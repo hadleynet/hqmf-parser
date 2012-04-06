@@ -63,6 +63,22 @@ module HQMF
       end
       return nil
     end
+    
+    def to_json
+      json = {
+        type: self.conjunction,
+        negation: self.negation,
+        comparison: (self.comparison.to_json if self.comparison)
+      }
+      
+      json[:preconditions] = json_array(self.preconditions)
+      json[:restrictions] = json_array(self.restrictions)
+
+      (has_non_nil(json)) ? clean_json(json) : nil 
+
+    end
+    
   end
+  
   
 end

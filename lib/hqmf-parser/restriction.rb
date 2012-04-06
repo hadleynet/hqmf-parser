@@ -73,6 +73,24 @@ module HQMF
     def value
       attr_val('./cda:observation/cda:value/@displayName')
     end
+    
+    def to_json 
+      json = {
+        range: (self.range.to_json if self.range), 
+        comparison: (self.comparison.to_json if self.comparison), 
+        subset: (self.subset.to_json if self.subset),
+        type: self.type,
+        target_id: self.target_id,
+        field: self.field,
+        value: self.value
+      }
+      
+      json[:restrictions] = json_array(self.restrictions)
+      json[:preconditions] = json_array(self.preconditions)
+      
+      (has_non_nil(json)) ? clean_json(json) : nil 
+      
+    end
 
   end
 end

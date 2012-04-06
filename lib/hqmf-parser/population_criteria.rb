@@ -40,5 +40,32 @@ module HQMF
       attr_val('cda:observation/cda:id/@root')
     end
     
+    def humanized_code 
+      case code
+      when 'IPP'
+        'INITIAL_POPULATION'
+      when 'DENOM'
+        'DENOMINATOR'
+      when 'NUMER'
+        'NUMERATOR'
+      when 'EXCL'
+        'EXCLUSIONS'
+      else
+        code
+      end
+    end
+    
+    def to_json
+      json = {}
+      
+      section = self.humanized_code
+      json[section] = []
+      
+      self.preconditions.each {|precondition| json[section] << precondition.to_json}
+      
+      clean_json(json)
+      
+    end
+    
   end
 end

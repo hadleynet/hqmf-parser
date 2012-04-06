@@ -15,5 +15,31 @@ module HQMF
     def to_xml
       @entry.to_xml
     end
+    
+    def json_array(elements) 
+      array = []
+      elements.each {|element| array << element.to_json }
+      # array.compact!
+      # (array.empty?) ? nil : array
+      array
+    end
+    
+    def has_non_nil(json)
+      # json.keys.reduce(false) do |has_non_nil, key|
+      #   if (json[key].is_a? Array) 
+      #     has_non_nil ||= !json[key].empty?
+      #   else
+      #     has_non_nil ||= !json[key].nil?
+      #   end
+      # end
+      json
+    end
+    
+    def clean_json(json)
+      # json.reject!{|k,v| v.nil?}
+      # json
+      json
+    end
+    
   end
 end  

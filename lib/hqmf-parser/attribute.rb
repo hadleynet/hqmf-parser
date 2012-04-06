@@ -59,10 +59,11 @@ module HQMF
         code: self.code,
         value: self.value,
         unit: self.unit,
-        name: self.name
+        name: self.name,
+        id: self.id
       }
       
-      json
+      clean_json(json)
       
     end
     

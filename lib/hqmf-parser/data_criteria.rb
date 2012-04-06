@@ -90,6 +90,7 @@ module HQMF
       json = {}
       
       json[self.const_name] = {
+        id: self.id,
         title: self.title,
         code_list_oid: self.code_list_id,
         type: self.type,
@@ -98,7 +99,7 @@ module HQMF
         codes: {}
       }
       
-      json
+      clean_json(json)
       
     end
 

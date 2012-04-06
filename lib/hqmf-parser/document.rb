@@ -1,6 +1,9 @@
 module HQMF
   # Class representing an HQMF document
   class Document
+    
+    include HQMF::Utilities
+    
     # Create a new HQMF::Document instance by parsing at file at the supplied path
     # @param [String] path the path to the HQMF document
     def initialize(path)
@@ -106,11 +109,11 @@ module HQMF
       end
 
       json[:logic] = {}
-      @population_criteria.each do |precondition|
-        json[:logic].merge! attribute.to_json
+      @population_criteria.each do |population|
+        json[:logic].merge! population.to_json
       end
       
-      json
+      clean_json(json)
     end
     
     private

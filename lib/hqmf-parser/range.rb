@@ -24,6 +24,15 @@ module HQMF
         false
       end
     end
+    
+    def to_json
+      json = {
+        value: self.value,
+        unit: self.unit,
+        inclusive?: self.inclusive?
+      }
+      clean_json(json)
+    end
   end
   
   # Represents a HQMF pauseQuantity which can have low and high bounds
@@ -37,6 +46,14 @@ module HQMF
         @low = optional_value('./cda:low')
         @high = optional_value('./cda:high')
       end
+    end
+   
+    def to_json
+      json = {
+        low: (self.low.to_json if self.low),
+        high: (self.high.to_json if self.high)
+      }
+      clean_json(json)
     end
     
     private
