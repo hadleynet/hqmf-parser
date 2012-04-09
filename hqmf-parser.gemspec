@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
   
   #s.add_dependency 'nokogiri', '~> 1.4.7'
 
-  s.files = Dir.glob('lib/**/*.rb') + ["Gemfile", "README.md", "Rakefile", "VERSION"]
+  s.files = Dir.glob('lib/**/*.rb') + Dir.glob('lib/**/*.rake') + ["Gemfile", "README.md", "Rakefile", "VERSION"]
 
 end
