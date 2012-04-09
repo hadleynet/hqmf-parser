@@ -56,14 +56,12 @@ module HQMF
     end
     
     def to_json
-      json = {}
       
       section = self.humanized_code
-      json[section] = []
-      
+      json = {section => []}
       self.preconditions.each {|precondition| json[section] << precondition.to_json}
-      
-      clean_json(json)
+#      json[section] = collapse_logical_operators(json[section])
+      json
       
     end
     

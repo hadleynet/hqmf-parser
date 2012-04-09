@@ -11,7 +11,7 @@ module HQMF
       @data_criteria = @doc.xpath('//cda:section[cda:code/@code="57025-9"]/cda:entry').collect do |entry|
         DataCriteria.new(entry)
       end
-      @attributes = @doc.xpath('//cda:subjectOf/cda:measureAttribute[cda:id]').collect do |attr|
+      @attributes = @doc.xpath('//cda:subjectOf/cda:measureAttribute').collect do |attr|
         Attribute.new(attr)
       end
       @population_criteria = @doc.xpath('//cda:section[cda:code/@code="57026-7"]/cda:entry').collect do |attr|
@@ -93,19 +93,22 @@ module HQMF
     end
 
     def to_json
-      json = {
-        title: self.title,
-        description: self.description
-      }
+      json = build_hash(self, [:title, :description])
       
       json[:data_criteria] = {}
       @data_criteria.each do |criteria|
         json[:data_criteria].merge! criteria.to_json
       end
       
+      json[:metadata] = {}
       json[:attributes] = {}
       @attributes.each do |attribute|
-        json[:attributes].merge! attribute.to_json
+        if (attribute.id)
+          json[:attributes].merge! attribute.to_json
+        else
+          json[:metadata].merge! attribute.to_json
+        end
+          
       end
 
       json[:logic] = {}
@@ -113,7 +116,8 @@ module HQMF
         json[:logic].merge! population.to_json
       end
       
-      clean_json(json)
+      clean_json_recursive(json)
+      json
     end
     
     private

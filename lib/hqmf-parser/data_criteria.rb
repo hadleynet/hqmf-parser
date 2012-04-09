@@ -87,20 +87,7 @@ module HQMF
     end
     
     def to_json
-      json = {}
-      
-      json[self.const_name] = {
-        id: self.id,
-        title: self.title,
-        code_list_oid: self.code_list_id,
-        type: self.type,
-        status: self.status,
-        property: self.property,
-        codes: {}
-      }
-      
-      clean_json(json)
-      
+      {self.const_name => build_hash(self, [:id,:title,:code_list_id,:type,:status,:property])}
     end
 
   end

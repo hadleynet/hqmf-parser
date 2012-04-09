@@ -27,14 +27,10 @@ module HQMF
     end
     
     def to_json
-      json = {
-        data_criteria_id: self.data_criteria_id,
-        title: self.title,
-        subset: self.subset
-      }
-      json[:restrictions] = json_array(@restrictions)
       
-      (has_non_nil(json)) ? clean_json(json) : nil 
+      json = build_hash(self, [:data_criteria_id,:title,:subset])
+      json[:restrictions] = json_array(@restrictions)
+      json
       
     end
     

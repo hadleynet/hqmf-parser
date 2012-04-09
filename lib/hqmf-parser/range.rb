@@ -26,12 +26,7 @@ module HQMF
     end
     
     def to_json
-      json = {
-        value: self.value,
-        unit: self.unit,
-        inclusive?: self.inclusive?
-      }
-      clean_json(json)
+      build_hash(self, [:value,:unit,:inclusive?])
     end
   end
   
@@ -49,11 +44,11 @@ module HQMF
     end
    
     def to_json
-      json = {
-        low: (self.low.to_json if self.low),
-        high: (self.high.to_json if self.high)
-      }
-      clean_json(json)
+      build_hash(self, [:low,:high])
+      json = {}
+      json[:low] = self.low.to_json if self.low
+      json[:high] = self.high.to_json if self.high
+      json
     end
     
     private

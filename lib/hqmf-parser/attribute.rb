@@ -13,13 +13,21 @@ module HQMF
     # Get the attribute code
     # @return [String] the code
     def code
-      @entry.at_xpath('./cda:code/@code').value
+      if (@entry.at_xpath('./cda:code/@code'))
+        @entry.at_xpath('./cda:code/@code').value
+      elsif @entry.at_xpath('./cda:code/@nullFlavor')
+        @entry.at_xpath('./cda:code/@nullFlavor').value
+      end
     end
 
     # Get the attribute name
     # @return [String] the name
     def name
-      @entry.at_xpath('./cda:code/@displayName').value
+      if (@entry.at_xpath('./cda:code/@displayName'))
+        @entry.at_xpath('./cda:code/@displayName').value
+      elsif @entry.at_xpath('cda:code/cda:originalText')
+        @entry.at_xpath('cda:code/cda:originalText').text
+      end
     end
     
     # Get the attribute id, used elsewhere in the document to refer to the attribute
@@ -32,6 +40,7 @@ module HQMF
     # @return [String] the value
     def value
       val = attr_val('./cda:value/@value')
+      val ||= attr_val('./cda:value/@extension')
       if val
         val
       else
@@ -52,19 +61,7 @@ module HQMF
     end
     
     def to_json
-      
-      json = {}
-      
-      json[self.const_name] = {
-        code: self.code,
-        value: self.value,
-        unit: self.unit,
-        name: self.name,
-        id: self.id
-      }
-      
-      clean_json(json)
-      
+      {self.const_name => build_hash(self, [:code,:value,:unit,:name,:id])}
     end
     
   end
