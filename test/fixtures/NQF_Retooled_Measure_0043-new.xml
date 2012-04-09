@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="HQMFreader.xsl"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="xslt/eMeasure_Updated_Dec_2011.xsl"?>
 <QualityMeasureDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hl7-org:v3">
          
       <!--
@@ -9,7 +9,7 @@
       --><typeId root="2.16.840.1.113883.1.3" extension="POQM_HD000001"/>
    <id root="38d3c446-df8e-4cc7-b3f5-90ea538c40d5"/>
    <code code="57024-2" codeSystem="2.16.840.1.113883.6.1" displayName="Health Quality Measure Document"/>
-   <title>Pneumonia Vaccination Status for Older Adults (NQF 0043)</title>
+   <title>Pneumonia Vaccination Status for Older Adults</title>
    <text>The percentage of patients 65 years of age and older who have ever received a pneumococcal vaccine.</text>
    <statusCode code="completed"/>
    <setId root="aa066eed-e8f6-4fec-8084-61d3d1e8b6e2"/>
@@ -35,7 +35,6 @@
    <verifier typeCode="VRF">
       <assignedPerson classCode="ASSIGNED">
          <representedOrganization classCode="ORG" determinerCode="INSTANCE">
-            <id root="2.16.840.1.113883.3.560"/>
             <name>National Quality Forum</name>
             <contactParty classCode="CON" nullFlavor="UNK"/>
          </representedOrganization>
@@ -50,13 +49,13 @@
    <subjectOf>
       <measureAttribute>
          <code code="MSRSCORE" codeSystem="2.16.840.1.113883.5.4" displayName="Measure scoring"/>
-         <value xsi:type="CD" code="PROPOR" codeSystem="2.16.840.1.113883.5.1063" displayName="Proportion"/>
+         <value xsi:type="CD" code="PROPOR" codeSystem="2.16.840.1.113883.1.11.20367" displayName="Proportion"/>
       </measureAttribute>
    </subjectOf>
    <subjectOf>
       <measureAttribute>
          <code code="MSRTYPE" codeSystem="2.16.840.1.113883.5.4" displayName="Measure type"/>
-         <value xsi:type="CD" code="PROCESS" codeSystem="2.16.840.1.113883.5.1063" displayName="Process"/>
+         <value xsi:type="CD" code="PROCESS" codeSystem="2.16.840.1.113883.1.11.20368" displayName="Process"/>
       </measureAttribute>
    </subjectOf>
    <subjectOf>
@@ -97,10 +96,18 @@
    </subjectOf>
    <subjectOf>
       <measureAttribute>
+         <code nullFlavor="OTH">
+            <originalText>NQF ID Number</originalText>
+         </code>
+         <value xsi:type="II" root="2.16.840.1.113883.3.560.1" extension="0043"/>
+      </measureAttribute>
+   </subjectOf>
+   <subjectOf>
+      <measureAttribute>
          <templateId root="2.16.840.1.113883.3.560.1.74"/>
          <id root="F8D5AD22-F49E-4181-B886-E5B12BEA8966"/>
          <code code="MSRTP" displayName="Measurement period" codeSystem="2.16.840.1.113883.3.560"/>
-         <value xsi:type="EXPR_PQ" value="12" unit="m">
+         <value xsi:type="EXPR_PQ" value="12" unit="mo">
             <expression mediaType="text/plain">measureEndDate - measureStartDate</expression>
          </value>
       </measureAttribute>
@@ -118,7 +125,7 @@
       <localVariableName>measureEndDate</localVariableName>
       <measureAttribute>
          <templateId root="2.16.840.1.113883.3.560.1.75"/>
-         <id root="F8D5AD22-F49E-4181-B886-E5B12BEA8966e"/>
+         <id root="F8D5AD22-F49E-4181-B886-E5B12BEA8966"/>
          <code code="MSRED" displayName="Measurement end date" codeSystem="2.16.840.1.113883.3.560"/>
          <value xsi:type="TS" value="00001231"/>
       </measureAttribute>
@@ -132,21 +139,52 @@
    <subjectOf>
       <measureAttribute>
          <code code="REF" codeSystem="2.16.840.1.113883.5.4" displayName="Reference"/>
-         <value xsi:type="ED" mediaType="text/plain">United States Preventive Services Task Force. Guide to Clinical Preventive Services. Baltimore: Williams &amp; Wilkins, 1989. 791-814. </value>
+         <value xsi:type="ED" mediaType="text/plain">United States Preventive Services Task Force. Guide to Clinical Preventive Services. Baltimore: Williams &amp; Wilkins, 1989. 791-814.</value>
       </measureAttribute>
    </subjectOf>
    <subjectOf>
       <measureAttribute>
          <code code="DEF" codeSystem="2.16.840.1.113883.3.560" displayName="Definition"/>
-         <value xsi:type="ED" mediaType="text/plain" nullFlavor="NI"/>
+         <value xsi:type="ED" mediaType="text/plain">Initial Patient Population(s): All patients 65 years of age and older during the measurement period.</value>
+      </measureAttribute>
+   </subjectOf>
+   <subjectOf>
+      <measureAttribute>
+         <code code="DEF" codeSystem="2.16.840.1.113883.3.560" displayName="Definition"/>
+         <value xsi:type="ED" mediaType="text/plain">Denominator(s): Patients in the initial population with an encounter during the measurement period.</value>
+      </measureAttribute>
+   </subjectOf>
+   <subjectOf>
+      <measureAttribute>
+         <code code="DEF" codeSystem="2.16.840.1.113883.3.560" displayName="Definition"/>
+         <value xsi:type="ED" mediaType="text/plain">Denominator Exclusion(s): N/A</value>
+      </measureAttribute>
+   </subjectOf>
+   <subjectOf>
+      <measureAttribute>
+         <code code="DEF" codeSystem="2.16.840.1.113883.3.560" displayName="Definition"/>
+         <value xsi:type="ED" mediaType="text/plain">Numerator(s): The number of patients who have received a pneumococcal vaccination.</value>
+      </measureAttribute>
+   </subjectOf>
+   <subjectOf>
+      <measureAttribute>
+         <code code="DEF" codeSystem="2.16.840.1.113883.3.560" displayName="Definition"/>
+         <value xsi:type="ED" mediaType="text/plain">Denominator Exception(s): N/A</value>
       </measureAttribute>
    </subjectOf>
    <subjectOf>
       <measureAttribute>
          <code code="GUIDE" codeSystem="2.16.840.1.113883.5.4" displayName="Guidance"/>
          <value xsi:type="ED" mediaType="text/plain">Numerator element:
-Pneumococcal vaccination is expected once ever for patients 65 years of age or older. There is no clear standard location for documentation in EHRs of pneumococcal vaccination that is administered external to the providers  practice. The measure specification assumes that administered vaccines will be documented in the medication administration record. In a truly interoperable environment, even medications administered elsewhere could be captured in the medication administration record. In absence of such interoperability the implementer may need to look elsewhere in the medical record for evidence of vaccine administered in other setting, e.g., a preventive care screening record.
-        </value>
+Pneumococcal vaccination is expected once ever for patients 65 years of age or older. There is no clear standard location for documentation in EHRs of pneumococcal vaccination that is administered external to the providers  practice. The measure specification assumes that administered vaccines will be documented in the medication administration record. In a truly interoperable environment, even medications administered elsewhere could be captured in the medication administration record. In absence of such interoperability the implementer may need to look elsewhere in the medical record for evidence of vaccine administered in other setting, e.g., a preventive care screening record.</value>
+      </measureAttribute>
+   </subjectOf>
+   <subjectOf>
+      <measureAttribute>
+         <code nullFlavor="OTH">
+            <originalText>Supplemental Data Elements</originalText>
+         </code>
+         <value xsi:type="ED" mediaType="text/plain">Report "Patient Characteristic: Gender" using "Gender HL7 Value Set (2.16.840.1.113883.1.11.1)"; Report "Patient Characteristic: Race" using "Race CDC Value Set (2.16.840.1.114222.4.11.836)"; Report "Patient Characteristic: Ethnicity" using "Ethnicity CDC Value Set (2.16.840.1.114222.4.11.837)"; Report "Patient Characteristic: Payer" using "Payer Source of Payment Typology Value Set (2.16.840.1.113883.3.221.5)".</value>
       </measureAttribute>
    </subjectOf>
    <componentOf>
@@ -169,29 +207,35 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
                <item>
                   <content styleCode="Bold">Initial Patient Population =</content>
                   <list>
-                     <item>AND: "Patient characteristic: birth date"  &gt;= 64 year(s) starts before start of "Measurement period"</item>
+                     <item>AND: "Patient Characteristic: birth date"  &gt;= 64 year(s) starts before start of "Measurement period"</item>
                   </list>
                </item>
                <item>
-                  <content styleCode="Bold">Denominator=</content>
+                  <content styleCode="Bold">Denominator =</content>
                   <list>
                      <item>AND: "Initial Patient Population"</item>
-                     <item>AND: "Encounter: encounter outpatient" during "Measurement period"</item>
+                     <item>AND: "Encounter: Encounter outpatient" during "Measurement period"</item>
+                  </list>
+               </item>
+               <item>
+                  <content styleCode="Bold">Denominator Exclusions =</content>
+                  <list>
+                     <item>None</item>
                   </list>
                </item>
                <item>
                   <content styleCode="Bold">Numerator =</content>
                   <list>
                      <item>AND: <list>
-                           <item>OR: "Medication administered: Pneumococcal Vaccine all ages"</item>
-                           <item>OR: "Procedure performed: Pneumococcal Vaccination all ages"</item>
+                           <item>OR: "Medication, Administered: Pneumococcal Vaccine all ages"</item>
+                           <item>OR: "Procedure, Performed: Pneumococcal Vaccination all ages"</item>
                            <item> during "Measurement period"</item>
                         </list>
                      </item>
                   </list>
                </item>
                <item>
-                  <content styleCode="Bold">Exclusions =</content>
+                  <content styleCode="Bold">Denominator Exceptions =</content>
                   <list>
                      <item>None</item>
                   </list>
@@ -209,14 +253,14 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
                <value xsi:type="CD" code="IPP" codeSystem="2.16.840.1.113883.5.1063" codeSystemName="HL7 Observation Value" displayName="Initial Patient Population"/><!--  top and/or -->
                <sourceOf typeCode="PRCN">
                   <conjunctionCode code="AND"/>
-                  <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- patient characteristic pattern -->
+                  <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Patient Characteristic pattern -->
                      <templateId root="2.16.840.1.113883.3.560.1.25"/>
-                     <id root="52A541D7-9C22-4633-8AEC-389611894672"/>
+                     <id root="AAC0024A-C096-468A-ACB7-E1286394CF1E"/>
                      <code code="45970-1" displayName="Demographics" codeSystem="2.16.840.1.113883.6.1"/>
                      <sourceOf typeCode="COMP">
                         <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
-                           <code code="2.16.840.1.113883.3.464.0001.14" displayName="birth date HL7 Code List"/>
-                           <title>Patient characteristic: birth date</title>
+                           <code code="2.16.840.1.113883.3.560.100.4" displayName="birth date LOINC Value Set"/>
+                           <title>Patient Characteristic: birth date</title>
                            <sourceOf typeCode="SBS">
                               <pauseQuantity xsi:type="IVL_PQ">
                                  <low value="64" unit="a" inclusive="true"/>
@@ -250,14 +294,14 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
                </sourceOf>
                <sourceOf typeCode="PRCN">
                   <conjunctionCode code="AND"/>
-                  <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- encounter pattern -->
+                  <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Encounter pattern -->
                      <templateId root="2.16.840.1.113883.3.560.1.4"/>
                      <id root="3CF573A8-34AE-408E-88D7-26A1016A140D"/>
                      <code code="46240-8" displayName="Encounter list" codeSystem="2.16.840.1.113883.6.1"/>
                      <sourceOf typeCode="COMP">
                         <encounter classCode="ENC" moodCode="EVN" isCriterionInd="true">
-                           <code code="2.16.840.1.113883.3.464.0001.49" displayName="encounter outpatient Code List GROUPING"/>
-                           <title>Encounter: encounter outpatient</title>
+                           <code code="2.16.840.1.113883.3.464.0001.49" displayName="Encounter outpatient Value Set GROUPING"/>
+                           <title>Encounter: Encounter outpatient</title>
                            <sourceOf typeCode="DURING">
                               <observation classCode="OBS" moodCode="EVN">
                                  <id root="F8D5AD22-F49E-4181-B886-E5B12BEA8966"/>
@@ -284,17 +328,17 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
                   <act classCode="ACT" moodCode="EVN" isCriterionInd="true">
                      <sourceOf typeCode="PRCN">
                         <conjunctionCode code="OR"/>
-                        <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- medication administered pattern -->
+                        <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Medication, Administered pattern -->
                            <templateId root="2.16.840.1.113883.3.560.1.14"/>
                            <id root="10165EC8-53EE-4242-A20D-B1D21CE0DC73"/>
                            <code code="18610-6" displayName="Medication administered" codeSystem="2.16.840.1.113883.6.1"/>
                            <sourceOf typeCode="COMP">
                               <substanceAdministration classCode="SBADM" moodCode="EVN" isCriterionInd="true">
-                                 <title>Medication administered: Pneumococcal Vaccine all ages</title>
+                                 <title>Medication, Administered: Pneumococcal Vaccine all ages</title>
                                  <participant typeCode="CSM">
                                     <roleParticipant classCode="MANU">
                                        <playingMaterial classCode="MMAT" determinerCode="KIND">
-                                          <code code="2.16.840.1.113883.3.464.0001.430" displayName="Pneumococcal Vaccine all ages Code List GROUPING"/>
+                                          <code code="2.16.840.1.113883.3.464.0001.430" displayName="Pneumococcal Vaccine all ages Value Set GROUPING"/>
                                        </playingMaterial>
                                     </roleParticipant>
                                  </participant>
@@ -304,14 +348,14 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
                      </sourceOf>
                      <sourceOf typeCode="PRCN">
                         <conjunctionCode code="OR"/>
-                        <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- procedure performed pattern -->
+                        <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Procedure, Performed pattern -->
                            <templateId root="2.16.840.1.113883.3.560.1.6"/>
                            <id root="482902EC-E214-4FB4-8C5A-85A41250573C"/>
                            <code code="47519-4" displayName="Procedures" codeSystem="2.16.840.1.113883.6.1"/>
                            <sourceOf typeCode="COMP">
                               <procedure classCode="PROC" moodCode="EVN" isCriterionInd="true">
-                                 <code code="2.16.840.1.113883.3.464.0001.143" displayName="Pneumococcal Vaccination all ages Code List GROUPING"/>
-                                 <title>Procedure performed: Pneumococcal Vaccination all ages</title>
+                                 <code code="2.16.840.1.113883.3.464.0001.143" displayName="Pneumococcal Vaccination all ages Value Set GROUPING"/>
+                                 <title>Procedure, Performed: Pneumococcal Vaccination all ages</title>
                               </procedure>
                            </sourceOf>
                         </act>
@@ -346,71 +390,71 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
          ******************************************
       --><component typeCode="COMP">
       <section>
-         <code code="57025-9" codeSystem="2.16.840.1.113883.6.1" displayName="Data criteria (QDS Data Elements)"/>
-         <title>Data criteria (QDS Data Elements)</title>
+         <code code="57025-9" codeSystem="2.16.840.1.113883.6.1" displayName="Data criteria (QDM Data Elements)"/>
+         <title>Data criteria (QDM Data Elements)</title>
          <text>
             <list>
                <item>
-                  <content>"Encounter: encounter outpatient"</content> using "encounter outpatient Code List GROUPING (2.16.840.1.113883.3.464.0001.49)"</item>
+                  <content>"Encounter: Encounter outpatient"</content> using "Encounter outpatient Value Set GROUPING (2.16.840.1.113883.3.464.0001.49)"</item>
                <item>
-                  <content>"Medication administered: Pneumococcal Vaccine all ages"</content> using "Pneumococcal Vaccine all ages Code List GROUPING (2.16.840.1.113883.3.464.0001.430)"</item>
+                  <content>"Medication, Administered: Pneumococcal Vaccine all ages"</content> using "Pneumococcal Vaccine all ages Value Set GROUPING (2.16.840.1.113883.3.464.0001.430)"</item>
                <item>
-                  <content>"Patient characteristic: birth date" (age)</content> using "birth date HL7 Code List (2.16.840.1.113883.3.464.0001.14)"</item>
+                  <content>"Patient Characteristic: birth date"</content> using "birth date LOINC Value Set (2.16.840.1.113883.3.560.100.4)"</item>
                <item>
-                  <content>"Procedure performed: Pneumococcal Vaccination all ages"</content> using "Pneumococcal Vaccination all ages Code List GROUPING (2.16.840.1.113883.3.464.0001.143)"</item>
+                  <content>"Procedure, Performed: Pneumococcal Vaccination all ages"</content> using "Pneumococcal Vaccination all ages Value Set GROUPING (2.16.840.1.113883.3.464.0001.143)"</item>
             </list>
          </text>
          <entry typeCode="DRIV">
-            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- patient characteristic pattern -->
+            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Patient Characteristic pattern -->
                <templateId root="2.16.840.1.113883.3.560.1.25"/>
-               <id root="52A541D7-9C22-4633-8AEC-389611894672"/>
+               <id root="AAC0024A-C096-468A-ACB7-E1286394CF1E"/>
                <code code="45970-1" displayName="Demographics" codeSystem="2.16.840.1.113883.6.1"/>
                <sourceOf typeCode="COMP">
                   <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
-                     <code code="2.16.840.1.113883.3.464.0001.14" displayName="birth date HL7 Code List"/>
-                     <title>Patient characteristic: birth date</title>
+                     <code code="2.16.840.1.113883.3.560.100.4" displayName="birth date LOINC Value Set"/>
+                     <title>Patient Characteristic: birth date</title>
                   </observation>
                </sourceOf>
             </act>
          </entry>
          <entry typeCode="DRIV">
-            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- encounter pattern -->
+            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Encounter pattern -->
                <templateId root="2.16.840.1.113883.3.560.1.4"/>
                <id root="3CF573A8-34AE-408E-88D7-26A1016A140D"/>
                <code code="46240-8" displayName="Encounter list" codeSystem="2.16.840.1.113883.6.1"/>
                <sourceOf typeCode="COMP">
                   <encounter classCode="ENC" moodCode="EVN" isCriterionInd="true">
-                     <code code="2.16.840.1.113883.3.464.0001.49" displayName="encounter outpatient Code List GROUPING"/>
-                     <title>Encounter: encounter outpatient</title>
+                     <code code="2.16.840.1.113883.3.464.0001.49" displayName="Encounter outpatient Value Set GROUPING"/>
+                     <title>Encounter: Encounter outpatient</title>
                   </encounter>
                </sourceOf>
             </act>
          </entry>
          <entry typeCode="DRIV">
-            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- procedure performed pattern -->
+            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Procedure, Performed pattern -->
                <templateId root="2.16.840.1.113883.3.560.1.6"/>
                <id root="482902EC-E214-4FB4-8C5A-85A41250573C"/>
                <code code="47519-4" displayName="Procedures" codeSystem="2.16.840.1.113883.6.1"/>
                <sourceOf typeCode="COMP">
                   <procedure classCode="PROC" moodCode="EVN" isCriterionInd="true">
-                     <code code="2.16.840.1.113883.3.464.0001.143" displayName="Pneumococcal Vaccination all ages Code List GROUPING"/>
-                     <title>Procedure performed: Pneumococcal Vaccination all ages</title>
+                     <code code="2.16.840.1.113883.3.464.0001.143" displayName="Pneumococcal Vaccination all ages Value Set GROUPING"/>
+                     <title>Procedure, Performed: Pneumococcal Vaccination all ages</title>
                   </procedure>
                </sourceOf>
             </act>
          </entry>
          <entry typeCode="DRIV">
-            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- medication administered pattern -->
+            <act classCode="ACT" moodCode="EVN" isCriterionInd="true"><!-- Medication, Administered pattern -->
                <templateId root="2.16.840.1.113883.3.560.1.14"/>
                <id root="10165EC8-53EE-4242-A20D-B1D21CE0DC73"/>
                <code code="18610-6" displayName="Medication administered" codeSystem="2.16.840.1.113883.6.1"/>
                <sourceOf typeCode="COMP">
                   <substanceAdministration classCode="SBADM" moodCode="EVN" isCriterionInd="true">
-                     <title>Medication administered: Pneumococcal Vaccine all ages</title>
+                     <title>Medication, Administered: Pneumococcal Vaccine all ages</title>
                      <participant typeCode="CSM">
                         <roleParticipant classCode="MANU">
                            <playingMaterial classCode="MMAT" determinerCode="KIND">
-                              <code code="2.16.840.1.113883.3.464.0001.430" displayName="Pneumococcal Vaccine all ages Code List GROUPING"/>
+                              <code code="2.16.840.1.113883.3.464.0001.430" displayName="Pneumococcal Vaccine all ages Value Set GROUPING"/>
                            </playingMaterial>
                         </roleParticipant>
                      </participant>
@@ -422,23 +466,72 @@ Pneumococcal vaccination is expected once ever for patients 65 years of age or o
    </component>
    <component typeCode="COMP">
       <section>
-         <title>Summary Calculation</title>
+         <code code="69670-8" codeSystem="2.16.840.1.113883.6.1" displayName="Health quality measure supplemental data"/>
+         <title>Supplemental Data Elements</title>
          <text>
-            <content>Calculation is generic to all measures:</content>
             <list>
-               <item>Calculate the final denominator by adding all that meet denominator criteria.</item>
-               <item>Subtract from the final denominator all that do not meet numerator criteria yet also meet exclusion criteria.  Note some measures do not have exclusion criteria.</item>
-               <item>The performance calculation is based on the "Measure scoring" from header information above:
-					        	<list>
-                     <item>For "Proportion" measures, the calculation is the number meeting numerator criteria divided by the final denominator.</item>
-                     <item>For "Ratio" and "Continuous Variable" measures, follow the calculation instructions in the Data Aggregation header information above, if present.</item>
-                  </list>
-               </item>
-               <item>For measures with multiple denominators, repeat this process for each denominator and report each result separately.</item>
-               <item>For measures with multiple patient populations, repeat this process for each patient population and report each result separately.</item>
-               <item>For measures with multiple numerators, calculate each numerator separately within each population using the paired exclusion.</item>
+               <item>"Patient Characteristic: Gender" using "Gender HL7 Value Set (2.16.840.1.113883.1.11.1)"</item>
+               <item>"Patient Characteristic: Race" using "Race CDC Value Set (2.16.840.1.114222.4.11.836)"</item>
+               <item>"Patient Characteristic: Ethnicity" using "Ethnicity CDC Value Set (2.16.840.1.114222.4.11.837)"</item>
+               <item>"Patient Characteristic: Payer" using "Payer Source of Payment Typology Value Set (2.16.840.1.113883.3.221.5)"</item>
             </list>
          </text>
+         <entry typeCode="DRIV">
+            <act classCode="ACT" moodCode="DEF">
+               <templateId root="2.16.840.1.113883.3.560.1.1001"/>
+               <id root="E95864C7-C036-403C-9A4E-80F9D1BEB0BD"/>
+               <code code="45970-1" displayName="Demographics" codeSystem="2.16.840.1.113883.6.1"/>
+               <sourceOf typeCode="COMP">
+                  <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
+                     <code code="21840-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Gender"/>
+                     <title>Patient Characteristic: Gender</title>
+                     <value xsi:type="CD" code="2.16.840.1.113883.1.11.1" displayName="HL7 Administrative Gender Value Set"/>
+                  </observation>
+               </sourceOf>
+            </act>
+         </entry>
+         <entry typeCode="DRIV">
+            <act classCode="ACT" moodCode="DEF">
+               <templateId root="2.16.840.1.113883.3.560.1.1001"/>
+               <id root="6EF71336-1E79-4E82-8BCF-D45D9DD96F78"/>
+               <code code="45970-1" displayName="Demographics" codeSystem="2.16.840.1.113883.6.1"/>
+               <sourceOf typeCode="COMP">
+                  <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
+                     <code code="32624-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Race"/>
+                     <title>Patient Characteristic: Race</title>
+                     <value xsi:type="CD" code="2.16.840.1.114222.4.11.836" displayName="CDC Race Value Set"/>
+                  </observation>
+               </sourceOf>
+            </act>
+         </entry>
+         <entry typeCode="DRIV">
+            <act classCode="ACT" moodCode="DEF">
+               <templateId root="2.16.840.1.113883.3.560.1.1001"/>
+               <id root="BA487998-EBE0-4E19-AFD1-E8D9159791E4"/>
+               <code code="45970-1" displayName="Demographics" codeSystem="2.16.840.1.113883.6.1"/>
+               <sourceOf typeCode="COMP">
+                  <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
+                     <code code="54133-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Ethnicity"/>
+                     <title>Patient Characteristic: Ethnicity</title>
+                     <value xsi:type="CD" code="2.16.840.1.114222.4.11.837" displayName="CDC Ethnicity Value Set"/>
+                  </observation>
+               </sourceOf>
+            </act>
+         </entry>
+         <entry typeCode="DRIV">
+            <act classCode="ACT" moodCode="DEF">
+               <templateId root="2.16.840.1.113883.3.560.1.1001"/>
+               <id root="B0C8DEAB-6A89-407F-8A5B-4522B5420079"/>
+               <code code="45970-1" displayName="Demographics" codeSystem="2.16.840.1.113883.6.1"/>
+               <sourceOf typeCode="COMP">
+                  <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
+                     <code code="48768-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Payer"/>
+                     <title>Patient Characteristic: Payer</title>
+                     <value xsi:type="CD" code="2.16.840.1.113883.3.221.5" displayName="Source of Payment Typology Health Insurance Type Value Set"/>
+                  </observation>
+               </sourceOf>
+            </act>
+         </entry>
       </section>
    </component>
 </QualityMeasureDocument>
