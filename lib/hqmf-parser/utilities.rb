@@ -55,31 +55,6 @@ module HQMF
       clean_json(json)
     end
     
-    [{:conjunction=>"AND",
-          :preconditions=>
-           [{:conjunction=>"OR",
-             :comparison=>
-              {:data_criteria_id=>"10165EC8-53EE-4242-A20D-B1D21CE0DC73",
-               :title=>"Medication, Administered: Pneumococcal Vaccine all ages",
-               :restrictions=>
-                [{:type=>"DURING",
-                  :target_id=>"F8D5AD22-F49E-4181-B886-E5B12BEA8966"}]},
-             :restrictions=>
-              [{:type=>"DURING",
-                :target_id=>"F8D5AD22-F49E-4181-B886-E5B12BEA8966"}]},
-            {:conjunction=>"OR",
-             :comparison=>
-              {:data_criteria_id=>"482902EC-E214-4FB4-8C5A-85A41250573C",
-               :title=>"Procedure, Performed: Pneumococcal Vaccination all ages",
-               :restrictions=>
-                [{:type=>"DURING",
-                  :target_id=>"F8D5AD22-F49E-4181-B886-E5B12BEA8966"}]},
-             :restrictions=>
-              [{:type=>"DURING",
-                :target_id=>"F8D5AD22-F49E-4181-B886-E5B12BEA8966"}]}],
-          :restrictions=>
-           [{:type=>"DURING",
-             :target_id=>"F8D5AD22-F49E-4181-B886-E5B12BEA8966"}]}]
     def collapse_logical_operators(operators)
       collapsed = []
       operators_by_type = {}

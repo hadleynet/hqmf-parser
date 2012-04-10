@@ -1,0 +1,183 @@
+{
+    "title": "Pneumonia Vaccination Status for Older Adults (NQF 0043)",
+    "description": "The percentage of patients 65 years of age and older who have ever received a pneumococcal vaccine.",
+    "data_criteria": {
+        "PATIENT_CHARACTERISTIC_BIRTH_DATE": {
+            "id": "52A541D7-9C22-4633-8AEC-389611894672",
+            "title": "Patient characteristic: birth date",
+            "code_list_id": "2.16.840.1.113883.3.464.0001.14",
+            "type": "characteristic",
+            "property": "birthtime"
+        },
+        "ENCOUNTER_ENCOUNTER_OUTPATIENT": {
+            "id": "3CF573A8-34AE-408E-88D7-26A1016A140D",
+            "title": "Encounter: encounter outpatient",
+            "code_list_id": "2.16.840.1.113883.3.464.0001.49",
+            "type": "encounter"
+        },
+        "PROCEDURE_PERFORMED_PNEUMOCOCCAL_VACCINATION_ALL_AGES": {
+            "id": "482902EC-E214-4FB4-8C5A-85A41250573C",
+            "title": "Procedure performed: Pneumococcal Vaccination all ages",
+            "code_list_id": "2.16.840.1.113883.3.464.0001.143",
+            "type": "procedure"
+        },
+        "MEDICATION_ADMINISTERED_PNEUMOCOCCAL_VACCINE_ALL_AGES": {
+            "id": "10165EC8-53EE-4242-A20D-B1D21CE0DC73",
+            "title": "Medication administered: Pneumococcal Vaccine all ages",
+            "code_list_id": "2.16.840.1.113883.3.464.0001.430",
+            "type": "medication"
+        }
+    },
+    "metadata": {
+        "COPYRIGHT": {
+            "code": "COPY",
+            "value": "© National Committee for Quality Assurance. All Rights Reserved",
+            "name": "Copyright"
+        },
+        "MEASURE_SCORING": {
+            "code": "MSRSCORE",
+            "name": "Measure scoring"
+        },
+        "MEASURE_TYPE": {
+            "code": "MSRTYPE",
+            "name": "Measure type"
+        },
+        "STRATIFICATION": {
+            "code": "STRAT",
+            "value": "None",
+            "name": "Stratification"
+        },
+        "RISK_ADJUSTMENT": {
+            "code": "MSRADJ",
+            "value": "None",
+            "name": "Risk Adjustment"
+        },
+        "DATA_AGGREGATION": {
+            "code": "MSRAGG",
+            "name": "Data Aggregation"
+        },
+        "RATIONALE": {
+            "code": "RAT",
+            "value": "This measure monitors the appropriate and timely use of vaccines among age-appropriate older adults. Each year, 20% of Americans contract influenza (flu) (CDC 2009). Rates of infection are highest among children and immunosuppressed patients, while mortality is highest among adults over 64 years, children under 2 years and persons with chronic medical conditions (CDC 2008). More than 200,000 people are hospitalized for flurelated complications each year; 63% are 65 or older (CDC 2009; Thompson et al. 2004). The health impact of influenza on older adults is substantial and flu short vaccines are the most effective way to prevent severe illness complications and death. This measure facilitates efforts toward infectious disease prevention among a vulnerable subgroup of the population.",
+            "name": "Rationale"
+        },
+        "CLINICAL_RECOMMENDATION_STATEMENT": {
+            "code": "CRS",
+            "value": "The U.S. Preventive Services Task Forces Guide to Clinical Preventive Services recommends pneumococcal vaccine for all immunocompetent individuals who are 65 and older or otherwise at increased risk for pneumococcal disease. Routine revaccination is not recommended, but may be appropriate in immunocompetent individuals at high risk for morbidity and mortality from pneumococcal disease (e.g., persons 75 years of age or with severe chronic disease) who were vaccinated more than five years previously (USPSTF, 1989).",
+            "name": "Clinical Recommendation Statement"
+        },
+        "IMPROVEMENT_NOTATION": {
+            "code": "IDUR",
+            "value": "Higher score indicates better quality",
+            "name": "Improvement notation"
+        },
+        "MEASUREMENT_DURATION": {
+            "code": "MSRMD",
+            "value": "12 month(s)",
+            "name": "Measurement duration"
+        },
+        "REFERENCE": {
+            "code": "REF",
+            "value": "United States Preventive Services Task Force. Guide to Clinical Preventive Services. Baltimore: Williams & Wilkins, 1989. 791-814. ",
+            "name": "Reference"
+        },
+        "DEFINITION": {
+            "code": "DEF",
+            "name": "Definition"
+        },
+        "GUIDANCE": {
+            "code": "GUIDE",
+            "value": "Numerator element:\nPneumococcal vaccination is expected once ever for patients 65 years of age or older. There is no clear standard location for documentation in EHRs of pneumococcal vaccination that is administered external to the providers  practice. The measure specification assumes that administered vaccines will be documented in the medication administration record. In a truly interoperable environment, even medications administered elsewhere could be captured in the medication administration record. In absence of such interoperability the implementer may need to look elsewhere in the medical record for evidence of vaccine administered in other setting, e.g., a preventive care screening record.\n        ",
+            "name": "Guidance"
+        }
+    },
+    "attributes": {
+        "MEASUREMENT_PERIOD": {
+            "code": "MSRTP",
+            "value": "12",
+            "unit": "m",
+            "name": "Measurement period",
+            "id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+        },
+        "MEASUREMENT_START_DATE": {
+            "code": "MSRSD",
+            "value": "00000101",
+            "name": "Measurement start date",
+            "id": "526506A5-8B25-4835-9A4F-E9C708B213DC"
+        },
+        "MEASUREMENT_END_DATE": {
+            "code": "MSRED",
+            "value": "00001231",
+            "name": "Measurement end date",
+            "id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966e"
+        }
+    },
+    "logic": {
+        "INITIAL_POPULATION": [{
+            "conjunction": "AND",
+            "comparison": {
+                "data_criteria_id": "52A541D7-9C22-4633-8AEC-389611894672",
+                "title": "Patient characteristic: birth date",
+                "restrictions": [{
+                    "type": "SBS",
+                    "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966",
+                    "range": {
+                        "low": {
+                            "value": "64",
+                            "unit": "a",
+                            "inclusive?": true
+                        }
+                    }
+                }]
+            }
+        }],
+        "DENOMINATOR": [{
+            "conjunction": "AND",
+            "comparison": {
+                "data_criteria_id": "3CF573A8-34AE-408E-88D7-26A1016A140D",
+                "title": "Encounter: encounter outpatient",
+                "restrictions": [{
+                    "type": "DURING",
+                    "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+                }]
+            }
+        }],
+        "NUMERATOR": [{
+            "conjunction": "AND",
+            "preconditions": [{
+                "conjunction": "OR",
+                "comparison": {
+                    "data_criteria_id": "10165EC8-53EE-4242-A20D-B1D21CE0DC73",
+                    "title": "Medication administered: Pneumococcal Vaccine all ages",
+                    "restrictions": [{
+                        "type": "DURING",
+                        "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+                    }]
+                },
+                "restrictions": [{
+                    "type": "DURING",
+                    "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+                }]
+            },
+            {
+                "conjunction": "OR",
+                "comparison": {
+                    "data_criteria_id": "482902EC-E214-4FB4-8C5A-85A41250573C",
+                    "title": "Procedure performed: Pneumococcal Vaccination all ages",
+                    "restrictions": [{
+                        "type": "DURING",
+                        "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+                    }]
+                },
+                "restrictions": [{
+                    "type": "DURING",
+                    "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+                }]
+            }],
+            "restrictions": [{
+                "type": "DURING",
+                "target_id": "F8D5AD22-F49E-4181-B886-E5B12BEA8966"
+            }]
+        }]
+    }
+}
