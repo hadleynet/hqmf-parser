@@ -1,8 +1,8 @@
-module HQMF
+module HQMF1
   
   class Precondition
   
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     attr_reader :restrictions, :preconditions, :subset
   

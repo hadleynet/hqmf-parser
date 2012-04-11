@@ -1,8 +1,8 @@
-module HQMF
+module HQMF1
   # Represents a data criteria specification
   class DataCriteria
   
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     attr_reader :property, :type
   

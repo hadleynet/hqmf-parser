@@ -1,4 +1,4 @@
-module HQMF
+module HQMF1
   module Utilities
     # Utility function to handle optional attributes
     # @param xpath an XPath that identifies an XML attribute

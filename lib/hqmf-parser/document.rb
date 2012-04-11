@@ -1,10 +1,10 @@
-module HQMF
+module HQMF1
   # Class representing an HQMF document
   class Document
     
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
-    # Create a new HQMF::Document instance by parsing at file at the supplied path
+    # Create a new HQMF1::Document instance by parsing at file at the supplied path
     # @param [String] path the path to the HQMF document
     def initialize(path)
       @doc = Document.parse(path)
@@ -32,54 +32,54 @@ module HQMF
     end
   
     # Get all the attributes defined by the measure
-    # @return [Array] an array of HQMF::Attribute
+    # @return [Array] an array of HQMF1::Attribute
     def all_attributes
       @attributes
     end
     
     # Get a specific attribute by id.
     # @param [String] id the attribute identifier
-    # @return [HQMF::Attribute] the matching attribute, raises an Exception if not found
+    # @return [HQMF1::Attribute] the matching attribute, raises an Exception if not found
     def attribute(id)
       find(@attributes, :id, id)
     end
     
     # Get a specific attribute by code.
     # @param [String] code the attribute code
-    # @return [HQMF::Attribute] the matching attribute, raises an Exception if not found
+    # @return [HQMF1::Attribute] the matching attribute, raises an Exception if not found
     def attribute_for_code(code)
       find(@attributes, :code, code)
     end
 
     # Get all the population criteria defined by the measure
-    # @return [Array] an array of HQMF::PopulationCriteria
+    # @return [Array] an array of HQMF1::PopulationCriteria
     def all_population_criteria
       @population_criteria
     end
     
     # Get a specific population criteria by id.
     # @param [String] id the population identifier
-    # @return [HQMF::PopulationCriteria] the matching criteria, raises an Exception if not found
+    # @return [HQMF1::PopulationCriteria] the matching criteria, raises an Exception if not found
     def population_criteria(id)
       find(@population_criteria, :id, id)
     end
     
     # Get a specific population criteria by code.
     # @param [String] code the population criteria code
-    # @return [HQMF::PopulationCriteria] the matching criteria, raises an Exception if not found
+    # @return [HQMF1::PopulationCriteria] the matching criteria, raises an Exception if not found
     def population_criteria_for_code(code)
       find(@population_criteria, :code, code)
     end
 
     # Get all the data criteria defined by the measure
-    # @return [Array] an array of HQMF::DataCriteria describing the data elements used by the measure
+    # @return [Array] an array of HQMF1::DataCriteria describing the data elements used by the measure
     def all_data_criteria
       @data_criteria
     end
     
     # Get a specific data criteria by id.
     # @param [String] id the data criteria identifier
-    # @return [HQMF::DataCriteria] the matching data criteria, raises an Exception if not found
+    # @return [HQMF1::DataCriteria] the matching data criteria, raises an Exception if not found
     def data_criteria(id)
       val = find(@data_criteria, :id, id) || raise("unknown data criteria #{id}")
     end

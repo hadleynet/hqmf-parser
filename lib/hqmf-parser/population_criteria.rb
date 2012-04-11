@@ -1,8 +1,8 @@
-module HQMF
+module HQMF1
   # Represents an HQMF population criteria
   class PopulationCriteria
   
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     attr_reader :preconditions
     

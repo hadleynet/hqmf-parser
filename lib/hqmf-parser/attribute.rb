@@ -1,8 +1,8 @@
-module HQMF
+module HQMF1
   # Represents a HQMF measure attribute
   class Attribute
   
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     # Create a new instance based on the supplied HQMF
     # @param [Nokogiri::XML::Element] entry the measure attribute element

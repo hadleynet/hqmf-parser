@@ -3,11 +3,11 @@ require File.expand_path("../../test_helper", __FILE__)
 class DocumentTest  < Test::Unit::TestCase
   def setup
     @hqmf_file_path = File.expand_path("../../fixtures/NQF_Retooled_Measure_0043.xml", __FILE__)
-    @doc = HQMF::Document.new(@hqmf_file_path)
+    @doc = HQMF1::Document.new(@hqmf_file_path)
   end
   
   def test_parse
-    doc = HQMF::Document.parse(@hqmf_file_path)
+    doc = HQMF1::Document.parse(@hqmf_file_path)
     assert_equal 'QualityMeasureDocument', doc.root.name
     assert_equal 'urn:hl7-org:v3', doc.root.namespace.href 
   end

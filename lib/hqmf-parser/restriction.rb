@@ -1,8 +1,8 @@
-module HQMF
+module HQMF1
   # Represents a restriction on the allowable values of a data item
   class Restriction
   
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     attr_reader :range, :comparison, :restrictions, :subset, :preconditions
     
@@ -29,7 +29,7 @@ module HQMF
         # create a dummy parent with a single restriction copied from self minus the
         # nested preconditions to avoid an infinite loop
         prior_comparison = nil
-        if parent.class==HQMF::Precondition
+        if parent.class==HQMF1::Precondition
           prior_comparison = parent.first_comparison
         else
           prior_comparison = @comparsion

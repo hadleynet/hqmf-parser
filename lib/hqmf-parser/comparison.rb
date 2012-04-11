@@ -1,7 +1,7 @@
-module HQMF
+module HQMF1
   class Comparison
   
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     attr_reader :restrictions, :data_criteria_id, :title, :subset
     

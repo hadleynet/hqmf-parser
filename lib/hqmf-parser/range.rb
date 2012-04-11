@@ -1,8 +1,8 @@
-module HQMF
+module HQMF1
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator
   class Value
-    include HQMF::Utilities
+    include HQMF1::Utilities
     
     def initialize(entry)
       @entry = entry
@@ -32,7 +32,7 @@ module HQMF
   
   # Represents a HQMF pauseQuantity which can have low and high bounds
   class Range
-    include HQMF::Utilities
+    include HQMF1::Utilities
     attr_reader :low, :high
     
     def initialize(entry)
