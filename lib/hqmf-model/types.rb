@@ -95,8 +95,6 @@ module HQMF
   
   # Represents a HQMF CD value which has a code and codeSystem
   class Coded
-    include HQMF::Utilities
-    
     attr_reader :type, :system, :code
     
     # Create a new JSON::Coded
