@@ -1,8 +1,7 @@
+require 'cover_me'
 require 'bundler/setup'
 require 'test/unit'
 require 'turn'
-require 'cover_me'
-require 'pry'
 
 # Load project files
 PROJECT_ROOT = File.expand_path("../../", __FILE__)

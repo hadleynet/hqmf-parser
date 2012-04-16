@@ -47,7 +47,11 @@ module HQMF1
         @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
         @property = :gender
       else
-        raise "Unknown data criteria template identifier [#{template_id}]"
+        Kernel.warn "Unknown data criteria template identifier [#{template_id}]"
+        
+        @type = :unknown
+        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
+        @property = :unknown
       end
     end
     

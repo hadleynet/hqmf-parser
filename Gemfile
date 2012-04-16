@@ -1,14 +1,14 @@
 source "http://rubygems.org"
 
-group :development do
-  gem 'rake'
-  gem 'pry'
-  gem 'pry-nav'
-  gem 'nokogiri'
-  gem 'turn'
-  gem 'minitest'
-end
+gem 'rake'
+gem 'pry'
+gem 'pry-nav'
+gem 'nokogiri'
 
 group :test do
-  gem 'cover_me'
+  gem 'minitest'
+  gem 'turn', :require => false
+  gem 'cover_me', '~> 1.2.0'
+  gem 'awesome_print', :require => 'ap'
+  
 end
