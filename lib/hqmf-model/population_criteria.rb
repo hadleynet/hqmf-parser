@@ -1,4 +1,4 @@
-module JSON
+module HQMF
   # Represents an HQMF population criteria, also supports all the same methods as
   # HQMF::Precondition
   class PopulationCriteria

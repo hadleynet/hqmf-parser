@@ -1,4 +1,4 @@
-module JSON
+module HQMF
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator
   class Value

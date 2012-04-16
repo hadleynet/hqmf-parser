@@ -1,4 +1,4 @@
-module JSON
+module HQMF
   # Represents a data criteria specification
   class DataCriteria
 

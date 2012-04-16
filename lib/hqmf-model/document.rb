@@ -1,4 +1,4 @@
-module JSON
+module HQMF
   # Class representing an HQMF document
   class Document
 

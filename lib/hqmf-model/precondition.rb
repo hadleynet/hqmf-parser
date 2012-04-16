@@ -1,4 +1,4 @@
-module JSON
+module HQMF
   
   class Precondition
   
