@@ -4,10 +4,10 @@ module HQMF1
     
     include HQMF1::Utilities
     
-    # Create a new HQMF1::Document instance by parsing at file at the supplied path
-    # @param [String] path the path to the HQMF document
-    def initialize(path)
-      @doc = Document.parse(path)
+    # Create a new HQMF1::Document instance by parsing the supplied contents
+    # @param [String] hqmf_contents the contents of an HQMF v1.0 document
+    def initialize(hqmf_contents)
+      @doc = Document.parse(hqmf_contents)
       @data_criteria = @doc.xpath('//cda:section[cda:code/@code="57025-9"]/cda:entry').collect do |entry|
         DataCriteria.new(entry)
       end
@@ -84,10 +84,10 @@ module HQMF1
       val = find(@data_criteria, :id, id) || raise("unknown data criteria #{id}")
     end
     
-    # Parse an XML document at the supplied path
+    # Parse an XML document from the supplied contents
     # @return [Nokogiri::XML::Document]
-    def self.parse(path)
-      doc = Nokogiri::XML(File.new(path))
+    def self.parse(hqmf_contents)
+      doc = Nokogiri::XML(hqmf_contents)
       doc.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
       doc
     end

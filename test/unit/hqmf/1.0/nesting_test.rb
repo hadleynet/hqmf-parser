@@ -5,7 +5,7 @@ module HQMF1
   class NestingTest  < Test::Unit::TestCase
     def setup
       path = File.expand_path("../../../../fixtures/1.0/precondition_nesting.xml", __FILE__)
-      doc = Nokogiri::XML(File.new(path))
+      doc = Nokogiri::XML(File.open(path).read)
       doc.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
       @precondition = HQMF1::Precondition.new(doc.root(), nil, nil)
     end
