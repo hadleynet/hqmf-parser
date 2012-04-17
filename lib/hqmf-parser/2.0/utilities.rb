@@ -19,13 +19,5 @@ module HQMF2
       @entry.to_xml
     end
     
-    # TODO: this needs to be removed
-    def js_name
-      if !id
-        raise "No identifier for #{self}"
-      end
-      id.gsub(/\W/, '_')
-    end
-    
   end
 end  

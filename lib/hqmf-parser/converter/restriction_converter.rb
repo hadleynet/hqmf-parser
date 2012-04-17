@@ -14,7 +14,7 @@ module HQMF
           data_criteria.effective_time.high = restricted_by.value.low
           if (restriction[:range])
             low_restriction = restriction[:range][:low] 
-            high_restriction = restriction[:range][:low] 
+            high_restriction = restriction[:range][:high] 
             data_criteria.value = HQMF::Range.new('IVL_PQ',nil,nil,nil)
             data_criteria.value.low = HQMF::Value.new('PQ',low_restriction[:unit],low_restriction[:value],low_restriction[:inclusive?],low_restriction[:derived?],low_restriction[:expression]) if low_restriction
             data_criteria.value.high = HQMF::Value.new('PQ',high_restriction[:unit],high_restriction[:value],high_restriction[:inclusive?],high_restriction[:derived?],high_restriction[:expression]) if high_restriction
