@@ -20,7 +20,7 @@ module HQMF
         preconditions << convert_comparison_to_precondition(precondition[:comparison],data_criteria_by_id)
       end
       
-      JSON::Precondition.new(preconditions,reference,conjunction_code)
+      HQMF::Precondition.new(preconditions,reference,conjunction_code)
       
     end
 
@@ -28,14 +28,14 @@ module HQMF
       
       data_criteria = data_criteria_by_id[comparison[:data_criteria_id]]
       
-      reference = JSON::Reference.new(data_criteria.id)
+      reference = HQMF::Reference.new(data_criteria.id)
       conjunction_code = "#{data_criteria.type}Reference"
       preconditions = nil
       
       Kernel.warn('restrictions not pushed down to comparisons are not picked up')
       HQMF::RestrictionConverter.applyRestrictionsToDataCriteria(data_criteria, comparison[:restrictions],data_criteria_by_id)
       
-      JSON::Precondition.new(preconditions,reference,conjunction_code)
+      HQMF::Precondition.new(preconditions,reference,conjunction_code)
     end
    
     private 
@@ -58,7 +58,7 @@ module HQMF
         preconditions.each do |precondition|
           sub_conditions.concat precondition.preconditions if precondition.preconditions
         end
-        joined << JSON::Precondition.new(sub_conditions,nil,conjunction_code)
+        joined << HQMF::Precondition.new(sub_conditions,nil,conjunction_code)
       end
       joined
     end

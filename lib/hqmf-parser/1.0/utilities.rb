@@ -1,5 +1,8 @@
 module HQMF1
   module Utilities
+    
+    include HQMF::JSON::Utilities
+    
     # Utility function to handle optional attributes
     # @param xpath an XPath that identifies an XML attribute
     # @return the value of the attribute or nil if the attribute is missing
@@ -14,23 +17,6 @@ module HQMF1
     
     def to_xml
       @entry.to_xml
-    end
-    
-    def json_array(elements) 
-      array = []
-      elements.each {|element| array << element.to_json }
-      array.compact!
-      (array.empty?) ? nil : array
-      array
-    end
-    
-    def build_hash(source, elements)
-      hash = {}
-      elements.each do |element|
-        value = source.send(element)
-        hash[element] = value if value
-      end
-      hash
     end
     
     def clean_json(json)

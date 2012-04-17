@@ -2,9 +2,11 @@ module HQMF
   # Class representing an HQMF document
   class Document
 
+    include HQMF::JSON::Utilities
+
     attr_reader :title, :description, :measure_period
   
-    # Create a new JSON::Document which can be converted to JavaScript
+    # Create a new HQMF::Document which can be converted to JavaScript
     # @param [String] title
     # @param [String] description
     # @param [Array#PopulationCritera] population_criteria 
@@ -18,19 +20,19 @@ module HQMF
       @measure_period = measure_period
     end
     
-    # Create a new JSON::Document from a JSON hash keyed with symbols
+    # Create a new HQMF::Document from a JSON hash keyed with symbols
     def self.from_json(json)
       title = json[:title]
       description = json[:description]
 
       population_criterias = []
-      json[:population_criteria].each {|key, population_criteria| population_criterias << JSON::PopulationCriteria.from_json(key.to_s, population_criteria)} if json[:population_criteria]
+      json[:population_criteria].each {|key, population_criteria| population_criterias << HQMF::PopulationCriteria.from_json(key.to_s, population_criteria)} if json[:population_criteria]
 
       data_criterias = []
-      json[:data_criteria].each {|key, data_criteria| data_criterias << JSON::DataCriteria.from_json(key.to_s, data_criteria)} if json[:data_criteria]
+      json[:data_criteria].each {|key, data_criteria| data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)} if json[:data_criteria]
 
-      measure_period = JSON::Range.from_json(json[:measure_period]) if json[:measure_period]
-      JSON::Document.new(title, description, population_criterias, data_criterias, measure_period)
+      measure_period = HQMF::Range.from_json(json[:measure_period]) if json[:measure_period]
+      HQMF::Document.new(title, description, population_criterias, data_criterias, measure_period)
     end
     
     def to_json
@@ -54,27 +56,27 @@ module HQMF
     
     
     # Get all the population criteria defined by the measure
-    # @return [Array] an array of JSON::PopulationCriteria
+    # @return [Array] an array of HQMF::PopulationCriteria
     def all_population_criteria
       @population_criteria
     end
     
     # Get a specific population criteria by id.
     # @param [String] id the population identifier
-    # @return [JSON::PopulationCriteria] the matching criteria, raises an Exception if not found
+    # @return [HQMF::PopulationCriteria] the matching criteria, raises an Exception if not found
     def population_criteria(id)
       find(@population_criteria, :id, id)
     end
     
     # Get all the data criteria defined by the measure
-    # @return [Array] an array of JSON::DataCriteria describing the data elements used by the measure
+    # @return [Array] an array of HQMF::DataCriteria describing the data elements used by the measure
     def all_data_criteria
       @data_criteria
     end
     
     # Get a specific data criteria by id.
     # @param [String] id the data criteria identifier
-    # @return [JSON::DataCriteria] the matching data criteria, raises an Exception if not found
+    # @return [HQMF::DataCriteria] the matching data criteria, raises an Exception if not found
     def data_criteria(id)
       find(@data_criteria, :id, id)
     end

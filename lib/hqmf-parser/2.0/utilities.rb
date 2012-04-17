@@ -1,5 +1,8 @@
 module HQMF2
   module Utilities
+    
+    include HQMF::JSON::Utilities
+    
     # Utility function to handle optional attributes
     # @param xpath an XPath that identifies an XML attribute
     # @return the value of the attribute or nil if the attribute is missing
@@ -22,22 +25,6 @@ module HQMF2
         raise "No identifier for #{self}"
       end
       id.gsub(/\W/, '_')
-    end
-    
-    def build_hash(source, elements)
-      hash = {}
-      elements.each do |element|
-        value = source.send(element)
-        hash[element] = value if value
-      end
-      hash
-    end
-    
-    def json_array(elements) 
-      array = []
-      elements.each {|element| array << element.to_json }
-      array.compact!
-      (array.empty?) ? nil : array
     end
     
   end

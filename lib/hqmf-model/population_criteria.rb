@@ -3,6 +3,8 @@ module HQMF
   # HQMF::Precondition
   class PopulationCriteria
   
+    include HQMF::JSON::Utilities
+
     attr_reader :preconditions, :id
     
     # Create a new population criteria
@@ -15,8 +17,8 @@ module HQMF
     
     # Create a new population criteria from a JSON hash keyed off symbols
     def self.from_json(id, json)
-      preconditions = json[:preconditions].map {|preciondition| JSON::Precondition.from_json(preciondition)} 
-      JSON::PopulationCriteria.new(id, preconditions)
+      preconditions = json[:preconditions].map {|preciondition| HQMF::Precondition.from_json(preciondition)} 
+      HQMF::PopulationCriteria.new(id, preconditions)
     end
     
     def to_json

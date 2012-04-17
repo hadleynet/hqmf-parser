@@ -1,3 +1,7 @@
+require 'pathname'
+require 'fileutils'
+require 'json'
+
 namespace :hqmf do
 
   desc 'Open a console for interacting with parsed HQMF'
@@ -11,30 +15,40 @@ namespace :hqmf do
   end
 
   desc 'Parse all xml files to JSON and save them to /tmp'
-  task :parse_all do
-    require 'fileutils'
-    require 'json'
+  task :parse_all, [:path, :version] do |t, args|
+    
+    raise "You must specify the HQMF XML file path to convert" unless args.path
+    
     FileUtils.mkdir_p File.join(".","tmp",'json')
-    Dir.glob(File.join(".","test",'fixtures','all_xml','*.xml')) do |measure_def|
+    path = File.expand_path(args.path)
+    version = args.version || HQMF::Parser::HQMF_VERSION_1
+    
+    Dir.glob(File.join(path,'*.xml')) do |measure_def|
       puts "processing #{measure_def}..."
-      doc = HQMF1::Document.new(File.expand_path(measure_def))
-      nqf_id = doc.to_json[:metadata]['NQF_ID_NUMBER'][:value]
-      File.open(File.join(".","tmp",'json',"#{nqf_id}.json"), 'w') {|f| f.write(doc.to_json.to_json) }
+      doc = HQMF::Parser.parse(File.open(measure_def).read, version)
+      filename = Pathname.new(measure_def).basename
+      
+      File.open(File.join(".","tmp",'json',"#{filename}.json"), 'w') {|f| f.write(doc.to_json.to_json) }
     end
     
   end
 
   desc 'Parse specified xml file to JSON and save it to /tmp'
-  task :parse, [:file] do |t, args|
-    require 'fileutils'
-    require 'json'
+  task :parse, [:file,:version] do |t, args|
     FileUtils.mkdir_p File.join(".","tmp",'json')
     
-    doc = HQMF1::Document.new(File.expand_path(args.file))
-    nqf_id = doc.to_json[:metadata]['NQF_ID_NUMBER'][:value]
-    File.open(File.join(".","tmp",'json',"#{nqf_id}.json"), 'w') {|f| f.write(doc.to_json.to_json) }
+    raise "You must specify the HQMF XML file to convert" unless args.file
+    
+    version = args.version || HQMF::Parser::HQMF_VERSION_1
+    file = File.expand_path(args.file)
+    filename = Pathname.new(file).basename
+    
+    doc = HQMF::Parser.parse(File.open(file).read, version)
+
+    File.open(File.join(".","tmp",'json',"#{filename}.json"), 'w') {|f| f.write(doc.to_json.to_json) }
     
   end
+  
 
   
 end

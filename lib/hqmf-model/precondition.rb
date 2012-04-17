@@ -1,6 +1,8 @@
 module HQMF
   
   class Precondition
+
+    include HQMF::JSON::Utilities
   
     attr_reader :preconditions, :reference, :conjunction_code
   
@@ -17,11 +19,11 @@ module HQMF
     # Create a new population criteria from a JSON hash keyed off symbols
     def self.from_json(json)
       preconditions = []
-      preconditions = json[:preconditions].map {|preciondition| JSON::Precondition.from_json(preciondition)} if json[:preconditions]
+      preconditions = json[:preconditions].map {|preciondition| HQMF::Precondition.from_json(preciondition)} if json[:preconditions]
       reference = Reference.new(json[:reference]) if json[:reference] 
       conjunction_code = json[:conjunction_code] if json[:conjunction_code]
       
-      JSON::Precondition.new(preconditions,reference,conjunction_code)
+      HQMF::Precondition.new(preconditions,reference,conjunction_code)
     end
     def to_json
       x = nil

@@ -9,7 +9,7 @@ module HQMF
       
       case version
         when HQMF_VERSION_1
-          HQMF1::Document.new(hqmf_contents)
+          HQMF::DocumentConverter.convert(HQMF1::Document.new(hqmf_contents).to_json)
         when HQMF_VERSION_2
           HQMF2::Document.new(hqmf_contents)
         else

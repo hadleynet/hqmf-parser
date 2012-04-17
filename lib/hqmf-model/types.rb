@@ -2,9 +2,10 @@ module HQMF
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator
   class Value
+    include HQMF::JSON::Utilities
     attr_reader :type,:unit,:value,:expression
     
-    # Create a new JSON::Value
+    # Create a new HQMF::Value
     # @param [String] type
     # @param [String] unit
     # @param [String] value
@@ -28,7 +29,7 @@ module HQMF
       derived = json[:derived?] if json[:derived?]
       expression = json[:expression] if json[:expression]
       
-      JSON::Value.new(type,unit,value,inclusive,derived,expression)
+      HQMF::Value.new(type,unit,value,inclusive,derived,expression)
     end
     
     
@@ -48,10 +49,11 @@ module HQMF
   
   # Represents a HQMF physical quantity which can have low and high bounds
   class Range
+    include HQMF::JSON::Utilities
     attr_reader :type
     attr_accessor :low, :high, :width
     
-    # Create a new JSON::Value
+    # Create a new HQMF::Value
     # @param [String] type
     # @param [Value] low
     # @param [Value] high
@@ -65,11 +67,11 @@ module HQMF
     
     def self.from_json(json)
       type = json[:type] if json[:type]
-      low = JSON::Value.from_json(json[:low]) if json[:low]
-      high = JSON::Value.from_json(json[:high]) if json[:high]
-      width = JSON::Value.from_json(json[:width]) if json[:width]
+      low = HQMF::Value.from_json(json[:low]) if json[:low]
+      high = HQMF::Value.from_json(json[:high]) if json[:high]
+      width = HQMF::Value.from_json(json[:width]) if json[:width]
       
-      JSON::Range.new(type,low,high,width)
+      HQMF::Range.new(type,low,high,width)
     end
     
     def to_json
@@ -95,9 +97,10 @@ module HQMF
   
   # Represents a HQMF CD value which has a code and codeSystem
   class Coded
+    include HQMF::JSON::Utilities
     attr_reader :type, :system, :code
     
-    # Create a new JSON::Coded
+    # Create a new HQMF::Coded
     # @param [String] type
     # @param [String] system
     # @param [String] code
@@ -112,7 +115,7 @@ module HQMF
       system = json[:system] if json[:system]
       code = json[:code] if json[:code]
       
-      JSON::Coded.new(type,system,code)
+      HQMF::Coded.new(type,system,code)
     end
     
     def to_json
@@ -135,9 +138,10 @@ module HQMF
   
   # Represents a HQMF reference from a precondition to a data criteria
   class Reference
+    include HQMF::JSON::Utilities
     attr_reader :id
     
-    # Create a new JSON::Reference
+    # Create a new HQMF::Reference
     # @param [String] id
     def initialize(id)
       @id = id

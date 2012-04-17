@@ -10,7 +10,7 @@ module HQMF
       id = key
       preconditions = parse_preconditions(population_criteria,data_criteria_by_id)
 
-      JSON::PopulationCriteria.new(id, preconditions)
+      HQMF::PopulationCriteria.new(id, preconditions)
      
     end
     

@@ -30,7 +30,7 @@ module HQMF
       inline_code_list = nil
       subset_code = nil
 
-      JSON::DataCriteria.new(id, title,section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      HQMF::DataCriteria.new(id, title,section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
  
     end
 
@@ -38,13 +38,13 @@ module HQMF
 
     def self.convert_data_criteria_section(type)
       case type
-        when 'encounter'
+        when 'encounter', :encounter
           'encounters'
-        when 'procedure'
+        when 'procedure', :procedure
           'procedures'
-        when 'medication'
+        when 'medication', :medication
           'medications'
-        when 'characteristic'
+        when 'characteristic', :characteristic
           'characteristic'
         else
           raise "unsupported data criteria type conversion: #{type}"
@@ -53,7 +53,7 @@ module HQMF
 
     def self.convert_data_criteria_property(property)
       case property
-        when 'birthtime'
+        when 'birthtime', :birthtime
           'age'
         else
           raise "unsupported data criteria property conversion: #{property}"

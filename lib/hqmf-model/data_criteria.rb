@@ -2,6 +2,8 @@ module HQMF
   # Represents a data criteria specification
   class DataCriteria
 
+    include HQMF::JSON::Utilities
+
     attr_reader :id,:title,:section,:subset_code,:code_list_id, :property, :type, :status, :inline_code_list
     attr_accessor :value, :effective_time
   
@@ -42,10 +44,10 @@ module HQMF
       status = json[:status] if json[:status]
 
       value = convert_value(json[:value]) if json[:value]
-      effective_time = JSON::Range.from_json(json[:effective_time]) if json[:effective_time]
+      effective_time = HQMF::Range.from_json(json[:effective_time]) if json[:effective_time]
       inline_code_list = json[:inline_code_list].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json[:inline_code_list]
       
-      JSON::DataCriteria.new(id,title,section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      HQMF::DataCriteria.new(id,title,section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
       
     end
     
@@ -65,11 +67,11 @@ module HQMF
       type = json[:type]
       case type
         when 'TS'
-          value = JSON::Value.from_json(json)
+          value = HQMF::Value.from_json(json)
         when 'IVL_PQ'
-          value = JSON::Range.from_json(json)
+          value = HQMF::Range.from_json(json)
         when 'CD'
-          value = JSON::Coded.from_json(json)
+          value = HQMF::Coded.from_json(json)
         else
           raise "Unknown value type [#{value_type}]"
         end

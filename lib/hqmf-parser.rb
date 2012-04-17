@@ -3,6 +3,8 @@ require 'nokogiri'
 require 'pry'
 
 # require_relative
+require_relative 'hqmf-model/utilities.rb'
+
 require_relative 'hqmf-parser/1.0/utilities'
 require_relative 'hqmf-parser/1.0/range'
 require_relative 'hqmf-parser/1.0/document'
