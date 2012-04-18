@@ -12,8 +12,8 @@ $LOAD_PATH << File.expand_path("../test",__FILE__)
 desc "Run basic tests"
 Rake::TestTask.new("test_unit") { |t|
   t.pattern = 'test/unit/**/*_test.rb'
-  t.verbose = true
-  t.warning = true
+  t.verbose = false
+  t.warning = false
 }
 
 task :default => [:test_unit,'cover_me:report']

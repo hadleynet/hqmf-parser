@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = "A library for parsing HQMF XML files."
   s.email = "talk@projectpophealth.org"
   s.homepage = "http://github.com/pophealth/hqmf-parser"
-  s.authors = ["Adam Goldstein", "Andre Quina"]
+  s.authors = ["Adam Goldstein", "Andre Quina", "Marc Hadley"]
   s.version = '0.0.1'
   
   #s.add_dependency 'nokogiri', '~> 1.4.7'

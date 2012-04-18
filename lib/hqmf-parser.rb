@@ -34,4 +34,6 @@ require_relative 'hqmf-model/population_criteria.rb'
 require_relative 'hqmf-model/precondition.rb'
 require_relative 'hqmf-model/types.rb'
 
+require_relative 'hqmf-parser/value_sets/value_set_parser'
+
 require_relative 'hqmf-parser/parser'
