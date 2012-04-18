@@ -10,49 +10,21 @@ module HQMF1
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
-      @code_list_xpath = 'cda:act/cda:sourceOf//cda:code/@code'
+      
+      config_file = File.expand_path('../data_criteria.json', __FILE__)
+      config = JSON.parse(File.read(config_file))
+      settings = config['defaults']
       template_id = attr_val('cda:act/cda:templateId/@root')
-      case template_id
-      when '2.16.840.1.113883.3.560.1.2'
-        @type = :diagnosis
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
-        @status_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName'
-      when '2.16.840.1.113883.3.560.1.3'
-        @type = :procedure
-        @status_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code'
-      when '2.16.840.1.113883.3.560.1.4'
-        @type = :encounter
-      when '2.16.840.1.113883.3.560.1.5'
-        @type = :result
-        @status_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code'
-      when '2.16.840.1.113883.3.560.1.6'
-        @type = :procedure
-      when '2.16.840.1.113883.3.560.1.8'
-        @type = :medication
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code'
-      when '2.16.840.1.113883.3.560.1.13'
-        @type = :medication
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code'
-        @status_xpath = 'cda:act/cda:sourceOf/cda:substanceAdministration/cda:sourceOf/cda:observation/cda:value/@displayName'
-      when '2.16.840.1.113883.3.560.1.14'
-        @type = :medication
-      when '2.16.840.1.113883.3.560.1.17'
-        @type = :medication
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code'
-      when '2.16.840.1.113883.3.560.1.25'
-        @type = :characteristic
-        @property = :birthtime
-      when '2.16.840.1.113883.3.560.1.1001'
-        @type = :characteristic
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
-        @property = :gender
+      if config[template_id]
+        settings = settings.merge(config[template_id])
       else
         Kernel.warn "Unknown data criteria template identifier [#{template_id}]"
-        
-        @type = :unknown
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
-        @property = :unknown
       end
+      
+      @type = settings['type'].intern
+      @code_list_xpath = settings['code_list_xpath']
+      @status_xpath = settings['status_xpath']
+      @property = settings['property'].intern
     end
     
     # Get the identifier of the criteria, used elsewhere within the document for referencing

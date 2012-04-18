@@ -1,0 +1,239 @@
+{
+  "defaults": {
+    "code_list_xpath": "cda:act/cda:sourceOf//cda:code/@code",
+    "type": "unknown",
+    "property": "unknown"
+  },
+  "2.16.840.1.113883.3.560.1.1": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.2": {
+    "type": "diagnosis",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"
+  },
+  "2.16.840.1.113883.3.560.1.3": {
+    "type": "procedure",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
+  },
+  "2.16.840.1.113883.3.560.1.4": {
+    "type": "encounter"
+  },
+  "2.16.840.1.113883.3.560.1.5": {
+    "type": "result",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
+  },
+  "2.16.840.1.113883.3.560.1.6": {
+    "type": "procedure"
+  },
+  "2.16.840.1.113883.3.560.1.7": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.8": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.9": {
+    "type": "care_goal",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code"
+  },
+  "2.16.840.1.113883.3.560.1.10": {
+    "type": "procedure",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.11": {
+    "type": "result",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
+  },
+  "2.16.840.1.113883.3.560.1.12": {
+    "type": "result",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
+  },
+  "2.16.840.1.113883.3.560.1.13": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:sourceOf/cda:observation/cda:value/@displayName"
+  },
+  "2.16.840.1.113883.3.560.1.14": {
+    "type": "medication"
+  },
+  "2.16.840.1.113883.3.560.1.15": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.17": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.18": {
+    "type": "physical_exam"
+  },
+  "2.16.840.1.113883.3.560.1.21": {
+    "type": "risk_category_assessment",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
+  },
+  "2.16.840.1.113883.3.560.1.23": {
+    "type": "diagnosis",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"
+  },
+  "2.16.840.1.113883.3.560.1.24": {
+    "type": "diagnosis",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"
+  },
+  "2.16.840.1.113883.3.560.1.25": {
+    "type": "characteristic",
+    "property": "birthtime"
+  },
+  "2.16.840.1.113883.3.560.1.29": {
+    "type": "communication"
+  },
+  "2.16.840.1.113883.3.560.1.31": {
+    "type": "communication"
+  },
+  "2.16.840.1.113883.3.560.1.34": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.35": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.36": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.40": {
+    "type": "procedure"
+  },
+  "2.16.840.1.113883.3.560.1.45": {
+    "type": "procedure"
+  },
+  "2.16.840.1.113883.3.560.1.46": {
+    "type": "procedure"
+  },
+  "2.16.840.1.113883.3.560.1.47": {
+    "type": "procedure",
+    "status_xpath": "cda:act/cda:sourceOf//cda:statusCode/@code"
+  },
+  "2.16.840.1.113883.3.560.1.57": {
+    "type": "physical_exam"
+  },
+  "2.16.840.1.113883.3.560.1.60": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.61": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.62": {
+    "type": "procedure"
+  },
+  "2.16.840.1.113883.3.560.1.63": {
+    "type": "procedure"
+  },
+  "2.16.840.1.113883.3.560.1.64": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.66": {
+    "type": "allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.69": {
+    "type": "symptom",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"    
+  },
+  "2.16.840.1.113883.3.560.1.70": {
+    "type": "symptom",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"    
+  },
+  "2.16.840.1.113883.3.560.1.71": {
+    "type": "transfer",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.72": {
+    "type": "transfer",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.78": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.103": {
+    "type": "procedure",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.105": {
+    "type": "laboratory_test",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.106": {
+    "type": "procedure",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.110": {
+    "type": "procedure",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.111": {
+    "type": "procedure",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.113": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.114": {
+    "type": "medication",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.18": {
+    "type": "physical_exam",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.121": {
+    "type": "risk_category_assessment",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.129": {
+    "type": "communication",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.140": {
+    "type": "procedure",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.146": {
+    "type": "procedure",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:statusCode/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.157": {
+    "type": "physical_exam",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.1001": {
+    "type": "characteristic",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.1002": {
+    "type": "characteristic",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.1003": {
+    "type": "characteristic",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
+  }
+}
