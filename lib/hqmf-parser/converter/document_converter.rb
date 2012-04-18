@@ -76,7 +76,7 @@ module HQMF
     def self.create_measure_period_variables(json,measure_period,data_criteria,data_criteria_by_id)
 
       Kernel.warn "Creating variables for measure period... not sure if this is right"
-
+      
       measure_period_key = json[:attributes]['MEASUREMENT_PERIOD'][:id]
       measure_start_key = json[:attributes]['MEASUREMENT_START_DATE'][:id]
       measure_end_key = json[:attributes]['MEASUREMENT_END_DATE'][:id]
@@ -96,11 +96,11 @@ module HQMF
       ##
       #####
       
-      value = HQMF::Value.new('TS',nil,measure_period.low.value,nil, nil, nil)
-      data_criteria << HQMF::DataCriteria.new('StartDate','StartDate',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
-
-      value = HQMF::Value.new('TS',nil,measure_period.high.value,nil, nil, nil)
-      data_criteria << HQMF::DataCriteria.new('EndDate','EndDate',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      # value = HQMF::Value.new('TS',nil,measure_period.low.value,nil, nil, nil)
+      # data_criteria << HQMF::DataCriteria.new('StartDate','StartDate',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      # 
+      # value = HQMF::Value.new('TS',nil,measure_period.high.value,nil, nil, nil)
+      # data_criteria << HQMF::DataCriteria.new('EndDate','EndDate',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
       
       
 
@@ -111,7 +111,7 @@ module HQMF
       #####
       
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new('EndDate','EndDate',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
       
       # set the measure period data criteria for all measure period keys
       data_criteria_by_id[measure_period_key] = measure_criteria

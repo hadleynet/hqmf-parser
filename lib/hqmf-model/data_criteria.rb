@@ -56,7 +56,7 @@ module HQMF
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
-      {self.id.to_sym => json}
+      {self.id.to_s.to_sym => json}
     end
     
     

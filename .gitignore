@@ -1,2 +1,4 @@
 coverage*
 .DS_Store
+dump.rdb
+tmp
