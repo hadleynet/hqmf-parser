@@ -5,234 +5,292 @@
     "property": "unknown"
   },
   "2.16.840.1.113883.3.560.1.1": {
+    "description": "Medication allergy",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.2": {
+    "description": "Diagnosis active",
     "type": "diagnosis",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"
   },
   "2.16.840.1.113883.3.560.1.3": {
+    "description": "Diagnostic study performed",
     "type": "procedure",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
   },
   "2.16.840.1.113883.3.560.1.4": {
+    "description": "Encounter",
     "type": "encounter"
   },
   "2.16.840.1.113883.3.560.1.5": {
+    "description": "Laboratory test performed",
     "type": "result",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
   },
   "2.16.840.1.113883.3.560.1.6": {
+    "description": "Procedure performed",
     "type": "procedure"
   },
   "2.16.840.1.113883.3.560.1.7": {
+    "description": "Medication adverse effects",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.8": {
+    "description": "Medication dispensed",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.9": {
+    "description": "Care goal",
     "type": "care_goal",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code"
   },
   "2.16.840.1.113883.3.560.1.10": {
+    "description": "Device applied",
     "type": "procedure",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.11": {
+    "description": "Diagnostic study result",
     "type": "result",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
   },
   "2.16.840.1.113883.3.560.1.12": {
+    "description": "Laboratory test result",
     "type": "result",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
   },
   "2.16.840.1.113883.3.560.1.13": {
+    "description": "Medication active",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
     "status_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:sourceOf/cda:observation/cda:value/@displayName"
   },
   "2.16.840.1.113883.3.560.1.14": {
+    "description": "Medication administered",
     "type": "medication"
   },
   "2.16.840.1.113883.3.560.1.15": {
+    "description": "Medication intolerance",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.17": {
+    "description": "Medication order",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.18": {
+    "description": "Physical exam finding",
     "type": "physical_exam"
   },
   "2.16.840.1.113883.3.560.1.21": {
+    "description": "Risk category / assessment",
     "type": "risk_category_assessment",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code"
   },
   "2.16.840.1.113883.3.560.1.23": {
+    "description": "Diagnosis inactive",
     "type": "diagnosis",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"
   },
   "2.16.840.1.113883.3.560.1.24": {
+    "description": "Diagnosis resolved",
     "type": "diagnosis",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"
   },
   "2.16.840.1.113883.3.560.1.25": {
+    "description": "Patient characteristic",
     "type": "characteristic",
     "property": "birthtime"
   },
   "2.16.840.1.113883.3.560.1.29": {
+    "description": "Communication provider to provider",
     "type": "communication"
   },
   "2.16.840.1.113883.3.560.1.31": {
+    "description": "Communication from provider to patient",
     "type": "communication"
   },
   "2.16.840.1.113883.3.560.1.34": {
+    "description": "Device adverse event",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.35": {
+    "description": "Device allergy",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.36": {
+    "description": "Device intolerance",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.40": {
+    "description": "Diagnostic study recommended",
     "type": "procedure"
   },
   "2.16.840.1.113883.3.560.1.45": {
+    "description": "Intervention ordered",
     "type": "procedure"
   },
   "2.16.840.1.113883.3.560.1.46": {
+    "description": "Intervention performed",
     "type": "procedure"
   },
   "2.16.840.1.113883.3.560.1.47": {
+    "description": "Intervention result",
     "type": "procedure",
     "status_xpath": "cda:act/cda:sourceOf//cda:statusCode/@code"
   },
   "2.16.840.1.113883.3.560.1.57": {
+    "description": "Physical exam performed",
     "type": "physical_exam"
   },
   "2.16.840.1.113883.3.560.1.60": {
+    "description": "Procedure adverse event",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.61": {
+    "description": "Procedure intolerance",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.62": {
+    "description": "Procedure order",
     "type": "procedure"
   },
   "2.16.840.1.113883.3.560.1.63": {
+    "description": "Procedure result",
     "type": "procedure"
   },
   "2.16.840.1.113883.3.560.1.64": {
+    "description": "Substance administered",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.66": {
+    "description": "Substance allergy",
     "type": "allergy",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.69": {
+    "description": "Symptom active",
     "type": "symptom",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"    
   },
   "2.16.840.1.113883.3.560.1.70": {
+    "description": "Symptom assessed",
     "type": "symptom",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName"    
   },
   "2.16.840.1.113883.3.560.1.71": {
+    "description": "Transfer from",
     "type": "transfer",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.72": {
+    "description": "Transfer to",
     "type": "transfer",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.78": {
+    "description": "Medication order not done",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.103": {
+    "description": "Diagnostic study performed not done",
     "type": "procedure",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.105": {
+    "description": "Laboratory test performed not done",
     "type": "laboratory_test",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.106": {
+    "description": "Procedure performed not done",
     "type": "procedure",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.110": {
+    "description": "Device applied not done",
     "type": "procedure",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.111": {
+    "description": "Diagnostic study result not done",
     "type": "procedure",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.113": {
+    "description": "Medication active not done",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.114": {
+    "description": "Medication administered not done",
     "type": "medication",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
     "negation": true
   },
-  "2.16.840.1.113883.3.560.1.18": {
+  "2.16.840.1.113883.3.560.1.118": {
+    "description": "Physical exam finding not done",
     "type": "physical_exam",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.121": {
+    "description": "Risk category / assessment not done",
     "type": "risk_category_assessment",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.129": {
+    "description": "Communication provider to provider not done",
     "type": "communication",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.140": {
+    "description": "Diagnostic study order not done",
     "type": "procedure",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.146": {
+    "description": "Intervention performed not done",
     "type": "procedure",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:sourceOf/cda:observation/cda:value/@code",
     "status_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:statusCode/@code",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.157": {
+    "description": "Physical exam performed not done",
     "type": "physical_exam",
     "negation": true
   },
   "2.16.840.1.113883.3.560.1.1001": {
+    "description": "Patient characteristic",
     "type": "characteristic",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.1002": {
+    "description": "Patient characteristic",
     "type": "characteristic",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.1003": {
+    "description": "Patient characteristic",
     "type": "characteristic",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
   }
