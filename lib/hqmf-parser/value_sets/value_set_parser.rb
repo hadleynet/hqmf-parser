@@ -44,7 +44,9 @@ module HQMF
             # for hierarchies we need to probably have codes be a hash that we select from if we don't find the
             # element in by_oid_ungrouped we may need to look for it in final
           end
-          value[:codes] = codes
+          value[:code_sets] = codes
+          value.delete(:codes)
+          value.delete(:code_set)
           final << value
         end
     
@@ -59,8 +61,9 @@ module HQMF
   
       def adopt_orphan(orphan)
         parent = orphan.dup
-        parent[:code_set] = GROUP_CODE_SET
-        parent[:codes] = [orphan]
+        parent[:code_sets] = [orphan]
+        parent.delete(:codes)
+        parent.delete(:code_set)
         parent
       end
   

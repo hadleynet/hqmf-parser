@@ -71,5 +71,6 @@ DEPENDENCIES
   pry-nav
   rake
   roo (~> 1.10.1)
+  rubyzip
   spreadsheet (~> 0.6.8)
   turn

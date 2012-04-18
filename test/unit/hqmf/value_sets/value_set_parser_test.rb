@@ -62,16 +62,18 @@ class ValueSetParserTest < Test::Unit::TestCase
     final.each {|value_set| by_oid[value_set[:oid]] = value_set}
     
     birthdate = by_oid["2.16.840.1.113883.3.464.0001.14"]
-    birthdate[:code_set].must_equal HQMF::ValueSet::Parser::GROUP_CODE_SET
-    birthdate[:codes].length.must_equal 1
-    birthdate[:codes][0][:key].must_equal "individual_characteristic_birth_date"
+    birthdate[:code_set].must_equal nil
+    birthdate[:codes].must_equal nil
+    birthdate[:code_sets].length.must_equal 1
+    birthdate[:code_sets][0][:key].must_equal "individual_characteristic_birth_date"
 
     encounter = by_oid["2.16.840.1.113883.3.464.0001.49"]
-    encounter[:code_set].must_equal HQMF::ValueSet::Parser::GROUP_CODE_SET
-    encounter[:codes].length.must_equal 2
+    encounter[:code_set].must_equal nil
+    encounter[:codes].must_equal nil
+    encounter[:code_sets].length.must_equal 2
     
     children = {}
-    encounter[:codes].each {|child| children[child[:oid]] = child}
+    encounter[:code_sets].each {|child| children[child[:oid]] = child}
     
     children["2.16.840.1.113883.3.464.0001.47"][:key].must_equal "encounter_encounter_outpatient"
     children["2.16.840.1.113883.3.464.0001.47"][:codes].length.must_equal 1

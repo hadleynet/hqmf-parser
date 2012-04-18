@@ -4,6 +4,7 @@ gem 'rake'
 gem 'pry'
 gem 'pry-nav'
 gem 'nokogiri'
+gem 'rubyzip'
 
 # below are gems required for excel spreadsheet processing
 gem 'spreadsheet', '~> 0.6.8'
