@@ -6,7 +6,8 @@ module HQMF
  
       # @param [String] id
       # @param [String] title
-      # @param [String] section
+      # @param [String] standard_category
+      # @param [String] qds_data_type
       # @param [String] subset_code
       # @param [String] code_list_id
       # @param [String] property
@@ -19,12 +20,13 @@ module HQMF
       id = convert_key(key)
       title = criteria[:title]
       type = criteria[:type]
-      section = convert_data_criteria_section(type)
+      standard_category = criteria[:standard_category]
+      qds_data_type = criteria[:qds_data_type]
       code_list_id = criteria[:code_list_id]
       property = convert_data_criteria_property(criteria[:property]) if criteria[:property]
+      status = criteria[:status]
       # TODO: NEED TO FINALIZE THESE
-      Kernel.warn "We still need to map status, value, effective_time, inline_code_list, and subset_code"
-      status = nil
+      Kernel.warn "We still need to map value, effective_time, inline_code_list, and subset_code"
       value = nil
       effective_time = nil
       inline_code_list = nil
