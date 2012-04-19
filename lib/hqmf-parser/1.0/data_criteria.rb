@@ -4,55 +4,30 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_reader :property, :type
+    attr_reader :property, :type, :status, :standard_category, :qds_data_type
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
-      @code_list_xpath = 'cda:act/cda:sourceOf//cda:code/@code'
+      
+      config_file = File.expand_path('../data_criteria.json', __FILE__)
+      config = JSON.parse(File.read(config_file))
+      settings = config['defaults']
       template_id = attr_val('cda:act/cda:templateId/@root')
-      case template_id
-      when '2.16.840.1.113883.3.560.1.2'
-        @type = :diagnosis
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
-        @status_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName'
-      when '2.16.840.1.113883.3.560.1.3'
-        @type = :procedure
-        @status_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code'
-      when '2.16.840.1.113883.3.560.1.4'
-        @type = :encounter
-      when '2.16.840.1.113883.3.560.1.5'
-        @type = :result
-        @status_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code'
-      when '2.16.840.1.113883.3.560.1.6'
-        @type = :procedure
-      when '2.16.840.1.113883.3.560.1.8'
-        @type = :medication
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code'
-      when '2.16.840.1.113883.3.560.1.13'
-        @type = :medication
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code'
-        @status_xpath = 'cda:act/cda:sourceOf/cda:substanceAdministration/cda:sourceOf/cda:observation/cda:value/@displayName'
-      when '2.16.840.1.113883.3.560.1.14'
-        @type = :medication
-      when '2.16.840.1.113883.3.560.1.17'
-        @type = :medication
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code'
-      when '2.16.840.1.113883.3.560.1.25'
-        @type = :characteristic
-        @property = :birthtime
-      when '2.16.840.1.113883.3.560.1.1001'
-        @type = :characteristic
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
-        @property = :gender
+      if config[template_id]
+        settings = settings.merge(config[template_id])
       else
         Kernel.warn "Unknown data criteria template identifier [#{template_id}]"
-        
-        @type = :unknown
-        @code_list_xpath = 'cda:act/cda:sourceOf/cda:observation/cda:value/@code'
-        @property = :unknown
       end
+      
+      @type = settings['type'].intern
+      @code_list_xpath = settings['code_list_xpath']
+      @status_xpath = settings['status_xpath']
+      @property = settings['property'].intern
+      @status = settings['status']
+      @standard_category = settings['standard_category']
+      @qds_data_type = settings['qds_data_type']
     end
     
     # Get the identifier of the criteria, used elsewhere within the document for referencing
@@ -73,17 +48,6 @@ module HQMF1
       attr_val(@code_list_xpath)
     end
     
-    # Get the status of the criteria, e.g. active, completed, etc. Only present for
-    # certain types like condition, diagnosis, procedure, etc.
-    # @return [String] the status of this data criteria
-    def status
-      if @status_path
-        attr_val(@status_xpath)
-      else
-        nil
-      end
-    end
-    
     # Get a JS friendly constant name for this measure attribute
     def const_name
       components = title.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }
@@ -91,7 +55,11 @@ module HQMF1
     end
     
     def to_json
-      {self.const_name => build_hash(self, [:id,:title,:code_list_id,:type,:status,:property])}
+      {
+        self.const_name => build_hash(
+          self, 
+          [:id,:title,:code_list_id,:type,:status,:property,:standard_category,:qds_data_type])
+      }
     end
 
   end

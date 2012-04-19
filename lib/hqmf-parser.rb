@@ -1,6 +1,7 @@
 # require
 require 'nokogiri'
 require 'pry'
+require 'json'
 
 # require_relative
 require_relative 'hqmf-model/utilities.rb'

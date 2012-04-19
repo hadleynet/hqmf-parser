@@ -1,0 +1,428 @@
+{
+  "defaults": {
+    "code_list_xpath": "cda:act/cda:sourceOf//cda:code/@code",
+    "type": "unknown",
+    "property": "unknown"
+  },
+  "2.16.840.1.113883.3.560.1.1": {
+    "description": "Medication allergy",
+    "type": "allergies",
+    "standard_category": "medication",
+    "qds_data_type": "medication_allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.2": {
+    "description": "Diagnosis active",
+    "type": "active_diagnosis",
+    "standard_category": "diagnosis_condition_problem",
+    "qds_data_type": "diagnosis_active",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
+    "status": "active"
+  },
+  "2.16.840.1.113883.3.560.1.3": {
+    "description": "Diagnostic study performed",
+    "type": "procedures",
+    "standard_category": "diagnostic_study",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": "performed"
+  },
+  "2.16.840.1.113883.3.560.1.4": {
+    "description": "Encounter",
+    "type": "encounters",
+    "standard_category": "encounter",
+    "qds_data_type": ""
+  },
+  "2.16.840.1.113883.3.560.1.5": {
+    "description": "Laboratory test performed",
+    "type": "laboratory_tests",
+    "standard_category": "laboratory_test",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": "performed"
+  },
+  "2.16.840.1.113883.3.560.1.6": {
+    "description": "Procedure performed",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_performed"
+  },
+  "2.16.840.1.113883.3.560.1.7": {
+    "description": "Medication adverse effects",
+    "type": "allergies",
+    "standard_category": "medication",
+    "qds_data_type": "medication_adverse_event",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.8": {
+    "description": "Medication dispensed",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_dispensed",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.9": {
+    "description": "Care goal",
+    "type": "care_goals",
+    "standard_category": "care_goal",
+    "qds_data_type": "",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code"
+  },
+  "2.16.840.1.113883.3.560.1.10": {
+    "description": "Device applied",
+    "type": "all_devices",
+    "standard_category": "device",
+    "qds_data_type": "device_applied",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.11": {
+    "description": "Diagnostic study result",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_result",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": "final report"
+  },
+  "2.16.840.1.113883.3.560.1.12": {
+    "description": "Laboratory test result",
+    "type": "laboratory_tests",
+    "standard_category": "laboratory_test",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": ""
+  },
+  "2.16.840.1.113883.3.560.1.13": {
+    "description": "Medication active",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_active",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:sourceOf/cda:observation/cda:value/@displayName",
+    "status": "active"
+  },
+  "2.16.840.1.113883.3.560.1.14": {
+    "description": "Medication administered",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_administered"
+  },
+  "2.16.840.1.113883.3.560.1.15": {
+    "description": "Medication intolerance",
+    "type": "allergies",
+    "standard_category": "medication",
+    "qds_data_type": "medication_intolerance",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.17": {
+    "description": "Medication order",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_order",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.18": {
+    "description": "Physical exam finding",
+    "type": "vital_signs",
+    "standard_category": "physical_exam",
+    "qds_data_type": ""
+  },
+  "2.16.840.1.113883.3.560.1.21": {
+    "description": "Risk category / assessment",
+    "type": "procedures",
+    "standard_category": "risk_category_assessment",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": "completed"
+  },
+  "2.16.840.1.113883.3.560.1.23": {
+    "description": "Diagnosis inactive",
+    "type": "inactive_diagnosis",
+    "standard_category": "diagnosis_condition_problem",
+    "qds_data_type": "diagnosis_inactive",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
+    "status": "inactive"
+  },
+  "2.16.840.1.113883.3.560.1.24": {
+    "description": "Diagnosis resolved",
+    "type": "resolved_diagnosis",
+    "standard_category": "diagnosis_condition_problem",
+    "qds_data_type": "diagnosis_resolved",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
+    "status": "resolved"
+  },
+  "2.16.840.1.113883.3.560.1.25": {
+    "description": "Patient characteristic",
+    "type": "characteristic",
+    "standard_category": "individual_characteristic",
+    "qds_data_type": "",
+    "property": "birthtime"
+  },
+  "2.16.840.1.113883.3.560.1.29": {
+    "description": "Communication provider to provider",
+    "type": "procedures",
+    "standard_category": "communication",
+    "qds_data_type": "provider_to_provider"
+  },
+  "2.16.840.1.113883.3.560.1.31": {
+    "description": "Communication from provider to patient",
+    "type": "procedures",
+    "standard_category": "communication",
+    "qds_data_type": "provider_to_patient"
+  },
+  "2.16.840.1.113883.3.560.1.34": {
+    "description": "Device adverse event",
+    "type": "allergies",
+    "standard_category": "device",
+    "qds_data_type": "device_allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.35": {
+    "description": "Device allergy",
+    "type": "allergies",
+    "standard_category": "device",
+    "qds_data_type": "device_allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.36": {
+    "description": "Device intolerance",
+    "type": "allergies",
+    "standard_category": "device",
+    "qds_data_type": "device_allergy",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.40": {
+    "description": "Diagnostic study recommended",
+    "type": "procedures",
+    "standard_category": "diagnostic_study",
+    "qds_data_type": ""
+  },
+  "2.16.840.1.113883.3.560.1.45": {
+    "description": "Intervention ordered",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_order"
+  },
+  "2.16.840.1.113883.3.560.1.46": {
+    "description": "Intervention performed",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_performed"
+  },
+  "2.16.840.1.113883.3.560.1.47": {
+    "description": "Intervention result",
+    "type": "procedure_results",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_result",
+    "status_xpath": "cda:act/cda:sourceOf//cda:statusCode/@code",
+    "status": "completed"
+  },
+  "2.16.840.1.113883.3.560.1.57": {
+    "description": "Physical exam performed",
+    "type": "vital_signs",
+    "standard_category": "physical_exam",
+    "qds_data_type": ""
+  },
+  "2.16.840.1.113883.3.560.1.60": {
+    "description": "Procedure adverse event",
+    "type": "allergies",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_adverse_event",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.61": {
+    "description": "Procedure intolerance",
+    "type": "allergies",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_intolerance",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.62": {
+    "description": "Procedure order",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_order"
+  },
+  "2.16.840.1.113883.3.560.1.63": {
+    "description": "Procedure result",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_result"
+  },
+  "2.16.840.1.113883.3.560.1.64": {
+    "description": "Substance administered",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_administered",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.66": {
+    "description": "Substance allergy",
+    "type": "allergies",
+    "standard_category": "substance",
+    "qds_data_type": "",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.69": {
+    "description": "Symptom active",
+    "type": "all_problems",
+    "standard_category": "symptom",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
+    "status": "active"  
+  },
+  "2.16.840.1.113883.3.560.1.70": {
+    "description": "Symptom assessed",
+    "type": "all_problems",
+    "standard_category": "symptom",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
+    "status": "assessed"    
+  },
+  "2.16.840.1.113883.3.560.1.71": {
+    "description": "Transfer from",
+    "type": "transfers",
+    "standard_category": "transfer",
+    "qds_data_type": "transfer_from",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.72": {
+    "description": "Transfer to",
+    "type": "transfers",
+    "standard_category": "transfer",
+    "qds_data_type": "transfer_to",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:participant/cda:roleParticipant/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.78": {
+    "description": "Medication order not done",
+    "type": "medications",
+    "standard_category": "medication",
+    "qds_data_type": "medication_order",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.103": {
+    "description": "Diagnostic study performed not done",
+    "type": "procedures",
+    "standard_category": "diagnostic_study",
+    "qds_data_type": "",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.105": {
+    "description": "Laboratory test performed not done",
+    "type": "laboratory_tests",
+    "standard_category": "laboratory_test",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": "performed",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.106": {
+    "description": "Procedure performed not done",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_performed",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.110": {
+    "description": "Device applied not done",
+    "type": "all_devices",
+    "standard_category": "device",
+    "qds_data_type": "device_applied",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.111": {
+    "description": "Diagnostic study result not done",
+    "type": "procedures",
+    "standard_category": "diagnostic_study",
+    "qds_data_type": "",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.113": {
+    "description": "Medication active not done",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_active",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.114": {
+    "description": "Medication administered not done",
+    "type": "all_meds",
+    "standard_category": "medication",
+    "qds_data_type": "medication_administered",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.118": {
+    "description": "Physical exam finding not done",
+    "type": "vital_signs",
+    "standard_category": "physical_exam",
+    "qds_data_type": "",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.121": {
+    "description": "Risk category / assessment not done",
+    "type": "procedures",
+    "standard_category": "risk_category_assessment",
+    "qds_data_type": "",
+    "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
+    "status": "completed",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.129": {
+    "description": "Communication provider to provider not done",
+    "type": "communication",
+    "standard_category": "communication",
+    "qds_data_type": "provider_to_provider",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.140": {
+    "description": "Diagnostic study order not done",
+    "type": "procedures",
+    "standard_category": "diagnostic_study",
+    "qds_data_type": "",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.146": {
+    "description": "Intervention performed not done",
+    "type": "procedures",
+    "standard_category": "procedure",
+    "qds_data_type": "procedure_performed",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:sourceOf/cda:observation/cda:value/@code",
+    "status_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:statusCode/@code",
+    "status": "completed",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.157": {
+    "description": "Physical exam performed not done",
+    "type": "vital_signs",
+    "standard_category": "physical_exam",
+    "qds_data_type": "",
+    "negation": true
+  },
+  "2.16.840.1.113883.3.560.1.1001": {
+    "description": "Patient characteristic",
+    "type": "characteristic",
+    "standard_category": "individual_characteristic",
+    "qds_data_type": "",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.1002": {
+    "description": "Patient characteristic",
+    "type": "characteristic",
+    "standard_category": "individual_characteristic",
+    "qds_data_type": "",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
+  },
+  "2.16.840.1.113883.3.560.1.1003": {
+    "description": "Patient characteristic",
+    "type": "characteristic",
+    "standard_category": "individual_characteristic",
+    "qds_data_type": "",
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:code/@code"
+  }
+}
