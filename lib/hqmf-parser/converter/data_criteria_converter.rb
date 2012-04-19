@@ -19,7 +19,7 @@ module HQMF
       id = convert_key(key)
       title = criteria[:title]
       type = criteria[:type]
-      section = convert_data_criteria_section(type)
+      section = type
       code_list_id = criteria[:code_list_id]
       property = convert_data_criteria_property(criteria[:property]) if criteria[:property]
       # TODO: NEED TO FINALIZE THESE
@@ -35,21 +35,6 @@ module HQMF
     end
 
     private 
-
-    def self.convert_data_criteria_section(type)
-      case type
-        when 'encounter', :encounter
-          'encounters'
-        when 'procedure', :procedure
-          'procedures'
-        when 'medication', :medication
-          'medications'
-        when 'characteristic', :characteristic
-          'characteristic'
-        else
-          raise "unsupported data criteria type conversion: #{type}"
-      end
-    end
 
     def self.convert_data_criteria_property(property)
       case property
