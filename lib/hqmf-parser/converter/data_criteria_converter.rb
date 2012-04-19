@@ -13,6 +13,7 @@ module HQMF
       # @param [String] property
       # @param [String] type
       # @param [String] status
+      # @param [boolean] negation
       # @param [Value|Range|Coded] value
       # @param [Range] effective_time
       # @param [Hash<String,String>] inline_code_list
@@ -25,6 +26,7 @@ module HQMF
       code_list_id = criteria[:code_list_id]
       property = convert_data_criteria_property(criteria[:property]) if criteria[:property]
       status = criteria[:status]
+      negation = criteria[:negation]
       # TODO: NEED TO FINALIZE THESE
       Kernel.warn "We still need to map value, effective_time, inline_code_list, and subset_code"
       value = nil
@@ -32,7 +34,9 @@ module HQMF
       inline_code_list = nil
       subset_code = nil
 
-      HQMF::DataCriteria.new(id, title,section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      HQMF::DataCriteria.new(id, title, standard_category, qds_data_type, subset_code, 
+        code_list_id, property,type, status, value, effective_time, inline_code_list,
+        negation)
  
     end
 
