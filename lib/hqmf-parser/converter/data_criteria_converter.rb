@@ -40,6 +40,8 @@ module HQMF
       case property
         when 'birthtime', :birthtime
           'age'
+        when 'unknown', :unknown
+          Kernel.warn("data criteria property is unknown")
         else
           raise "unsupported data criteria property conversion: #{property}"
       end
