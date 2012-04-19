@@ -156,7 +156,7 @@
   "2.16.840.1.113883.3.560.1.25": {
     "description": "Patient characteristic",
     "type": "characteristic",
-    "standard_category": "",
+    "standard_category": "individual_characteristic",
     "qds_data_type": "",
     "property": "birthtime"
   },

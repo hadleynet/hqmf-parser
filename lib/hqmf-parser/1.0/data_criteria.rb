@@ -4,7 +4,7 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_reader :property, :type
+    attr_reader :property, :type, :status, :standard_category, :qds_data_type
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -25,6 +25,9 @@ module HQMF1
       @code_list_xpath = settings['code_list_xpath']
       @status_xpath = settings['status_xpath']
       @property = settings['property'].intern
+      @status = settings['status']
+      @standard_category = settings['standard_category']
+      @qds_data_type = settings['qds_data_type']
     end
     
     # Get the identifier of the criteria, used elsewhere within the document for referencing
@@ -45,17 +48,6 @@ module HQMF1
       attr_val(@code_list_xpath)
     end
     
-    # Get the status of the criteria, e.g. active, completed, etc. Only present for
-    # certain types like condition, diagnosis, procedure, etc.
-    # @return [String] the status of this data criteria
-    def status
-      if @status_path
-        attr_val(@status_xpath)
-      else
-        nil
-      end
-    end
-    
     # Get a JS friendly constant name for this measure attribute
     def const_name
       components = title.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }
@@ -63,7 +55,11 @@ module HQMF1
     end
     
     def to_json
-      {self.const_name => build_hash(self, [:id,:title,:code_list_id,:type,:status,:property])}
+      {
+        self.const_name => build_hash(
+          self, 
+          [:id,:title,:code_list_id,:type,:status,:property,:standard_category,:qds_data_type])
+      }
     end
 
   end
