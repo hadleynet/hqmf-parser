@@ -23,7 +23,7 @@ module HQMF
       end
   
       # import an excel matrix array into mongo
-      def parse(file, options)
+      def parse(file, options={})
         sheet_array = file_to_array(file, options)
         by_oid_ungrouped = cells_to_hashs_by_oid(sheet_array)
         collapse_groups(by_oid_ungrouped)
@@ -137,7 +137,7 @@ module HQMF
       def file_to_array(file_path, options)
         defaults = {
           :columns => 2,  # range of import
-          :sheet => 0     # only one sheet at a time can be worked on
+          :sheet => 1     # only one sheet at a time can be worked on
         }
         options = defaults.merge(options)
     

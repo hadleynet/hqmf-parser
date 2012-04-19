@@ -64,8 +64,8 @@ module HQMF
       # @param [String] derived
       # @param [String] expression
       
-      low = HQMF::Value.new('TS',nil,'20120101',nil, nil, nil)
-      high = HQMF::Value.new('TS',nil,'20121231',nil, nil, nil)
+      low = HQMF::Value.new('TS',nil,'20100101',nil, nil, nil)
+      high = HQMF::Value.new('TS',nil,'20101231',nil, nil, nil)
       width = HQMF::Value.new('PQ','a','1',nil, nil, nil)
       
       Kernel.warn('need to figure out a way to make dates dynamic')

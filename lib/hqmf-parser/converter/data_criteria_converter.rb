@@ -38,25 +38,12 @@ module HQMF
 
     private 
 
-    def self.convert_data_criteria_section(type)
-      case type
-        when 'encounter', :encounter
-          'encounters'
-        when 'procedure', :procedure
-          'procedures'
-        when 'medication', :medication
-          'medications'
-        when 'characteristic', :characteristic
-          'characteristic'
-        else
-          raise "unsupported data criteria type conversion: #{type}"
-      end
-    end
-
     def self.convert_data_criteria_property(property)
       case property
         when 'birthtime', :birthtime
           'age'
+        when 'unknown', :unknown
+          Kernel.warn("data criteria property is unknown")
         else
           raise "unsupported data criteria property conversion: #{property}"
       end
