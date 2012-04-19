@@ -62,7 +62,7 @@ module HQMF
     end
     
     def to_json
-      json = build_hash(self, [:title,:standard_category,:qds_data_type,:subset_code,:code_list_id, :property, :type, :status, :neagtion])
+      json = build_hash(self, [:title,:standard_category,:qds_data_type,:subset_code,:code_list_id, :property, :type, :status, :negation])
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
