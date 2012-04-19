@@ -39,7 +39,7 @@ module HQMF
     def self.convert_data_criteria_property(property)
       case property
         when 'birthtime', :birthtime
-          'age'
+          :age
         when 'unknown', :unknown
           Kernel.warn("data criteria property is unknown")
         else

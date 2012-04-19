@@ -13,7 +13,7 @@
   },
   "2.16.840.1.113883.3.560.1.2": {
     "description": "Diagnosis active",
-    "type": "active_diagnosis",
+    "type": "activeDiagnoses",
     "standard_category": "diagnosis_condition_problem",
     "qds_data_type": "diagnosis_active",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
@@ -36,7 +36,7 @@
   },
   "2.16.840.1.113883.3.560.1.5": {
     "description": "Laboratory test performed",
-    "type": "laboratory_tests",
+    "type": "laboratoryTests",
     "standard_category": "laboratory_test",
     "qds_data_type": "",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
@@ -57,21 +57,21 @@
   },
   "2.16.840.1.113883.3.560.1.8": {
     "description": "Medication dispensed",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_dispensed",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.9": {
     "description": "Care goal",
-    "type": "care_goals",
+    "type": "careGoals",
     "standard_category": "care_goal",
     "qds_data_type": "",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code"
   },
   "2.16.840.1.113883.3.560.1.10": {
     "description": "Device applied",
-    "type": "all_devices",
+    "type": "allDevices",
     "standard_category": "device",
     "qds_data_type": "device_applied",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code"
@@ -86,7 +86,7 @@
   },
   "2.16.840.1.113883.3.560.1.12": {
     "description": "Laboratory test result",
-    "type": "laboratory_tests",
+    "type": "laboratoryTests",
     "standard_category": "laboratory_test",
     "qds_data_type": "",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
@@ -94,7 +94,7 @@
   },
   "2.16.840.1.113883.3.560.1.13": {
     "description": "Medication active",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_active",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
@@ -103,7 +103,7 @@
   },
   "2.16.840.1.113883.3.560.1.14": {
     "description": "Medication administered",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_administered"
   },
@@ -116,14 +116,14 @@
   },
   "2.16.840.1.113883.3.560.1.17": {
     "description": "Medication order",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_order",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.18": {
     "description": "Physical exam finding",
-    "type": "vital_signs",
+    "type": "vitalSigns",
     "standard_category": "physical_exam",
     "qds_data_type": ""
   },
@@ -137,7 +137,7 @@
   },
   "2.16.840.1.113883.3.560.1.23": {
     "description": "Diagnosis inactive",
-    "type": "inactive_diagnosis",
+    "type": "inactiveDiagnoses",
     "standard_category": "diagnosis_condition_problem",
     "qds_data_type": "diagnosis_inactive",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
@@ -146,7 +146,7 @@
   },
   "2.16.840.1.113883.3.560.1.24": {
     "description": "Diagnosis resolved",
-    "type": "resolved_diagnosis",
+    "type": "resolvedDiagnoses",
     "standard_category": "diagnosis_condition_problem",
     "qds_data_type": "diagnosis_resolved",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:observation/cda:value/@code",
@@ -213,7 +213,7 @@
   },
   "2.16.840.1.113883.3.560.1.47": {
     "description": "Intervention result",
-    "type": "procedure_results",
+    "type": "procedureResults",
     "standard_category": "procedure",
     "qds_data_type": "procedure_result",
     "status_xpath": "cda:act/cda:sourceOf//cda:statusCode/@code",
@@ -221,7 +221,7 @@
   },
   "2.16.840.1.113883.3.560.1.57": {
     "description": "Physical exam performed",
-    "type": "vital_signs",
+    "type": "vitalSigns",
     "standard_category": "physical_exam",
     "qds_data_type": ""
   },
@@ -253,7 +253,7 @@
   },
   "2.16.840.1.113883.3.560.1.64": {
     "description": "Substance administered",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_administered",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
@@ -267,7 +267,7 @@
   },
   "2.16.840.1.113883.3.560.1.69": {
     "description": "Symptom active",
-    "type": "all_problems",
+    "type": "allProblems",
     "standard_category": "symptom",
     "qds_data_type": "",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
@@ -275,7 +275,7 @@
   },
   "2.16.840.1.113883.3.560.1.70": {
     "description": "Symptom assessed",
-    "type": "all_problems",
+    "type": "allProblems",
     "standard_category": "symptom",
     "qds_data_type": "",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:observation/cda:value/@displayName",
@@ -312,7 +312,7 @@
   },
   "2.16.840.1.113883.3.560.1.105": {
     "description": "Laboratory test performed not done",
-    "type": "laboratory_tests",
+    "type": "laboratoryTests",
     "standard_category": "laboratory_test",
     "qds_data_type": "",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
@@ -328,7 +328,7 @@
   },
   "2.16.840.1.113883.3.560.1.110": {
     "description": "Device applied not done",
-    "type": "all_devices",
+    "type": "allDevices",
     "standard_category": "device",
     "qds_data_type": "device_applied",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code",
@@ -343,7 +343,7 @@
   },
   "2.16.840.1.113883.3.560.1.113": {
     "description": "Medication active not done",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_active",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
@@ -351,7 +351,7 @@
   },
   "2.16.840.1.113883.3.560.1.114": {
     "description": "Medication administered not done",
-    "type": "all_meds",
+    "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_administered",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
@@ -359,7 +359,7 @@
   },
   "2.16.840.1.113883.3.560.1.118": {
     "description": "Physical exam finding not done",
-    "type": "vital_signs",
+    "type": "vitalSigns",
     "standard_category": "physical_exam",
     "qds_data_type": "",
     "negation": true
@@ -375,7 +375,7 @@
   },
   "2.16.840.1.113883.3.560.1.129": {
     "description": "Communication provider to provider not done",
-    "type": "communication",
+    "type": "communications",
     "standard_category": "communication",
     "qds_data_type": "provider_to_provider",
     "negation": true
@@ -399,7 +399,7 @@
   },
   "2.16.840.1.113883.3.560.1.157": {
     "description": "Physical exam performed not done",
-    "type": "vital_signs",
+    "type": "vitalSigns",
     "standard_category": "physical_exam",
     "qds_data_type": "",
     "negation": true
