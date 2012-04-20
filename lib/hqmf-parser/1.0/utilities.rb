@@ -41,37 +41,5 @@ module HQMF1
       clean_json(json)
     end
     
-    def collapse_logical_operators(operators)
-      collapsed = []
-      operators_by_type = {}
-      operators.each do |operator|
-        operators_by_type[operator[:conjunction]] ||= []
-        operators_by_type[operator[:conjunction]] << operator
-      end
-      operators_by_type.each do |type, operators|
-        collapse = join_like_operators(type, operators)
-        collapse[:preconditions] = collapse_logical_operators(collapse[:preconditions]) if collapse[:preconditions]
-        collapsed << collapse
-      end
-      collapsed
-    end
-    
-    def join_like_operators(type, operators)
-      operator = {}
-      operator[:conjunction] = type
-      operators.each do |current|
-        if (current[:comparison])
-          comparison = current[:comparison]
-          comparison[:negation] = current[:negation] if current[:negation]
-          operator[:comparisons] ||= []
-          operator[:comparisons] << comparison
-        end
-        operator[:preconditions] = current[:preconditions]
-        # restrictions have been pushed down
-        # operator[:restrictions] = current[:restrictions] if current[:restrictions]
-      end
-      operator
-    end
-    
   end
 end  

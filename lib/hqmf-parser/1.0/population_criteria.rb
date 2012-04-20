@@ -45,7 +45,6 @@ module HQMF1
       section = self.code
       json = {section => []}
       self.preconditions.each {|precondition| json[section] << precondition.to_json}
-#      json[section] = collapse_logical_operators(json[section])
       json
       
     end
