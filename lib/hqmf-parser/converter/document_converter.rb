@@ -82,7 +82,6 @@ module HQMF
       measure_end_key = json[:attributes]['MEASUREMENT_END_DATE'][:id]
       
       type = 'variable'
-      section = nil
       code_list_id = nil
       property = nil
       status = nil
@@ -111,7 +110,7 @@ module HQMF
       #####
       
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod',section,subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list)
+      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list, false)
       
       # set the measure period data criteria for all measure period keys
       data_criteria_by_id[measure_period_key] = measure_criteria
