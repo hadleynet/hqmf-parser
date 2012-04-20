@@ -4,7 +4,7 @@ module HQMF
 
     include HQMF::JSON::Utilities
 
-    attr_reader :id,:title,:section,:subset_code,:code_list_id, :property, :type, :status, :inline_code_list
+    attr_reader :id,:title,:section,:subset_code,:code_list_id, :property, :type, :status, :inline_code_list, :standard_category, :qds_data_type, :negation
     attr_accessor :value, :effective_time
   
     # Create a new data criteria instance

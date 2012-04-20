@@ -114,13 +114,13 @@ module HQMF1
       assert_equal '482902EC-E214-4FB4-8C5A-85A41250573C', data_criteria[2].id
       assert_equal '2.16.840.1.113883.3.464.0001.143', data_criteria[2].code_list_id
     
-      assert_equal :all_meds, data_criteria[3].type
+      assert_equal :allMedications, data_criteria[3].type
       assert_equal 'Medication administered: Pneumococcal Vaccine all ages', data_criteria[3].title
       assert_equal '10165EC8-53EE-4242-A20D-B1D21CE0DC73', data_criteria[3].id
       assert_equal '2.16.840.1.113883.3.464.0001.430', data_criteria[3].code_list_id
     
       criteria = @doc.data_criteria('10165EC8-53EE-4242-A20D-B1D21CE0DC73')
-      assert_equal :all_meds, criteria.type
+      assert_equal :allMedications, criteria.type
       assert_equal 'Medication administered: Pneumococcal Vaccine all ages', criteria.title
       assert_equal '10165EC8-53EE-4242-A20D-B1D21CE0DC73', criteria.id
       assert_equal '2.16.840.1.113883.3.464.0001.430', criteria.code_list_id
