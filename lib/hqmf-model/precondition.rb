@@ -19,12 +19,13 @@ module HQMF
     # Create a new population criteria from a JSON hash keyed off symbols
     def self.from_json(json)
       preconditions = []
-      preconditions = json[:preconditions].map {|preciondition| HQMF::Precondition.from_json(preciondition)} if json[:preconditions]
-      reference = Reference.new(json[:reference]) if json[:reference] 
-      conjunction_code = json[:conjunction_code] if json[:conjunction_code]
+      preconditions = json["preconditions"].map {|precondition| HQMF::Precondition.from_json(precondition)} if json["preconditions"]
+      reference = Reference.new(json["reference"]) if json["reference"] 
+      conjunction_code = json["conjunction_code"] if json["conjunction_code"]
       
-      HQMF::Precondition.new(preconditions,reference,conjunction_code)
+      HQMF::Precondition.new(preconditions, reference, conjunction_code)
     end
+    
     def to_json
       x = nil
       json = {}
@@ -33,7 +34,6 @@ module HQMF
       json[:conjunction_code] = self.conjunction_code if self.conjunction_code
       json
     end
-    
     
     # Return true of this precondition represents a conjunction with nested preconditions
     # or false of this precondition is a reference to a data criteria

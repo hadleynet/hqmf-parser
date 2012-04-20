@@ -41,24 +41,22 @@ module HQMF
     
     # Create a new data criteria instance from a JSON hash keyed with symbols
     def self.from_json(id, json)
-      title = json[:title] if json[:title]
-      standard_category = json[:standard_category] if json[:standard_category]
-      qds_data_type = json[:qds_data_type] if json[:standard_category]
-      subset_code = json[:subset_code] if json[:subset_code]
-      code_list_id = json[:code_list_id] if json[:code_list_id]
-      property = json[:property].to_sym if json[:property]
-      type = json[:type].to_sym if json[:type]
-      status = json[:status] if json[:status]
-      negation = json[:negation] || false
+      title = json["title"] if json["title"]
+      standard_category = json["standard_category"] if json["standard_category"]
+      qds_data_type = json["qds_data_type"] if json["standard_category"]
+      subset_code = json["subset_code"] if json["subset_code"]
+      code_list_id = json["code_list_id"] if json["code_list_id"]
+      property = json["property"].to_sym if json[:property]
+      type = json["type"].to_sym if json["type"]
+      status = json["status"] if json["status"]
+      negation = json["negation"] || false
 
-      value = convert_value(json[:value]) if json[:value]
-      effective_time = HQMF::Range.from_json(json[:effective_time]) if json[:effective_time]
-      inline_code_list = json[:inline_code_list].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json[:inline_code_list]
+      value = convert_value(json["value"]) if json["value"]
+      effective_time = HQMF::Range.from_json(json["effective_time"]) if json["effective_time"]
+      inline_code_list = json["inline_code_list"].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json["inline_code_list"]
       
-      HQMF::DataCriteria.new(id, title, standard_category, qds_data_type, subset_code, 
-        code_list_id, property, type, status, value, effective_time, inline_code_list,
-        negation)
-      
+      HQMF::DataCriteria.new(id, title, standard_category, qds_data_type, subset_code, code_list_id,
+                            property, type, status, value, effective_time, inline_code_list, negation)
     end
     
     def to_json
@@ -74,7 +72,7 @@ module HQMF
     
     def self.convert_value(json)
       value = nil
-      type = json[:type]
+      type = json["type"]
       case type
         when 'TS'
           value = HQMF::Value.from_json(json)

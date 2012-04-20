@@ -12,12 +12,15 @@ module HQMF
     # @param [Array#Precondition] preconditions 
     def initialize(id, preconditions)
       @id = id
-      @preconditions = preconditions 
+      @preconditions = preconditions
     end
     
     # Create a new population criteria from a JSON hash keyed off symbols
     def self.from_json(id, json)
-      preconditions = json[:preconditions].map {|preciondition| HQMF::Precondition.from_json(preciondition)} 
+      preconditions = json["preconditions"].map do |precondition|
+        HQMF::Precondition.from_json(precondition)
+      end
+      
       HQMF::PopulationCriteria.new(id, preconditions)
     end
     

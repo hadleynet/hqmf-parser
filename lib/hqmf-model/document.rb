@@ -25,11 +25,15 @@ module HQMF
       title = json[:title]
       description = json[:description]
 
-      population_criterias = []
-      json[:population_criteria].each {|key, population_criteria| population_criterias << HQMF::PopulationCriteria.from_json(key.to_s, population_criteria)} if json[:population_criteria]
+      population_criterias = {}
+      json[:population_criteria].each do |key, population_criteria|
+        population_criterias.merge! HQMF::PopulationCriteria.from_json(key.to_s, population_criteria).to_json
+      end
 
-      data_criterias = []
-      json[:data_criteria].each {|key, data_criteria| data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)} if json[:data_criteria]
+      data_criterias = {}
+      json[:data_criteria].each do |key, data_criteria|
+        data_criterias.merge! HQMF::DataCriteria.from_json(key.to_s, data_criteria).to_json
+      end
 
       measure_period = HQMF::Range.from_json(json[:measure_period]) if json[:measure_period]
       HQMF::Document.new(title, description, population_criterias, data_criterias, measure_period)
@@ -51,7 +55,6 @@ module HQMF
       json[:measure_period] = @measure_period.to_json
 
       json
-
     end
     
     
