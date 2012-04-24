@@ -124,7 +124,7 @@ require_relative '../../../test_helper'
       assert_equal '2.16.840.1.113883.6.238', criteria.value.system
 
       criteria = @doc.data_criteria('DummyProcedure')
-      assert_equal :procedure, criteria.type
+      assert_equal :procedures, criteria.type
       assert criteria.inline_code_list
       assert_equal '127355002', criteria.inline_code_list['SNOMED-CT'][0]
       assert criteria.effective_time
@@ -133,7 +133,7 @@ require_relative '../../../test_helper'
       assert_equal 'completed', criteria.status
 
       criteria = @doc.data_criteria('EDorInpatientEncounter')
-      assert_equal :encounter, criteria.type
+      assert_equal :encounters, criteria.type
       assert_equal 'EDorInpatientEncounter', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.42', criteria.code_list_id
       assert criteria.effective_time
@@ -143,7 +143,7 @@ require_relative '../../../test_helper'
       assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
 
       criteria = @doc.data_criteria('HasGestationalDiabetes')
-      assert_equal :diagnosis, criteria.type
+      assert_equal :conditions, criteria.type
       assert_equal 'HasGestationalDiabetes', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.67', criteria.code_list_id
       assert criteria.effective_time
@@ -155,7 +155,7 @@ require_relative '../../../test_helper'
       assert_equal 'EndDate', criteria.effective_time.high.expression
 
       criteria = @doc.data_criteria('HbA1C')
-      assert_equal :result, criteria.type
+      assert_equal :results, criteria.type
       assert_equal 'HbA1C', criteria.title
       assert_equal 'RECENT', criteria.subset_code
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
@@ -168,7 +168,7 @@ require_relative '../../../test_helper'
       assert_equal '%', criteria.value.low.unit
 
       criteria = @doc.data_criteria('DiabetesMedAdministered')
-      assert_equal :medication, criteria.type
+      assert_equal :medications, criteria.type
       assert_equal 'DiabetesMedAdministered', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
       assert criteria.effective_time
@@ -178,7 +178,7 @@ require_relative '../../../test_helper'
       assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
 
       criteria = @doc.data_criteria('DiabetesMedSupplied')
-      assert_equal :medication, criteria.type
+      assert_equal :medications, criteria.type
       assert_equal 'DiabetesMedSupplied', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
       assert criteria.effective_time
