@@ -22,12 +22,12 @@ module HQMF
     end
     
     def self.from_json(json)
-      type = json[:type] if json[:type]
-      unit = json[:unit] if json[:unit]
-      value = json[:value] if json[:value]
-      inclusive = json[:inclusive?] if json[:inclusive?]
-      derived = json[:derived?] if json[:derived?]
-      expression = json[:expression] if json[:expression]
+      type = json["type"] if json["type"]
+      unit = json["unit"] if json["unit"]
+      value = json["value"] if json["value"]
+      inclusive = json["inclusive?"] if json["inclusive?"]
+      derived = json["derived?"] if json["derived?"]
+      expression = json["expression"] if json["expression"]
       
       HQMF::Value.new(type,unit,value,inclusive,derived,expression)
     end
@@ -66,10 +66,10 @@ module HQMF
     end
     
     def self.from_json(json)
-      type = json[:type] if json[:type]
-      low = HQMF::Value.from_json(json[:low]) if json[:low]
-      high = HQMF::Value.from_json(json[:high]) if json[:high]
-      width = HQMF::Value.from_json(json[:width]) if json[:width]
+      type = json["type"] if json["type"]
+      low = HQMF::Value.from_json(json["low"]) if json["low"]
+      high = HQMF::Value.from_json(json["high"]) if json["high"]
+      width = HQMF::Value.from_json(json["width"]) if json["width"]
       
       HQMF::Range.new(type,low,high,width)
     end
@@ -111,9 +111,9 @@ module HQMF
     end
     
     def self.from_json(json)
-      type = json[:type] if json[:type]
-      system = json[:system] if json[:system]
-      code = json[:code] if json[:code]
+      type = json["type"] if json["type"]
+      system = json["system"] if json["system"]
+      code = json["code"] if json["code"]
       
       HQMF::Coded.new(type,system,code)
     end

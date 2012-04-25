@@ -46,7 +46,7 @@ module HQMF
       qds_data_type = json["qds_data_type"] if json["standard_category"]
       subset_code = json["subset_code"] if json["subset_code"]
       code_list_id = json["code_list_id"] if json["code_list_id"]
-      property = json["property"].to_sym if json[:property]
+      property = json["property"].to_sym if json["property"]
       type = json["type"].to_sym if json["type"]
       status = json["status"] if json["status"]
       negation = json["negation"] || false
