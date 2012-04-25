@@ -44,7 +44,7 @@ class ValueSetParserTest < Test::Unit::TestCase
     assert structure["2.16.840.1.113883.3.464.0001.48"]
     assert structure["2.16.840.1.113883.3.464.0001.49"]
 
-    structure["2.16.840.1.113883.3.464.0001.14"][:codes].length.must_equal 2
+    structure["2.16.840.1.113883.3.464.0001.14"]["codes"].length.must_equal 2
     
   end
   
@@ -59,33 +59,33 @@ class ValueSetParserTest < Test::Unit::TestCase
     final.length.must_equal 2
     
     by_oid = {}
-    final.each {|value_set| by_oid[value_set[:oid]] = value_set}
+    final.each {|value_set| by_oid[value_set["oid"]] = value_set}
     
     birthdate = by_oid["2.16.840.1.113883.3.464.0001.14"]
-    birthdate[:code_set].must_equal nil
-    birthdate[:codes].must_equal nil
-    birthdate[:code_sets].length.must_equal 1
-    birthdate[:code_sets][0][:key].must_equal "individual_characteristic_birth_date"
+    birthdate["code_set"].must_equal nil
+    birthdate["codes"].must_equal nil
+    birthdate["code_sets"].length.must_equal 1
+    birthdate["code_sets"][0]["key"].must_equal "individual_characteristic_birth_date"
 
     encounter = by_oid["2.16.840.1.113883.3.464.0001.49"]
-    encounter[:code_set].must_equal nil
-    encounter[:codes].must_equal nil
-    encounter[:code_sets].length.must_equal 2
+    encounter["code_set"].must_equal nil
+    encounter["codes"].must_equal nil
+    encounter["code_sets"].length.must_equal 2
     
     children = {}
-    encounter[:code_sets].each {|child| children[child[:oid]] = child}
+    encounter["code_sets"].each {|child| children[child["oid"]] = child}
     
-    children["2.16.840.1.113883.3.464.0001.47"][:key].must_equal "encounter_encounter_outpatient"
-    children["2.16.840.1.113883.3.464.0001.47"][:codes].length.must_equal 1
-    children["2.16.840.1.113883.3.464.0001.47"][:category].must_equal "encounter"
-    children["2.16.840.1.113883.3.464.0001.47"][:concept].must_equal "encounter_outpatient"
-    children["2.16.840.1.113883.3.464.0001.47"][:code_set].must_equal "CPT"
+    children["2.16.840.1.113883.3.464.0001.47"]["key"].must_equal "encounter_encounter_outpatient"
+    children["2.16.840.1.113883.3.464.0001.47"]["codes"].length.must_equal 1
+    children["2.16.840.1.113883.3.464.0001.47"]["category"].must_equal "encounter"
+    children["2.16.840.1.113883.3.464.0001.47"]["concept"].must_equal "encounter_outpatient"
+    children["2.16.840.1.113883.3.464.0001.47"]["code_set"].must_equal "CPT"
 
-    children["2.16.840.1.113883.3.464.0001.48"][:key].must_equal "encounter_encounter_outpatient"
-    children["2.16.840.1.113883.3.464.0001.48"][:codes].length.must_equal 9
-    children["2.16.840.1.113883.3.464.0001.48"][:category].must_equal "encounter"
-    children["2.16.840.1.113883.3.464.0001.48"][:concept].must_equal "encounter_outpatient"
-    children["2.16.840.1.113883.3.464.0001.48"][:code_set].must_equal "CPT"
+    children["2.16.840.1.113883.3.464.0001.48"]["key"].must_equal "encounter_encounter_outpatient"
+    children["2.16.840.1.113883.3.464.0001.48"]["codes"].length.must_equal 9
+    children["2.16.840.1.113883.3.464.0001.48"]["category"].must_equal "encounter"
+    children["2.16.840.1.113883.3.464.0001.48"]["concept"].must_equal "encounter_outpatient"
+    children["2.16.840.1.113883.3.464.0001.48"]["code_set"].must_equal "CPT"
     
   end
   
