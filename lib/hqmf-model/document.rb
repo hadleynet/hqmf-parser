@@ -25,14 +25,14 @@ module HQMF
       title = json[:title]
       description = json[:description]
 
-      population_criterias = {}
+      population_criterias = []
       json[:population_criteria].each do |key, population_criteria|
-        population_criterias.merge! HQMF::PopulationCriteria.from_json(key.to_s, population_criteria).to_json
+        population_criterias << HQMF::PopulationCriteria.from_json(key.to_s, population_criteria)
       end
 
-      data_criterias = {}
+      data_criterias = []
       json[:data_criteria].each do |key, data_criteria|
-        data_criterias.merge! HQMF::DataCriteria.from_json(key.to_s, data_criteria).to_json
+        data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)
       end
 
       measure_period = HQMF::Range.from_json(json[:measure_period]) if json[:measure_period]
