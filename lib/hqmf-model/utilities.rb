@@ -13,7 +13,13 @@ module HQMF
 
       def json_array(elements) 
         array = []
-        elements.each {|element| array << element.to_json }
+        elements.each do |element| 
+          if (element.is_a? OpenStruct)
+            array << element.marshal_dump 
+          else
+            array << element.to_json 
+          end
+        end
         array.compact!
         (array.empty?) ? nil : array
       end

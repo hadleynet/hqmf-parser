@@ -112,8 +112,17 @@ module HQMF1
       end
 
       json[:logic] = {}
+      counters = {}
       @population_criteria.each do |population|
-        json[:logic].merge! population.to_json
+        population_json = population.to_json
+        key = population_json.keys.first
+        if json[:logic][key]
+          counters[key] ||= 0
+          counters[key] += 1
+          population_json["#{key}_#{counters[key]}"] = population_json[key]
+          population_json.delete(key)
+        end
+        json[:logic].merge! population_json
       end
       
       clean_json_recursive(json)

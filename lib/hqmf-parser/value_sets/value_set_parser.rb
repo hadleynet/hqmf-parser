@@ -89,7 +89,7 @@ module HQMF
         by_oid
       end
   
-      def get_format(file_path)
+      def self.get_format(file_path)
         if file_path =~ /xls$/
           :xls
         elsif file_path =~ /xlsx$/
@@ -162,7 +162,7 @@ module HQMF
       end
       
       def book_by_format(file_path, format)
-        format = get_format(file_path) unless format
+        format = HQMF::ValueSet::Parser.get_format(file_path) unless format
         
         if format == :xls
           book = Excel.new(file_path, nil, :ignore)

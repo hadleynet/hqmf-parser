@@ -135,6 +135,67 @@ module HQMF
     end
     
   end
+
+  class LogicalReference
+    include HQMF::JSON::Utilities
+    attr_reader :type, :references
+    # @param [String] type
+    # @param [Array#Reference] references
+    def initialize(type,references)
+      @type = type
+      @references = references
+    end
+    
+    def self.from_json(json)
+      type = json["type"] if json["type"]
+      references = json["references"].map do |reference|
+        HQMF::Reference.new(reference)
+      end
+      
+      HQMF::LogicalReference.new(type,references)
+    end
+    
+    def to_json
+      json = build_hash(self, [:type])
+      json[:references] = @references
+      json
+    end
+    
+  end
+
+  class TemporalReference
+    include HQMF::JSON::Utilities
+    attr_reader :type, :references, :range
+    # @param [String] type
+    # @param [Array#LogicalReference] references
+    # @param [Range] range
+    def initialize(type,references,range)
+      @type = type
+      @references = references
+      @range = range
+    end
+    
+    def self.from_json(json)
+      type = json["type"] if json["type"]
+      references = json["references"].map do |reference|
+        HQMF::LogicalReference.from_json(reference)
+      end
+      range = HQMF::Range.from_json(json["range"]) if json["range"]
+      
+      HQMF::TemporalReference.new(type,references,range)
+    end
+    
+    
+    def to_json
+      x = nil
+      json = build_hash(self, [:type])
+      json[:references] = x if x = json_array(@references)
+      json[:range] = self.range.to_json if self.range
+      json
+    end
+    
+  end
+
   
   # Represents a HQMF reference from a precondition to a data criteria
   class Reference
@@ -145,6 +206,10 @@ module HQMF
     # @param [String] id
     def initialize(id)
       @id = id
+    end
+    
+    def to_json
+      @id
     end
     
   end

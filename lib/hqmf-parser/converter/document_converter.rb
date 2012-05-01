@@ -14,6 +14,22 @@ module HQMF
      
       title = json[:title]
       description = json[:description]
+      
+      metadata = json[:metadata]
+      metadata.keys.each {|key| metadata[key.to_s] = metadata[key]; metadata.delete(key.to_sym)}
+      
+      id = metadata["NQF_ID_NUMBER"][:value] if metadata["NQF_ID_NUMBER"]
+
+      attributes = []
+      
+      metadata.keys.each do |key|
+        attribute_hash = metadata[key]
+        code = attribute_hash[:code]
+        value = attribute_hash[:value]
+        unit = attribute_hash[:unit]
+        name = attribute_hash[:name]
+        attributes << HQMF::Attribute.new(id,code,value,unit,name)
+      end
 
       data_criteria_by_id = {}
 
@@ -25,7 +41,7 @@ module HQMF
       population_criteria = parse_population_criteria(json,data_criteria_by_id)
       
       
-      HQMF::Document.new(title, description, population_criteria, data_criteria, measure_period)
+      HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period)
      
     end
     
@@ -77,9 +93,12 @@ module HQMF
 
       Kernel.warn "Creating variables for measure period... not sure if this is right"
       
-      measure_period_key = json[:attributes]['MEASUREMENT_PERIOD'][:id]
-      measure_start_key = json[:attributes]['MEASUREMENT_START_DATE'][:id]
-      measure_end_key = json[:attributes]['MEASUREMENT_END_DATE'][:id]
+      attributes = json[:attributes]
+      attributes.keys.each {|key| attributes[key.to_s] = attributes[key]}
+      
+      measure_period_key = attributes['MEASUREMENT_PERIOD'][:id]
+      measure_start_key = attributes['MEASUREMENT_START_DATE'][:id]
+      measure_end_key = attributes['MEASUREMENT_END_DATE'][:id]
       
       type = 'variable'
       code_list_id = nil
@@ -110,7 +129,7 @@ module HQMF
       #####
       
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list, false)
+      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list, false,[])
       
       # set the measure period data criteria for all measure period keys
       data_criteria_by_id[measure_period_key] = measure_criteria

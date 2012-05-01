@@ -4,27 +4,32 @@ module HQMF
 
     include HQMF::JSON::Utilities
 
-    attr_reader :title, :description, :measure_period
+    attr_reader :id, :title, :description, :measure_period, :attributes
   
     # Create a new HQMF::Document which can be converted to JavaScript
+    # @param [String] id
     # @param [String] title
     # @param [String] description
     # @param [Array#PopulationCritera] population_criteria 
     # @param [Array#DataCriteria] data_criteria
+    # @param [Array#Attribute] attributes
     # @param [Range] measure_period
-    def initialize(title, description, population_criteria, data_criteria, measure_period)
+    def initialize(id, title, description, population_criteria, data_criteria, attributes, measure_period)
+      @id = id
       @title = title
       @description = description
       @population_criteria = population_criteria
       @data_criteria = data_criteria
+      @attributes = attributes
       @measure_period = measure_period
     end
     
     # Create a new HQMF::Document from a JSON hash keyed with symbols
     def self.from_json(json)
+      id = json[:id]
       title = json[:title]
       description = json[:description]
-
+      
       population_criterias = []
       json[:population_criteria].each do |key, population_criteria|
         population_criterias << HQMF::PopulationCriteria.from_json(key.to_s, population_criteria)
@@ -35,12 +40,14 @@ module HQMF
         data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)
       end
 
+      attributes = json[:attributes].map {|attribute| HQMF::Attribute.from_json(attribute)} if json[:attributes]
+
       measure_period = HQMF::Range.from_json(json[:measure_period]) if json[:measure_period]
-      HQMF::Document.new(title, description, population_criterias, data_criterias, measure_period)
+      HQMF::Document.new(id, title, description, population_criterias, data_criterias, attributes, measure_period)
     end
     
     def to_json
-      json = build_hash(self, [:title, :description])
+      json = build_hash(self, [:id, :title, :description])
 
       json[:population_criteria] = {}
       @population_criteria.each do |population|
@@ -51,6 +58,9 @@ module HQMF
       @data_criteria.each do |data|
         json[:data_criteria].merge! data.to_json
       end
+      
+      x = nil
+      json[:attributes] = x if x = json_array(@attributes)
       
       json[:measure_period] = @measure_period.to_json
 

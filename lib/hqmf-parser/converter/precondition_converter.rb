@@ -9,7 +9,13 @@ module HQMF
       # @param [String] conjunction_code
       
       # TODO: need to create preconditions for comparisons that attach to data criteria
-      preconditions = parse_preconditions(precondition[:preconditions],data_criteria_by_id) if precondition[:preconditions]
+      preconditions = parse_preconditions(precondition[:preconditions],data_criteria_by_id) if precondition[:preconditions] || []
+      
+      # TODO: we are currently pulling preconditions from restrictions... these should be moved to temporal references on the data criteria
+      Kernel.warn('pulled preconditions from restrictions... these should be temporal references on the data criteria')
+      preconditions_from_restrictions = pull_preconditions_from_restrictions(precondition[:restrictions])
+      preconditions.concat(parse_preconditions(preconditions_from_restrictions,data_criteria_by_id)) if preconditions_from_restrictions.size > 0
+      
       conjunction_code = convert_logical_conjunction(precondition[:conjunction])
       Kernel.warn ("need to push down values, restrictions, effective_date to data criteria")
       # reference is for data preconditions
@@ -22,6 +28,17 @@ module HQMF
       
       HQMF::Precondition.new(preconditions,reference,conjunction_code)
       
+    end
+    
+    def self.pull_preconditions_from_restrictions(restrictions)
+      return [] unless restrictions
+      preconditions = []
+      restrictions.each do |restriction|
+        if (restriction[:preconditions])
+          preconditions.concat(restriction[:preconditions])
+        end
+      end
+      preconditions
     end
 
     def self.convert_comparison_to_precondition(comparison, data_criteria_by_id)
@@ -41,6 +58,7 @@ module HQMF
     private 
     
     def self.parse_preconditions(source, data_criteria_by_id)
+      return [] unless source
       preconditions_by_conjunction = {}
       source.each do |precondition|
         parsed = HQMF::PreconditionConverter.convert_logical(precondition,data_criteria_by_id)

@@ -10,6 +10,7 @@ module HQMF1
       @doc = doc
       @entry = entry
       @restrictions = []
+      
       range_def = @entry.at_xpath('./cda:pauseQuantity')
       if range_def
         @range = Range.new(range_def)
@@ -17,6 +18,11 @@ module HQMF1
       if parent
         @restrictions.concat(parent.restrictions.select {|r| r.field==nil})
       end
+      local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
+        Restriction.new(entry, self, @doc)
+      end
+      @restrictions.concat(local_restrictions)
+      
       @subset = attr_val('./cda:subsetCode/@code')
       
       comparison_def = @entry.at_xpath('./*/cda:sourceOf[@typeCode="COMP"]')
@@ -52,6 +58,7 @@ module HQMF1
           'subset' => @subset
         )
         p = Precondition.new(entry, parent, @doc)
+        
       end
     end
     
