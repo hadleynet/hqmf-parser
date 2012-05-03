@@ -26,6 +26,13 @@ module HQMF
         preconditions << convert_comparison_to_precondition(precondition[:comparison],data_criteria_by_id)
       end
       
+      # TODO: we need to do something along these lines to pull the comparisons out of preconditions where it is a restriction like count > 1
+      if (precondition[:restrictions])
+        preconditions ||= []
+        preconditions.concat convert_restriction_comparisons_to_preconditions(precondition[:restrictions],data_criteria_by_id)
+      end
+      
+      
       HQMF::Precondition.new(preconditions,reference,conjunction_code)
       
     end
@@ -41,10 +48,21 @@ module HQMF
       preconditions
     end
 
+    def self.convert_restriction_comparisons_to_preconditions(restrictions, data_criteria_by_id)
+      preconditions = []
+      restrictions.each do |restriction|
+        # DRIV restrictions appear to contain preconditions
+        if (restriction[:comparison] and restriction[:type] == 'DRIV')
+          preconditions << convert_comparison_to_precondition(restriction[:comparison], data_criteria_by_id)
+        end
+      end
+      preconditions
+    end
+
     def self.convert_comparison_to_precondition(comparison, data_criteria_by_id)
       
       data_criteria = data_criteria_by_id[comparison[:data_criteria_id]]
-      
+
       reference = HQMF::Reference.new(data_criteria.id)
       conjunction_code = "#{data_criteria.type}Reference"
       preconditions = nil

@@ -4,8 +4,8 @@ module HQMF
 
     include HQMF::JSON::Utilities
 
-    attr_reader :id,:title,:section,:subset_code,:code_list_id, :property, :type, :inline_code_list, :standard_category, :qds_data_type, :negation
-    attr_accessor :value, :effective_time, :status, :temporal_references
+    attr_reader :id,:title,:section,:subset_code,:code_list_id, :inline_code_list, :standard_category, :qds_data_type, :negation
+    attr_accessor :value, :effective_time, :status, :temporal_references, :property, :type
   
     # Create a new data criteria instance
     # @param [String] id
@@ -90,7 +90,7 @@ module HQMF
         when 'CD'
           value = HQMF::Coded.from_json(json)
         else
-          raise "Unknown value type [#{value_type}]"
+          raise "Unknown value type [#{type}]"
         end
       value
     end

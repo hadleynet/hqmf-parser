@@ -2,7 +2,7 @@ module HQMF
   # Class for converting an HQMF 1.0 representation to an HQMF 2.0 representation
   class DocumentConverter
    
-    def self.convert(json)
+    def self.convert(json, codes)
      
       # Create a new HQMF::Document which can be converted to JavaScript
       # @param [String] title
@@ -40,12 +40,37 @@ module HQMF
       
       population_criteria = parse_population_criteria(json,data_criteria_by_id)
       
+      doc = HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period)
+       
+      backfill_patient_characteristics_with_codes(doc, codes) if (codes)
       
-      HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period)
+      doc
      
     end
     
     private
+
+    # patient characteristics data criteria such as GENDER require looking at the codes to determine if the 
+    # measure is interested in Males or Females.  This process is awkward, and thus is done as a separate
+    # step after the document has been converted.
+    def self.backfill_patient_characteristics_with_codes(doc, codes)
+      doc.all_data_criteria.each do |data_criteria|
+        if (data_criteria.type == :characteristic and data_criteria.property.nil?)
+          value_set = codes[data_criteria.code_list_id]
+          raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
+          
+          # looking for Gender: Female
+          if value_set["HL7"] and value_set["HL7"] == ["10174"]
+            data_criteria.property = :gender
+            data_criteria.value = HQMF::Coded.new('CD','Gender','F')
+          else
+            data_criteria.type = :allProblems
+            Kernel.warn "backfilled data criteria: #{data_criteria.id}"
+          end
+          
+        end
+      end
+    end
     
     def self.parse_data_criteria(json, data_criteria_by_id)
       data_criteria = []

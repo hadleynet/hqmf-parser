@@ -47,6 +47,8 @@ module HQMF
       case property
         when 'birthtime', :birthtime
           :age
+        when 'gender', :gender
+          :gender
         when 'unknown', :unknown
           Kernel.warn("data criteria property is unknown")
         else

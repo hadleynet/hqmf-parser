@@ -123,7 +123,7 @@
   },
   "2.16.840.1.113883.3.560.1.18": {
     "description": "Physical exam finding",
-    "type": "vitalSigns",
+    "type": "procedureResults",
     "standard_category": "physical_exam",
     "qds_data_type": ""
   },
@@ -221,7 +221,7 @@
   },
   "2.16.840.1.113883.3.560.1.57": {
     "description": "Physical exam performed",
-    "type": "vitalSigns",
+    "type": "procedureResults",
     "standard_category": "physical_exam",
     "qds_data_type": ""
   },
@@ -359,7 +359,7 @@
   },
   "2.16.840.1.113883.3.560.1.118": {
     "description": "Physical exam finding not done",
-    "type": "vitalSigns",
+    "type": "procedureResults",
     "standard_category": "physical_exam",
     "qds_data_type": "",
     "negation": true
@@ -399,7 +399,7 @@
   },
   "2.16.840.1.113883.3.560.1.157": {
     "description": "Physical exam performed not done",
-    "type": "vitalSigns",
+    "type": "procedureResults",
     "standard_category": "physical_exam",
     "qds_data_type": "",
     "negation": true

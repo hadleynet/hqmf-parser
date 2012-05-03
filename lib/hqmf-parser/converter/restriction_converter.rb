@@ -4,25 +4,35 @@ module HQMF
    
     def self.applyRestrictionsToDataCriteria(data_criteria, restrictions,data_criteria_by_id)
       
+      return unless restrictions
+      
       restrictions.each do |restriction|
         restricted_by = data_criteria_by_id[restriction[:target_id]] if restriction[:target_id]
+        unless restricted_by
+          Kernel.warn("Could not find data criteria by ID: #{restriction[:target_id]}")
+          next
+        end
         case restriction[:type]
         when 'DURING'
           data_criteria.effective_time = restricted_by.value
         when 'SBS'
           data_criteria.effective_time ||= HQMF::EffectiveTime.new(nil,nil,nil)
-          data_criteria.effective_time.high = restricted_by.value.low
+          if restricted_by.value
+            data_criteria.effective_time.high = restricted_by.value.low
+          else
+            Kernel.warn "Temporal Reference for SBS"
+          end 
           if (restriction[:range])
-            low_restriction = restriction[:range][:low] 
-            high_restriction = restriction[:range][:high] 
-            data_criteria.value = HQMF::Range.new('IVL_PQ',nil,nil,nil)
+            data_criteria.value = HQMF::Range.new('IVL_PQ',nil,nil,nil) unless data_criteria.value
+            low_restriction = restriction[:range][:low] unless data_criteria.value.low
+            high_restriction = restriction[:range][:high] unless data_criteria.value.high
             data_criteria.value.low = HQMF::Value.new('PQ',low_restriction[:unit],low_restriction[:value],low_restriction[:inclusive?],low_restriction[:derived?],low_restriction[:expression]) if low_restriction
             data_criteria.value.high = HQMF::Value.new('PQ',high_restriction[:unit],high_restriction[:value],high_restriction[:inclusive?],high_restriction[:derived?],high_restriction[:expression]) if high_restriction
           end
-        when 'EAS'
-          temporal_reference = convert_preconditions_to_temporal_reference(restriction[:type],restriction[:preconditions]) if restriction[:preconditions]
-          data_criteria.temporal_references ||= []
-          data_criteria.temporal_references << temporal_reference
+#        when 'EAS'
+#          temporal_reference = convert_preconditions_to_temporal_reference(restriction[:type],restriction[:preconditions]) if restriction[:preconditions]
+#          data_criteria.temporal_references ||= []
+#          data_criteria.temporal_references << temporal_reference
         when 'REFR'
           if restriction[:field].downcase == 'status'
             data_criteria.status = restriction[:value].downcase
@@ -32,7 +42,8 @@ module HQMF
         when 'DRIV'
           Kernel.warn "Ignoring DRIV restriction type (I think it's used for restrictions of preconditions)"
         else
-          raise "The restriction type is not yet supported: #{restriction[:type]}"
+          Kernel.warn "The restriction type is not yet supported: #{restriction[:type]}"
+#          raise "The restriction type is not yet supported: #{restriction[:type]}"
         end
         
         applyRestrictionsToDataCriteria(data_criteria, restriction[:restrictions],data_criteria_by_id) if restriction[:restrictions]

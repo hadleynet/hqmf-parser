@@ -39,6 +39,7 @@ module HQMF1
     # Get the title of the criteria, provides a human readable description
     # @return [String] the title of this data criteria
     def title
+      # TODO: places where there is no title, the data criteria is a variable... need to figure that out
       @entry.at_xpath('.//cda:title').inner_text
     end
     
