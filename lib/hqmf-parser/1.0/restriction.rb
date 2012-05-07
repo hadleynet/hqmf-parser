@@ -5,6 +5,7 @@ module HQMF1
     include HQMF1::Utilities
     
     attr_reader :range, :comparison, :restrictions, :subset, :preconditions
+    attr_accessor :from_parent
     
     def initialize(entry, parent, doc)
       @doc = doc
@@ -16,7 +17,8 @@ module HQMF1
         @range = Range.new(range_def)
       end
       if parent
-        @restrictions.concat(parent.restrictions.select {|r| r.field==nil})
+        parent_restrictions = get_restrictions_from_parent(parent)
+        @restrictions.concat(parent_restrictions)
       end
       local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
         Restriction.new(entry, self, @doc)
@@ -82,7 +84,8 @@ module HQMF1
     end
     
     def to_json 
-      json = build_hash(self, [:subset,:type,:target_id,:field,:value])
+#      return {} if from_parent
+      json = build_hash(self, [:subset,:type,:target_id,:field,:value,:from_parent])
       json[:range] = range.to_json if range
       json[:comparison] = comparison.to_json if comparison
       json[:restrictions] = json_array(self.restrictions)

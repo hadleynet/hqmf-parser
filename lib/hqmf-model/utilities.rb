@@ -15,13 +15,27 @@ module HQMF
         array = []
         elements.each do |element| 
           if (element.is_a? OpenStruct)
-            array << element.marshal_dump 
+            array << openstruct_to_json(element)
           else
             array << element.to_json 
           end
         end
         array.compact!
         (array.empty?) ? nil : array
+      end
+      
+      def openstruct_to_json(element)
+        json = {}
+        element.marshal_dump.each do |key,value|
+          if value.is_a? OpenStruct
+            json[key] = openstruct_to_json(value) 
+          elsif (value.class.to_s.split("::").first.start_with? 'HQMF')
+            json[key] = value.to_json
+          else
+            json[key] = value
+          end
+        end
+        json
       end
     end
   end

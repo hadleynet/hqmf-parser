@@ -12,7 +12,8 @@ module HQMF1
       @id = attr_val('./*/cda:id/@root')
       @restrictions = []
       if (parent)
-        @restrictions.concat(parent.restrictions.select {|r| r.field==nil})
+        parent_restrictions = get_restrictions_from_parent(parent)
+        @restrictions.concat(parent_restrictions)
         @subset = parent.subset
       end
       local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|

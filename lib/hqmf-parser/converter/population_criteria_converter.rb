@@ -17,11 +17,7 @@ module HQMF
     private
     
     def self.parse_preconditions(source,data_criteria_by_id)
-      preconditions = []
-      source.each do |precondition|
-        preconditions << HQMF::PreconditionConverter.convert_logical(precondition,data_criteria_by_id)
-      end
-      preconditions
+      HQMF::PreconditionConverter.parse_preconditions(source,data_criteria_by_id)
     end
    
   end  
