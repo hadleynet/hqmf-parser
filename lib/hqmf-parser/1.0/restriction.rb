@@ -68,6 +68,11 @@ module HQMF1
     def type
       attr_val('./@typeCode')
     end
+
+    # is this type negated? true or false
+    def negation
+      attr_val('./@inversionInd') == "true"
+    end
     
     # The id of the data criteria or measurement property that the value
     # will be compared against
@@ -85,7 +90,7 @@ module HQMF1
     
     def to_json 
 #      return {} if from_parent
-      json = build_hash(self, [:subset,:type,:target_id,:field,:value,:from_parent])
+      json = build_hash(self, [:subset,:type,:target_id,:field,:value,:from_parent, :negation])
       json[:range] = range.to_json if range
       json[:comparison] = comparison.to_json if comparison
       json[:restrictions] = json_array(self.restrictions)

@@ -189,5 +189,68 @@ require_relative '../../../test_helper'
 
       assert_nil @doc.data_criteria('foo')
     end
+    
+    def test_to_json
+      json = @doc.to_json
+      
+      json[:title].must_equal "Sample Quality Measure Document"
+      json[:description].must_equal "This is the measure description."
+      
+      logic = json[:population_criteria]
+      
+      population_criteria = logic[:IPP]
+      
+      ipp = {conjunction?:true, :preconditions=>[{:reference=>"ageBetween17and64",:conjunction_code=>"observationReference"}]}
+      diff = ipp.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+      
+      population_criteria = logic[:DENOM]
+      denom =
+      {conjunction?:true, :preconditions=>
+          [{:preconditions=>[{:preconditions=>
+            [
+              { :reference=>"HasDiabetes",
+                :conjunction_code=>"observationReference"},
+                {:preconditions=>
+                   [
+                    {:reference=>"EDorInpatientEncounter",:conjunction_code=>"encounterReference"},
+                    {:reference=>"AmbulatoryEncounter",:conjunction_code=>"encounterReference"}
+                   ],
+                 :conjunction_code=>"atLeastOneTrue"
+                }
+            ],
+            :conjunction_code=>"allTrue"
+           },
+           {:reference=>"DiabetesMedAdministered",:conjunction_code=>"substanceAdministrationReference"},
+           {:reference=>"DiabetesMedIntended",:conjunction_code=>"substanceAdministrationReference"},
+           {:reference=>"DiabetesMedSupplied",:conjunction_code=>"supplyReference"},
+           {:reference=>"DiabetesMedOrdered",:conjunction_code=>"supplyReference"}],
+           :conjunction_code=>"atLeastOneTrue"
+          }]
+      }
+
+      diff = denom.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+      
+      population_criteria = logic[:NUMER]
+      numer={conjunction?:true,:preconditions=>[{:reference=>"HbA1C", :conjunction_code=>"observationReference"}]}
+      diff = numer.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+      
+      
+      population_criteria = logic[:DENEXCEP]
+      denomexc = {conjunction?:true,
+         :preconditions=>
+          [{:preconditions=>
+             [{:reference=>"HasPolycysticOvaries",:conjunction_code=>"observationReference"},
+              {:reference=>"HasDiabetes",:conjunction_code=>"observationReference"}],
+            :conjunction_code=>"allTrue"},
+           {:reference=>"HasSteroidInducedDiabetes",:conjunction_code=>"observationReference"},
+           {:reference=>"HasGestationalDiabetes",:conjunction_code=>"observationReference"}]}
+           
+      diff = denomexc.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+           
+    end
   
   end

@@ -26,23 +26,23 @@ module HQMF
     
     # Create a new HQMF::Document from a JSON hash keyed with symbols
     def self.from_json(json)
-      id = json[:id]
-      title = json[:title]
-      description = json[:description]
+      id = json["id"]
+      title = json["title"]
+      description = json["description"]
       
       population_criterias = []
-      json[:population_criteria].each do |key, population_criteria|
+      json["population_criteria"].each do |key, population_criteria|
         population_criterias << HQMF::PopulationCriteria.from_json(key.to_s, population_criteria)
       end
 
       data_criterias = []
-      json[:data_criteria].each do |key, data_criteria|
+      json["data_criteria"].each do |key, data_criteria|
         data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)
       end
 
-      attributes = json[:attributes].map {|attribute| HQMF::Attribute.from_json(attribute)} if json[:attributes]
+      attributes = json["attributes"].map {|attribute| HQMF::Attribute.from_json(attribute)} if json["attributes"]
 
-      measure_period = HQMF::Range.from_json(json[:measure_period]) if json[:measure_period]
+      measure_period = HQMF::Range.from_json(json["measure_period"]) if json["measure_period"]
       HQMF::Document.new(id, title, description, population_criterias, data_criterias, attributes, measure_period)
     end
     

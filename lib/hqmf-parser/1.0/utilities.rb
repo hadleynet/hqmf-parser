@@ -15,10 +15,6 @@ module HQMF1
       end
     end
     
-    def to_xml
-      @entry.to_xml
-    end
-    
     def clean_json(json)
       json.reject!{|k,v| v.nil? || (v.respond_to?(:empty?) && v.empty?)}
     end
