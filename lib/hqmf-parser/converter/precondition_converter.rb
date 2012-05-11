@@ -1,24 +1,24 @@
 module HQMF
   # Class for converting an HQMF 1.0 representation to an HQMF 2.0 representation
   class PreconditionConverter
-   
-    def self.parse_preconditions(source,data_criteria_by_id)
+    
+    def self.parse_preconditions(source,data_criteria_converter)
       preconditions = []
       source.each do |precondition|
-        preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_by_id)
+        preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
       end
       preconditions
     end
    
     # converts a precondtion to a hqmf model
-    def self.parse_precondition(precondition,data_criteria_by_id)
+    def self.parse_precondition(precondition,data_criteria_converter)
       
       # grab child preconditions, and parse recursively
-      preconditions = parse_and_merge_preconditions(precondition[:preconditions],data_criteria_by_id) if precondition[:preconditions] || []
+      preconditions = parse_and_merge_preconditions(precondition[:preconditions],data_criteria_converter) if precondition[:preconditions] || []
       
       # TODO: we are currently pulling preconditions from restrictions... these should be moved to temporal references on the data criteria
       Kernel.warn('pulled preconditions from restrictions... these should be temporal references on the data criteria')
-      preconditions_from_restrictions = HQMF::PreconditionExtractor.extract_preconditions_from_restrictions(precondition[:restrictions], data_criteria_by_id)
+      preconditions_from_restrictions = HQMF::PreconditionExtractor.extract_preconditions_from_restrictions(precondition[:restrictions], data_criteria_converter)
       preconditions.concat(preconditions_from_restrictions)
       
       conjunction_code = convert_logical_conjunction(precondition[:conjunction])
@@ -30,7 +30,7 @@ module HQMF
       
       if (precondition[:comparison])
         preconditions ||= []
-        comparison_precondition = HQMF::PreconditionExtractor.convert_comparison_to_precondition(precondition[:comparison],data_criteria_by_id)
+        comparison_precondition = HQMF::PreconditionExtractor.convert_comparison_to_precondition(precondition[:comparison],data_criteria_converter)
         preconditions << comparison_precondition
       end
       
@@ -40,11 +40,11 @@ module HQMF
     
     private 
     
-    def self.parse_and_merge_preconditions(source, data_criteria_by_id)
+    def self.parse_and_merge_preconditions(source,data_criteria_converter)
       return [] unless source and source.size > 0
       preconditions_by_conjunction = {}
       source.each do |precondition|
-        parsed = HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_by_id)
+        parsed = HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
         preconditions_by_conjunction[parsed.conjunction_code] ||= []
         preconditions_by_conjunction[parsed.conjunction_code]  << parsed
       end

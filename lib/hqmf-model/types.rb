@@ -2,7 +2,7 @@ module HQMF
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator
   class Value
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     attr_reader :type,:unit,:value,:expression
     
     # Create a new HQMF::Value
@@ -49,7 +49,7 @@ module HQMF
   
   # Represents a HQMF physical quantity which can have low and high bounds
   class Range
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     attr_reader :type
     attr_accessor :low, :high, :width
     
@@ -97,7 +97,7 @@ module HQMF
   
   # Represents a HQMF CD value which has a code and codeSystem
   class Coded
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     attr_reader :type, :system, :code
     
     # Create a new HQMF::Coded
@@ -137,7 +137,7 @@ module HQMF
   end
 
   class LogicalReference
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     attr_reader :type, :references
     # @param [String] type
     # @param [Array#Reference] references
@@ -164,7 +164,7 @@ module HQMF
   end
 
   class TemporalReference
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     attr_reader :type, :references, :range
     # @param [String] type
     # @param [Array#LogicalReference] references
@@ -199,8 +199,8 @@ module HQMF
   
   # Represents a HQMF reference from a precondition to a data criteria
   class Reference
-    include HQMF::JSON::Utilities
-    attr_reader :id
+    include HQMF::Conversion::Utilities
+    attr_accessor :id
     
     # Create a new HQMF::Reference
     # @param [String] id

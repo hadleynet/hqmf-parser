@@ -2,10 +2,10 @@ module HQMF
   # Represents a data criteria specification
   class DataCriteria
 
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
 
-    attr_reader :id,:title,:section,:subset_code,:code_list_id, :inline_code_list, :standard_category, :qds_data_type, :negation
-    attr_accessor :value, :effective_time, :status, :temporal_references, :property, :type
+    attr_reader :title,:section,:subset_code,:code_list_id, :inline_code_list, :standard_category, :qds_data_type, :negation
+    attr_accessor :id, :value, :effective_time, :status, :temporal_references, :property, :type
   
     # Create a new data criteria instance
     # @param [String] id
@@ -66,18 +66,25 @@ module HQMF
     end
     
     def to_json
+      json = base_json
+      {self.id.to_s.to_sym => json}
+    end
+    
+    def clone
+      HQMF::DataCriteria.from_json(id, JSON.parse(base_json.to_json))
+    end
+    
+    private 
+    
+    def base_json
       json = build_hash(self, [:title,:standard_category,:qds_data_type,:subset_code,:code_list_id, :property, :type, :status, :negation])
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
       temporal_references = json_array(@temporal_references) if @temporal_references && !@temporal_references.empty?
       json[:temporal_references] = temporal_references if temporal_references
-      
-      {self.id.to_s.to_sym => json}
+      json
     end
-    
-    
-    private 
     
     def self.convert_value(json)
       value = nil

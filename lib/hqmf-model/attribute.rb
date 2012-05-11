@@ -1,7 +1,7 @@
 module HQMF
   
   class Attribute
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     attr_reader :id,:code,:value,:unit,:name
     # @param [String] id
     # @param [String] code

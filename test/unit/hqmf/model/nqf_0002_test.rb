@@ -68,6 +68,7 @@ module HQMFModel
          :qds_data_type=>"medication_dispensed",
          :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
          :type=>:allMedications,
+         :status=>"dispensed",
          :value=> {:type=>"IVL_PQ", :high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},
          :effective_time=>{:type=>"IVL_TS"}}
         
@@ -76,6 +77,7 @@ module HQMFModel
            :qds_data_type=>"medication_order",
            :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
            :type=>:allMedications,
+           :status=>"ordered",
            :value=>{:type=>"IVL_PQ", :high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},
            :effective_time=>{:type=>"IVL_TS"}}        
          
@@ -134,7 +136,7 @@ module HQMFModel
       ]
       }
       
-      diff = numerator.diff_hash(population_criteria)
+      diff = numerator.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"
       
       population_criteria = logic[:IPP]
@@ -148,7 +150,7 @@ module HQMFModel
         ]
       }
       
-      diff = ipp.diff_hash(population_criteria)
+      diff = ipp.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"
 
       population_criteria = logic[:DENOM]
@@ -188,7 +190,7 @@ module HQMFModel
             }
           ]
       }
-      diff = denom.diff_hash(population_criteria)
+      diff = denom.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"
       
     end
@@ -231,7 +233,7 @@ module HQMFModel
     
     def check_data_criteria(all_criteria, key, values)
       data_criteria = all_criteria[key]
-      diff = data_criteria.diff_hash(values)
+      diff = values.diff_hash(data_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
     end
     

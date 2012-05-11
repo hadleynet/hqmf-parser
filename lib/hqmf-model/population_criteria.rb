@@ -3,7 +3,7 @@ module HQMF
   # HQMF::Precondition
   class PopulationCriteria
   
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
 
     attr_reader :preconditions, :id
     

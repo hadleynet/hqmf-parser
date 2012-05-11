@@ -46,7 +46,8 @@
     "description": "Procedure performed",
     "type": "procedures",
     "standard_category": "procedure",
-    "qds_data_type": "procedure_performed"
+    "qds_data_type": "procedure_performed",
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.7": {
     "description": "Medication adverse effects",
@@ -60,6 +61,7 @@
     "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_dispensed",
+    "status": "dispensed",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.9": {
@@ -74,6 +76,7 @@
     "type": "allDevices",
     "standard_category": "device",
     "qds_data_type": "device_applied",
+    "status": "applied",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.11": {
@@ -90,7 +93,7 @@
     "standard_category": "laboratory_test",
     "qds_data_type": "",
     "status_xpath": "cda:act/cda:sourceOf/cda:observation/cda:statusCode/@code",
-    "status": ""
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.13": {
     "description": "Medication active",
@@ -105,7 +108,8 @@
     "description": "Medication administered",
     "type": "allMedications",
     "standard_category": "medication",
-    "qds_data_type": "medication_administered"
+    "qds_data_type": "medication_administered",
+    "status": "administered"
   },
   "2.16.840.1.113883.3.560.1.15": {
     "description": "Medication intolerance",
@@ -119,13 +123,15 @@
     "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_order",
+    "status": "ordered",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
   },
   "2.16.840.1.113883.3.560.1.18": {
     "description": "Physical exam finding",
     "type": "procedureResults",
     "standard_category": "physical_exam",
-    "qds_data_type": ""
+    "qds_data_type": "",
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.21": {
     "description": "Risk category / assessment",
@@ -197,19 +203,22 @@
     "description": "Diagnostic study recommended",
     "type": "procedures",
     "standard_category": "diagnostic_study",
-    "qds_data_type": ""
+    "qds_data_type": "",
+    "status":"recommended"
   },
   "2.16.840.1.113883.3.560.1.45": {
     "description": "Intervention ordered",
     "type": "procedures",
     "standard_category": "procedure",
-    "qds_data_type": "procedure_order"
+    "qds_data_type": "procedure_order",
+    "status":"ordered"
   },
   "2.16.840.1.113883.3.560.1.46": {
     "description": "Intervention performed",
     "type": "procedures",
     "standard_category": "procedure",
-    "qds_data_type": "procedure_performed"
+    "qds_data_type": "procedure_performed",
+    "status":"performed"
   },
   "2.16.840.1.113883.3.560.1.47": {
     "description": "Intervention result",
@@ -223,7 +232,8 @@
     "description": "Physical exam performed",
     "type": "procedureResults",
     "standard_category": "physical_exam",
-    "qds_data_type": ""
+    "qds_data_type": "",
+    "status":"performed"
   },
   "2.16.840.1.113883.3.560.1.60": {
     "description": "Procedure adverse event",
@@ -243,7 +253,8 @@
     "description": "Procedure order",
     "type": "procedures",
     "standard_category": "procedure",
-    "qds_data_type": "procedure_order"
+    "qds_data_type": "procedure_order",
+    "status":"ordered"
   },
   "2.16.840.1.113883.3.560.1.63": {
     "description": "Procedure result",
@@ -256,7 +267,8 @@
     "type": "allMedications",
     "standard_category": "medication",
     "qds_data_type": "medication_administered",
-    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"
+    "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
+    "status":"administered"
   },
   "2.16.840.1.113883.3.560.1.66": {
     "description": "Substance allergy",
@@ -301,14 +313,16 @@
     "standard_category": "medication",
     "qds_data_type": "medication_order",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
-    "negation": true
+    "negation": true,
+    "status":"ordered"
   },
   "2.16.840.1.113883.3.560.1.103": {
     "description": "Diagnostic study performed not done",
     "type": "procedures",
     "standard_category": "diagnostic_study",
     "qds_data_type": "",
-    "negation": true
+    "negation": true,
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.105": {
     "description": "Laboratory test performed not done",
@@ -324,7 +338,8 @@
     "type": "procedures",
     "standard_category": "procedure",
     "qds_data_type": "procedure_performed",
-    "negation": true
+    "negation": true,
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.110": {
     "description": "Device applied not done",
@@ -332,14 +347,16 @@
     "standard_category": "device",
     "qds_data_type": "device_applied",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:procedure/cda:participant/cda:roleParticipant/cda:playingDevice/cda:code/@code",
-    "negation": true
+    "negation": true,
+    "status": "applied"
   },
   "2.16.840.1.113883.3.560.1.111": {
     "description": "Diagnostic study result not done",
     "type": "procedures",
     "standard_category": "diagnostic_study",
-    "qds_data_type": "",
-    "negation": true
+    "qds_data_type": "procedure_result",
+    "negation": true,
+    "status": "final report"
   },
   "2.16.840.1.113883.3.560.1.113": {
     "description": "Medication active not done",
@@ -347,7 +364,8 @@
     "standard_category": "medication",
     "qds_data_type": "medication_active",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
-    "negation": true
+    "negation": true,
+    "status": "active"
   },
   "2.16.840.1.113883.3.560.1.114": {
     "description": "Medication administered not done",
@@ -355,14 +373,16 @@
     "standard_category": "medication",
     "qds_data_type": "medication_administered",
     "code_list_xpath": "cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code",
-    "negation": true
+    "negation": true,
+    "status": "administered"
   },
   "2.16.840.1.113883.3.560.1.118": {
     "description": "Physical exam finding not done",
     "type": "procedureResults",
     "standard_category": "physical_exam",
     "qds_data_type": "",
-    "negation": true
+    "negation": true,
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.121": {
     "description": "Risk category / assessment not done",
@@ -385,7 +405,8 @@
     "type": "procedures",
     "standard_category": "diagnostic_study",
     "qds_data_type": "",
-    "negation": true
+    "negation": true,
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.146": {
     "description": "Intervention performed not done",
@@ -402,7 +423,8 @@
     "type": "procedureResults",
     "standard_category": "physical_exam",
     "qds_data_type": "",
-    "negation": true
+    "negation": true,
+    "status": "performed"
   },
   "2.16.840.1.113883.3.560.1.1001": {
     "description": "Patient characteristic",

@@ -1,6 +1,6 @@
 
 module HQMF
-  module JSON
+  module Conversion
     module Utilities
       def build_hash(source, elements)
         hash = {}

@@ -1,7 +1,7 @@
 module HQMF1
   module Utilities
     
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
     
     # Utility function to handle optional attributes
     # @param xpath an XPath that identifies an XML attribute

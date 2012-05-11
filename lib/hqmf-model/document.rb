@@ -2,7 +2,7 @@ module HQMF
   # Class representing an HQMF document
   class Document
 
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
 
     attr_reader :id, :title, :description, :measure_period, :attributes
   
