@@ -34,7 +34,7 @@ module HQMF
         preconditions << comparison_precondition
       end
       
-      HQMF::Precondition.new(preconditions,reference,conjunction_code, negation)
+      HQMF::Precondition.new(nil,preconditions,reference,conjunction_code, negation)
       
     end
     
@@ -61,7 +61,7 @@ module HQMF
         end
         negation = false
         sub_conditions.each {|precondition| negation ||= precondition.negation}
-        joined << HQMF::Precondition.new(sub_conditions,nil,conjunction_code, negation)
+        joined << HQMF::Precondition.new(nil,sub_conditions,nil,conjunction_code, negation)
       end
       joined
     end

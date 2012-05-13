@@ -58,7 +58,7 @@ module HQMF
         preconditions = extract_preconditions_from_restrictions(comparison[:restrictions], data_criteria_converter) 
       end
 
-      precondition = HQMF::Precondition.new(preconditions,reference,conjunction_code, false)
+      precondition = HQMF::Precondition.new(nil,preconditions,reference,conjunction_code, false)
       
       if comparison[:restrictions]
         # push the restrictions down to the data criteria
