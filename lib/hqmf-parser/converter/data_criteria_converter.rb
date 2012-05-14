@@ -41,7 +41,8 @@ module HQMF
       # @param [Hash<String,String>] inline_code_list
 
       id = convert_key(key)
-      title = criteria[:title]
+      description = criteria[:title]
+      title = title_from_description(description, criteria[:description])
       type = criteria[:type]
       standard_category = criteria[:standard_category]
       qds_data_type = criteria[:qds_data_type]
@@ -49,6 +50,7 @@ module HQMF
       property = convert_data_criteria_property(criteria[:property]) if criteria[:property]
       status = criteria[:status]
       negation = criteria[:negation]
+      
       # TODO: NEED TO FINALIZE THESE
       Kernel.warn "We still need to map value, effective_time, inline_code_list, and subset_code"
       value = nil
@@ -57,7 +59,7 @@ module HQMF
       subset_code = nil
       temporal_references = []
 
-      HQMF::DataCriteria.new(id, title, standard_category, qds_data_type, subset_code, 
+      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, 
         code_list_id, property,type, status, value, effective_time, inline_code_list,
         negation, temporal_references)
  
@@ -92,7 +94,7 @@ module HQMF
       #####
       
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list, false,[])
+      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list, false,[])
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria
@@ -101,6 +103,11 @@ module HQMF
       
     end
     
+    private 
+    
+    def self.title_from_description(title, description)
+      title.gsub(/^#{Regexp.escape(description).gsub('\\ ',':?,?\\ ')}:\s*/i,'')
+    end
 
     def self.convert_data_criteria_property(property)
       case property
@@ -117,6 +124,6 @@ module HQMF
 
     def self.convert_key(key)
       key.to_s.downcase.gsub('_', ' ').split(' ').map {|w| w.capitalize }.join('')
-    end
+    end   
   end
 end
