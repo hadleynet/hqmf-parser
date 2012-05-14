@@ -18,7 +18,7 @@ module HQMFModel
             
       all_criteria = json[:data_criteria]
       refute_nil all_criteria
-      all_criteria.length.must_equal 7
+      all_criteria.length.must_equal 12
       all_criteria.length.must_equal hqmf.all_data_criteria.length
 
       [:PatientCharacteristicBirthDate, :EncounterEncounterAmbulatoryIncludingPediatrics, :LaboratoryTestPerformedGroupAStreptococcusTest,
@@ -27,67 +27,115 @@ module HQMFModel
          refute_nil all_criteria[data_criteria_key]
       end
       
-      patientCharacteristicBirthDate={:title=>"Patient Characteristic: birth date",
+      expected_dc = {}
+      expected_dc[:PatientCharacteristicBirthDate] = []
+      expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] = []
+      expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] = []
+      expected_dc[:DiagnosisActivePharyngitis] = []
+      expected_dc[:MedicationActivePharyngitisAntibiotics] = []
+      expected_dc[:MedicationDispensedPharyngitisAntibiotics] = []
+      expected_dc[:MedicationOrderPharyngitisAntibiotics] = []
+      
+      expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",
+         :description=>"Patient Characteristic: birth date",
          :standard_category=>"individual_characteristic",
          :code_list_id=>"2.16.840.1.113883.3.560.100.4",
          :property=>:age,
-         :type=>:characteristic,
-         :value=>{:type=>"IVL_PQ", :low=>{:type=>"PQ", :unit=>"a", :value=>"2", inclusive?:true}, :high=>{:type=>"PQ", :unit=>"a", :value=>"17", inclusive?:true}},
-         :effective_time=> {:type=>"IVL_TS", :high=>{:type=>"TS", :value=>"20100101"}}}
-
-      encounterEncounterAmbulatoryIncludingPediatrics={:title=>"Encounter: Encounter ambulatory including pediatrics",
+         :type=>:characteristic}
+      expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"Encounter ambulatory including pediatrics",
+         :description=>"Encounter: Encounter ambulatory including pediatrics",
          :standard_category=>"encounter",
          :code_list_id=>"2.16.840.1.113883.3.464.0001.231",
          :type=>:encounters,
-         :effective_time=> {:type=>"IVL_TS", :low=>{:type=>"TS", :value=>"20100101"}, :high=>{:type=>"TS", :value=>"20101231"}, :width=>{:type=>"PQ", :unit=>"a", :value=>"1"}}}
-
-       laboratoryTestPerformedGroupAStreptococcusTest={:title=>"Laboratory Test, Performed: Group A Streptococcus Test",
+         :effective_time=>{:type=>"IVL_TS", :low=>{:type=>"TS", :value=>"20100101"}, :high=>{:type=>"TS", :value=>"20101231"}, :width=>{:type=>"PQ", :unit=>"a", :value=>"1"}}}
+      expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",
+         :description=>"Laboratory Test, Performed: Group A Streptococcus Test",
          :standard_category=>"laboratory_test",
          :code_list_id=>"2.16.840.1.113883.3.464.0001.250",
          :type=>:laboratoryTests,
          :status=>"performed"}
-       
-       diagnosisActivePharyngitis={:title=>"Diagnosis, Active: pharyngitis",
+      expected_dc[:DiagnosisActivePharyngitis] << {:title=>"pharyngitis",
+         :description=>"Diagnosis, Active: pharyngitis",
          :standard_category=>"diagnosis_condition_problem",
          :qds_data_type=>"diagnosis_active",
          :code_list_id=>"2.16.840.1.113883.3.464.0001.369",
          :type=>:activeDiagnoses,
          :status=>"active"}
-       
-       medicationActivePharyngitisAntibiotics={:title=>"Medication, Active: pharyngitis antibiotics",
+      expected_dc[:MedicationActivePharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",
+         :description=>"Medication, Active: pharyngitis antibiotics",
          :standard_category=>"medication",
          :qds_data_type=>"medication_active",
          :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
          :type=>:allMedications,
-         :status=>"active",
-         :value=>{:type=>"IVL_PQ", :high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},
-         :effective_time=>{:type=>"IVL_TS"}}
-       
-       medicationDispensedPharyngitisAntibiotics={:title=>"Medication, Dispensed: pharyngitis antibiotics",
+         :status=>"active"}
+      expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",
+         :description=>"Medication, Dispensed: pharyngitis antibiotics",
+         :standard_category=>"medication",
+         :qds_data_type=>"medication_dispensed",
+         :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
+         :type=>:allMedications,
+         :status=>"dispensed"}
+      expected_dc[:MedicationOrderPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",
+         :description=>"Medication, Order: pharyngitis antibiotics",
+         :standard_category=>"medication",
+         :qds_data_type=>"medication_order",
+         :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
+         :type=>:allMedications,
+         :status=>"ordered"}
+      expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",
+         :description=>"Medication, Dispensed: pharyngitis antibiotics",
          :standard_category=>"medication",
          :qds_data_type=>"medication_dispensed",
          :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
          :type=>:allMedications,
          :status=>"dispensed",
-         :value=> {:type=>"IVL_PQ", :high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},
+         :value=>{:type=>"IVL_PQ",:high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},:effective_time=>{:type=>"IVL_TS"}}
+      expected_dc[:MedicationOrderPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",
+         :description=>"Medication, Order: pharyngitis antibiotics",
+         :standard_category=>"medication",
+         :qds_data_type=>"medication_order",
+         :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
+         :type=>:allMedications,
+         :status=>"ordered",
+         :value=>{:type=>"IVL_PQ",:high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},
          :effective_time=>{:type=>"IVL_TS"}}
-        
-       medicationOrderPharyngitisAntibiotics={:title=>"Medication, Order: pharyngitis antibiotics",
-           :standard_category=>"medication",
-           :qds_data_type=>"medication_order",
-           :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
-           :type=>:allMedications,
-           :status=>"ordered",
-           :value=>{:type=>"IVL_PQ", :high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}},
-           :effective_time=>{:type=>"IVL_TS"}}        
-         
-      check_data_criteria(all_criteria, :PatientCharacteristicBirthDate, patientCharacteristicBirthDate)
-      check_data_criteria(all_criteria, :EncounterEncounterAmbulatoryIncludingPediatrics, encounterEncounterAmbulatoryIncludingPediatrics)
-      check_data_criteria(all_criteria, :LaboratoryTestPerformedGroupAStreptococcusTest, laboratoryTestPerformedGroupAStreptococcusTest)
-      check_data_criteria(all_criteria, :DiagnosisActivePharyngitis, diagnosisActivePharyngitis)
-      check_data_criteria(all_criteria, :MedicationActivePharyngitisAntibiotics, medicationActivePharyngitisAntibiotics)
-      check_data_criteria(all_criteria, :MedicationDispensedPharyngitisAntibiotics, medicationDispensedPharyngitisAntibiotics)
-      check_data_criteria(all_criteria, :MedicationOrderPharyngitisAntibiotics, medicationOrderPharyngitisAntibiotics)
+      expected_dc[:MedicationActivePharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",
+         :description=>"Medication, Active: pharyngitis antibiotics",
+         :standard_category=>"medication",
+         :qds_data_type=>"medication_active",
+         :code_list_id=>"2.16.840.1.113883.3.464.0001.373",
+         :type=>:allMedications,
+         :status=>"active",
+         :value=>{:type=>"IVL_PQ",:high=>{:type=>"PQ", :unit=>"d", :value=>"30", inclusive?:true}}, :effective_time=>{:type=>"IVL_TS"}}
+      expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",
+         :description=>"Patient Characteristic: birth date",
+         :standard_category=>"individual_characteristic",
+         :code_list_id=>"2.16.840.1.113883.3.560.100.4",
+         :property=>:age,
+         :type=>:characteristic,
+         :value=>{:type=>"IVL_PQ",:low=>{:type=>"PQ", :unit=>"a", :value=>"2", inclusive?:true}},
+         :effective_time=>{:type=>"IVL_TS", :high=>{:type=>"TS", :value=>"20100101"}}}
+      expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",
+         :description=>"Patient Characteristic: birth date",
+         :standard_category=>"individual_characteristic",
+         :code_list_id=>"2.16.840.1.113883.3.560.100.4",
+         :property=>:age,
+         :type=>:characteristic,
+         :value=>{:type=>"IVL_PQ",:high=>{:type=>"PQ", :unit=>"a", :value=>"17", inclusive?:true}},
+         :effective_time=>{:type=>"IVL_TS", :high=>{:type=>"TS", :value=>"20100101"}}}
+      
+      
+      all_criteria.keys.each do |key|
+        orig_key = key
+        key = key.to_s.gsub(/_precondition_\d+/, '').to_sym
+        found_matching = false
+        expected_dc[key].each do |expected|
+          data_criteria = all_criteria[key]
+          diff = expected.diff_hash(data_criteria)
+          found_matching ||= diff.empty?
+        end
+        assert found_matching, "could not find matching expected criteria for #{orig_key}"
+      end
       
       
       logic = json[:population_criteria]
@@ -212,7 +260,7 @@ module HQMFModel
     def test_finders
       model = HQMF::Parser.parse(@hqmf_contents, HQMF::Parser::HQMF_VERSION_1)
       
-      model.all_data_criteria.size.must_equal 7
+      model.all_data_criteria.size.must_equal 12
       
       ["PatientCharacteristicBirthDate", "EncounterEncounterAmbulatoryIncludingPediatrics", "LaboratoryTestPerformedGroupAStreptococcusTest",
        "DiagnosisActivePharyngitis", "MedicationActivePharyngitisAntibiotics", "MedicationDispensedPharyngitisAntibiotics",
@@ -227,14 +275,6 @@ module HQMFModel
         refute_nil model.population_criteria(key)
       end
     
-    end
-    
-    private 
-    
-    def check_data_criteria(all_criteria, key, values)
-      data_criteria = all_criteria[key]
-      diff = values.diff_hash(data_criteria)
-      assert diff.empty?, "differences: #{diff.to_json}"
     end
     
   end
