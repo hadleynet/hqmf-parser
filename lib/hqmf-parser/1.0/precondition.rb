@@ -4,14 +4,16 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_reader :restrictions, :preconditions, :subset
+    attr_reader :restrictions, :preconditions, :subset, :expression, :id
   
     def initialize(entry, parent, doc)
       @doc = doc
       @entry = entry
+      @id = attr_val('./*/cda:id/@root')
       @restrictions = []
       if (parent)
-        @restrictions.concat(parent.restrictions.select {|r| r.field==nil})
+        parent_restrictions = get_restrictions_from_parent(parent)
+        @restrictions.concat(parent_restrictions)
         @subset = parent.subset
       end
       local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
@@ -22,6 +24,9 @@ module HQMF1
       if local_subset
         @subset = local_subset
       end
+
+      @expression = Expression.new(@entry) if @entry.at_xpath('./*/cda:derivationExpr')
+
       @preconditions = @entry.xpath('./*/cda:sourceOf[@typeCode="PRCN"]').collect do |entry|
         Precondition.new(entry, self, @doc)
       end
@@ -66,8 +71,9 @@ module HQMF1
     
     def to_json
       
-      json = build_hash(self, [:conjunction,:negation])
+      json = build_hash(self, [:id,:conjunction,:negation])
       json[:comparison] = self.comparison.to_json if self.comparison
+      json[:expression] = self.expression.to_json if self.expression
       json[:preconditions] = json_array(self.preconditions)
       json[:restrictions] = json_array(self.restrictions)
       json

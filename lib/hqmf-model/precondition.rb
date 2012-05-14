@@ -2,36 +2,45 @@ module HQMF
   
   class Precondition
 
-    include HQMF::JSON::Utilities
+    include HQMF::Conversion::Utilities
+    
+    
   
-    attr_reader :preconditions, :reference, :conjunction_code
+    attr_reader :id, :preconditions, :reference, :conjunction_code, :negation
   
     # Create a new population criteria
     # @param [Array#Precondition] preconditions 
     # @param [Reference] reference
     # @param [String] conjunction_code
-    def initialize(preconditions,reference,conjunction_code)
+    def initialize(id, preconditions,reference,conjunction_code,negation)
       @preconditions = preconditions || []
       @reference = reference
       @conjunction_code = conjunction_code
+      @negation = negation
+      @id = id
+      @id = @@ids.next if (@id.nil?)
     end
     
     # Create a new population criteria from a JSON hash keyed off symbols
     def self.from_json(json)
       preconditions = []
+      id = json["id"] if json["id"]
       preconditions = json["preconditions"].map {|precondition| HQMF::Precondition.from_json(precondition)} if json["preconditions"]
       reference = Reference.new(json["reference"]) if json["reference"] 
       conjunction_code = json["conjunction_code"] if json["conjunction_code"]
+      negation = json["negation"] if json["negation"]
       
-      HQMF::Precondition.new(preconditions, reference, conjunction_code)
+      HQMF::Precondition.new(id, preconditions, reference, conjunction_code, negation)
     end
     
     def to_json
       x = nil
       json = {}
+      json[:id] = self.id
       json[:reference] = self.reference.id if self.reference
       json[:preconditions] = x if x = json_array(@preconditions)
       json[:conjunction_code] = self.conjunction_code if self.conjunction_code
+      json[:negation] = self.negation if self.negation
       json
     end
     
@@ -40,7 +49,19 @@ module HQMF
     def conjunction?
       @preconditions.length>0
     end
-    
+
+    # Simple class to issue monotonically increasing integer identifiers
+    class Counter
+      def initialize
+        @count = 0
+      end
+
+      def next
+        @count+=1
+      end
+    end
+    @@ids = Counter.new
   end
-    
+  
+  
 end

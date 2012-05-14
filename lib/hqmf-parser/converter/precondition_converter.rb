@@ -1,49 +1,50 @@
 module HQMF
   # Class for converting an HQMF 1.0 representation to an HQMF 2.0 representation
   class PreconditionConverter
+    
+    def self.parse_preconditions(source,data_criteria_converter)
+      preconditions = []
+      source.each do |precondition|
+        preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
+      end
+      preconditions
+    end
    
-    def self.convert_logical(precondition,data_criteria_by_id)
+    # converts a precondtion to a hqmf model
+    def self.parse_precondition(precondition,data_criteria_converter)
       
-      # @param [Array#Precondition] preconditions 
-      # @param [Reference] reference
-      # @param [String] conjunction_code
+      # grab child preconditions, and parse recursively
+      preconditions = parse_and_merge_preconditions(precondition[:preconditions],data_criteria_converter) if precondition[:preconditions] || []
       
-      # TODO: need to create preconditions for comparisons that attach to data criteria
-      preconditions = parse_preconditions(precondition[:preconditions],data_criteria_by_id) if precondition[:preconditions]
+      # TODO: we are currently pulling preconditions from restrictions... these should be moved to temporal references on the data criteria
+      Kernel.warn('pulled preconditions from restrictions... these should be temporal references on the data criteria')
+      preconditions_from_restrictions = HQMF::PreconditionExtractor.extract_preconditions_from_restrictions(precondition[:restrictions], data_criteria_converter)
+      preconditions.concat(preconditions_from_restrictions)
+      
       conjunction_code = convert_logical_conjunction(precondition[:conjunction])
+      negation = precondition[:negation]
+      
       Kernel.warn ("need to push down values, restrictions, effective_date to data criteria")
       # reference is for data preconditions
       reference = nil
       
       if (precondition[:comparison])
         preconditions ||= []
-        preconditions << convert_comparison_to_precondition(precondition[:comparison],data_criteria_by_id)
+        comparison_precondition = HQMF::PreconditionExtractor.convert_comparison_to_precondition(precondition[:comparison],data_criteria_converter)
+        preconditions << comparison_precondition
       end
       
-      HQMF::Precondition.new(preconditions,reference,conjunction_code)
+      HQMF::Precondition.new(nil,preconditions,reference,conjunction_code, negation)
       
     end
-
-    def self.convert_comparison_to_precondition(comparison, data_criteria_by_id)
-      
-      data_criteria = data_criteria_by_id[comparison[:data_criteria_id]]
-      
-      reference = HQMF::Reference.new(data_criteria.id)
-      conjunction_code = "#{data_criteria.type}Reference"
-      preconditions = nil
-      
-      Kernel.warn('restrictions not pushed down to comparisons are not picked up')
-      HQMF::RestrictionConverter.applyRestrictionsToDataCriteria(data_criteria, comparison[:restrictions],data_criteria_by_id)
-      
-      HQMF::Precondition.new(preconditions,reference,conjunction_code)
-    end
-   
+    
     private 
     
-    def self.parse_preconditions(source, data_criteria_by_id)
+    def self.parse_and_merge_preconditions(source,data_criteria_converter)
+      return [] unless source and source.size > 0
       preconditions_by_conjunction = {}
       source.each do |precondition|
-        parsed = HQMF::PreconditionConverter.convert_logical(precondition,data_criteria_by_id)
+        parsed = HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
         preconditions_by_conjunction[parsed.conjunction_code] ||= []
         preconditions_by_conjunction[parsed.conjunction_code]  << parsed
       end
@@ -58,7 +59,9 @@ module HQMF
         preconditions.each do |precondition|
           sub_conditions.concat precondition.preconditions if precondition.preconditions
         end
-        joined << HQMF::Precondition.new(sub_conditions,nil,conjunction_code)
+        negation = false
+        sub_conditions.each {|precondition| negation ||= precondition.negation}
+        joined << HQMF::Precondition.new(nil,sub_conditions,nil,conjunction_code, negation)
       end
       joined
     end

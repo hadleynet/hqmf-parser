@@ -4,7 +4,7 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_reader :property, :type, :status, :standard_category, :qds_data_type
+    attr_reader :property, :type, :status, :standard_category, :qds_data_type, :description
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -28,6 +28,7 @@ module HQMF1
       @status = settings['status']
       @standard_category = settings['standard_category']
       @qds_data_type = settings['qds_data_type']
+      @description = settings['description']
     end
     
     # Get the identifier of the criteria, used elsewhere within the document for referencing
@@ -39,6 +40,7 @@ module HQMF1
     # Get the title of the criteria, provides a human readable description
     # @return [String] the title of this data criteria
     def title
+      # TODO: places where there is no title, the data criteria is a variable... need to figure that out
       @entry.at_xpath('.//cda:title').inner_text
     end
     
@@ -58,7 +60,7 @@ module HQMF1
       {
         self.const_name => build_hash(
           self, 
-          [:id,:title,:code_list_id,:type,:status,:property,:standard_category,:qds_data_type])
+          [:id,:title,:code_list_id,:type,:status,:property,:standard_category,:qds_data_type,:description])
       }
     end
 

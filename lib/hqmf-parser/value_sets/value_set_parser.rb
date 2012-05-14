@@ -35,18 +35,18 @@ module HQMF
     
         # select the grouped code sets and fill in the children... also remove the children that are a
         # member of a group.  We remove the children so that we can create parent groups for the orphans
-        (by_oid_ungrouped.select {|key,value| value[:code_set] == GROUP_CODE_SET}).each do |key, value|
+        (by_oid_ungrouped.select {|key,value| value["code_set"] == GROUP_CODE_SET}).each do |key, value|
           # remove the group so that it is not in the orphan list
-          by_oid_ungrouped.delete(value[:oid])
+          by_oid_ungrouped.delete(value["oid"])
           codes = []
-          value[:codes].each do |child_oid|
+          value["codes"].each do |child_oid|
             codes << by_oid_ungrouped.delete(child_oid)
             # for hierarchies we need to probably have codes be a hash that we select from if we don't find the
             # element in by_oid_ungrouped we may need to look for it in final
           end
-          value[:code_sets] = codes
-          value.delete(:codes)
-          value.delete(:code_set)
+          value["code_sets"] = codes
+          value.delete("codes")
+          value.delete("code_set")
           final << value
         end
     
@@ -61,9 +61,9 @@ module HQMF
   
       def adopt_orphan(orphan)
         parent = orphan.dup
-        parent[:code_sets] = [orphan]
-        parent.delete(:codes)
-        parent.delete(:code_set)
+        parent["code_sets"] = [orphan]
+        parent.delete("codes")
+        parent.delete("code_set")
         parent
       end
   
@@ -78,15 +78,23 @@ module HQMF
         array_of_hashes.each do |row|
           entry = convert_row(row)
       
-          existing = by_oid[entry[:oid]]
+          existing = by_oid[entry["oid"]]
           if (existing)
-            existing[:codes].concat(entry[:codes])
+            existing["codes"].concat(entry["codes"])
           else
-            by_oid[entry[:oid]] = entry
+            by_oid[entry["oid"]] = entry
           end
         end
     
         by_oid
+      end
+  
+      def self.get_format(file_path)
+        if file_path =~ /xls$/
+          :xls
+        elsif file_path =~ /xlsx$/
+          :xlsx
+        end
       end
   
       private
@@ -101,15 +109,15 @@ module HQMF
         # Code
         # Descriptor
         {
-          :key => normalize_names(row[CATEGORY_TITLE],row[CONCEPT_TITLE]),
-          :organization => row[ORGANIZATION_TITLE],
-          :oid => row[OID_TITLE].strip,
-          :concept => normalize_names(row[CONCEPT_TITLE]),
-          :category => normalize_names(row[CATEGORY_TITLE]),
-          :code_set => row[CODE_SET_TITLE],
-          :version => row[VERSION_TITLE],
-          :codes => extract_code(row[CODE_TITLE], row[CODE_SET_TITLE]),
-          :description => row[DESCRIPTION_TITLE]
+          "key" => normalize_names(row[CATEGORY_TITLE],row[CONCEPT_TITLE]),
+          "organization" => row[ORGANIZATION_TITLE],
+          "oid" => row[OID_TITLE].strip,
+          "concept" => normalize_names(row[CONCEPT_TITLE]),
+          "category" => normalize_names(row[CATEGORY_TITLE]),
+          "code_set" => row[CODE_SET_TITLE],
+          "version" => row[VERSION_TITLE],
+          "codes" => extract_code(row[CODE_TITLE], row[CODE_SET_TITLE]),
+          "description" => row[DESCRIPTION_TITLE]
         }
       end
   
@@ -140,14 +148,8 @@ module HQMF
           :sheet => 1     # only one sheet at a time can be worked on
         }
         options = defaults.merge(options)
-    
-        if !(file_path =~ /xls$/).nil?
-          book = Excel.new(file_path)
-        elsif !(file_path =~ /xlsx$/).nil?
-          book = Excelx.new(file_path)
-        else
-          raise "File does not end in .xls or .xlsx"
-        end
+        
+        book = book_by_format(file_path, options[:format])
         book.default_sheet=book.sheets[options[:sheet]]
     
         # catch double byte encoding problems in spreadsheet files
@@ -157,6 +159,19 @@ module HQMF
         rescue Encoding::InvalidByteSequenceError => e
           raise "Spreadsheet encoding problem: #{e}"
         end
+      end
+      
+      def book_by_format(file_path, format)
+        format = HQMF::ValueSet::Parser.get_format(file_path) unless format
+        
+        if format == :xls
+          book = Excel.new(file_path, nil, :ignore)
+        elsif format == :xlsx
+          book = Excelx.new(file_path, nil, :ignore)
+        else
+          raise "File does not end in .xls or .xlsx"
+        end
+        book
       end
   
   

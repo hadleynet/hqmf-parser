@@ -124,7 +124,7 @@ require_relative '../../../test_helper'
       assert_equal '2.16.840.1.113883.6.238', criteria.value.system
 
       criteria = @doc.data_criteria('DummyProcedure')
-      assert_equal :procedure, criteria.type
+      assert_equal :procedures, criteria.type
       assert criteria.inline_code_list
       assert_equal '127355002', criteria.inline_code_list['SNOMED-CT'][0]
       assert criteria.effective_time
@@ -133,7 +133,7 @@ require_relative '../../../test_helper'
       assert_equal 'completed', criteria.status
 
       criteria = @doc.data_criteria('EDorInpatientEncounter')
-      assert_equal :encounter, criteria.type
+      assert_equal :encounters, criteria.type
       assert_equal 'EDorInpatientEncounter', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.42', criteria.code_list_id
       assert criteria.effective_time
@@ -143,7 +143,7 @@ require_relative '../../../test_helper'
       assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
 
       criteria = @doc.data_criteria('HasGestationalDiabetes')
-      assert_equal :diagnosis, criteria.type
+      assert_equal :conditions, criteria.type
       assert_equal 'HasGestationalDiabetes', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.67', criteria.code_list_id
       assert criteria.effective_time
@@ -155,7 +155,7 @@ require_relative '../../../test_helper'
       assert_equal 'EndDate', criteria.effective_time.high.expression
 
       criteria = @doc.data_criteria('HbA1C')
-      assert_equal :result, criteria.type
+      assert_equal :results, criteria.type
       assert_equal 'HbA1C', criteria.title
       assert_equal 'RECENT', criteria.subset_code
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
@@ -168,7 +168,7 @@ require_relative '../../../test_helper'
       assert_equal '%', criteria.value.low.unit
 
       criteria = @doc.data_criteria('DiabetesMedAdministered')
-      assert_equal :medication, criteria.type
+      assert_equal :medications, criteria.type
       assert_equal 'DiabetesMedAdministered', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
       assert criteria.effective_time
@@ -178,7 +178,7 @@ require_relative '../../../test_helper'
       assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
 
       criteria = @doc.data_criteria('DiabetesMedSupplied')
-      assert_equal :medication, criteria.type
+      assert_equal :medications, criteria.type
       assert_equal 'DiabetesMedSupplied', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
       assert criteria.effective_time
@@ -188,6 +188,69 @@ require_relative '../../../test_helper'
       assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
 
       assert_nil @doc.data_criteria('foo')
+    end
+    
+    def test_to_json
+      json = @doc.to_json
+      
+      json[:title].must_equal "Sample Quality Measure Document"
+      json[:description].must_equal "This is the measure description."
+      
+      logic = json[:population_criteria]
+      
+      population_criteria = logic[:IPP]
+      
+      ipp = {conjunction?:true, :preconditions=>[{:reference=>"ageBetween17and64",:conjunction_code=>"observationReference"}]}
+      diff = ipp.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+      
+      population_criteria = logic[:DENOM]
+      denom =
+      {conjunction?:true, :preconditions=>
+          [{:preconditions=>[{:preconditions=>
+            [
+              { :reference=>"HasDiabetes",
+                :conjunction_code=>"observationReference"},
+                {:preconditions=>
+                   [
+                    {:reference=>"EDorInpatientEncounter",:conjunction_code=>"encounterReference"},
+                    {:reference=>"AmbulatoryEncounter",:conjunction_code=>"encounterReference"}
+                   ],
+                 :conjunction_code=>"atLeastOneTrue"
+                }
+            ],
+            :conjunction_code=>"allTrue"
+           },
+           {:reference=>"DiabetesMedAdministered",:conjunction_code=>"substanceAdministrationReference"},
+           {:reference=>"DiabetesMedIntended",:conjunction_code=>"substanceAdministrationReference"},
+           {:reference=>"DiabetesMedSupplied",:conjunction_code=>"supplyReference"},
+           {:reference=>"DiabetesMedOrdered",:conjunction_code=>"supplyReference"}],
+           :conjunction_code=>"atLeastOneTrue"
+          }]
+      }
+
+      diff = denom.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+      
+      population_criteria = logic[:NUMER]
+      numer={conjunction?:true,:preconditions=>[{:reference=>"HbA1C", :conjunction_code=>"observationReference"}]}
+      diff = numer.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+      
+      
+      population_criteria = logic[:DENEXCEP]
+      denomexc = {conjunction?:true,
+         :preconditions=>
+          [{:preconditions=>
+             [{:reference=>"HasPolycysticOvaries",:conjunction_code=>"observationReference"},
+              {:reference=>"HasDiabetes",:conjunction_code=>"observationReference"}],
+            :conjunction_code=>"allTrue"},
+           {:reference=>"HasSteroidInducedDiabetes",:conjunction_code=>"observationReference"},
+           {:reference=>"HasGestationalDiabetes",:conjunction_code=>"observationReference"}]}
+           
+      diff = denomexc.diff_hash(population_criteria)
+      assert diff.empty?, "differences: #{diff.to_json}"
+           
     end
   
   end

@@ -19,30 +19,30 @@ module HQMF2
       entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
       case entry_type
       when 'Problem', 'Problems'
-        @type = :diagnosis
+        @type = :conditions
         @code_list_xpath = './cda:observationCriteria/cda:value'
         @section = 'conditions'
       when 'Encounter', 'Encounters'
-        @type = :encounter
+        @type = :encounters
         @id_xpath = './cda:encounterCriteria/cda:id/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
         @section = 'encounters'
       when 'LabResults', 'Results'
-        @type = :result
+        @type = :results
         @value = extract_value
         @section = 'results'
       when 'Procedure', 'Procedures'
         @id_xpath = './cda:procedureCriteria/cda:id/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
-        @type = :procedure
+        @type = :procedures
         @section = 'procedures'
       when 'Medication', 'Medications'
-        @type = :medication
+        @type = :medications
         @id_xpath = './cda:substanceAdministrationCriteria/cda:id/@extension'
         @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
         @section = 'medications'
       when 'RX'
-        @type = :medication
+        @type = :medications
         @id_xpath = './cda:supplyCriteria/cda:id/@extension'
         @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
         @section = 'medications'

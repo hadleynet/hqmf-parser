@@ -44,8 +44,43 @@ namespace :hqmf do
     filename = Pathname.new(file).basename
     
     doc = HQMF::Parser.parse(File.open(file).read, version)
+    outfile = File.join(".","tmp",'json',"#{filename}.json")
+    File.open(outfile, 'w') {|f| f.write(doc.to_json.to_json.gsub(/",/,"\",\n")) }
+    
+    puts "wrote result to: #{outfile}"
+    
+  end
+  
+  desc 'Parse specified xml file to V1 JSON and save it to /tmp'
+  task :parse_v1, [:file] do |t, args|
+    FileUtils.mkdir_p File.join(".","tmp",'json')
+    
+    raise "You must specify the HQMF XML file to convert" unless args.file
+    
+    file = File.expand_path(args.file)
+    filename = Pathname.new(file).basename
+    
+    doc = HQMF1::Document.new(File.open(file).read).to_json
+    outfile = File.join(".","tmp",'json',"#{filename}_v1.json")
+    File.open(outfile, 'w') {|f| f.write(doc.to_json(max_nesting: 100).gsub(/",/,"\",\n")) }
+    puts "wrote result to: #{outfile}"
+    
+  end
 
-    File.open(File.join(".","tmp",'json',"#{filename}.json"), 'w') {|f| f.write(doc.to_json.to_json) }
+  desc 'Convert V1 JSON to V2 JSON and save it to /tmp'
+  task :convert, [:file] do |t, args|
+    FileUtils.mkdir_p File.join(".","tmp",'json')
+    
+    raise "You must specify the V1 JSON file to convert" unless args.file
+    
+    file = File.expand_path(args.file)
+    filename = Pathname.new(file).basename
+
+    converted = HQMF::DocumentConverter.convert(JSON.parse(File.open(file).read,:symbolize_names => true))
+    
+    outfile = File.join(".","tmp",'json',"#{filename}_v2.json")
+    File.open(outfile, 'w') {|f| f.write(converted.to_json.to_json.gsub(/",/,"\",\n")) }
+    puts "wrote result to: #{outfile}"
     
   end
   

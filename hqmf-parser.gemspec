@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.version = '0.0.1'
   
   s.add_dependency 'rubyzip'
-  s.add_dependency 'spreadsheet'
-  s.add_dependency 'google-spreadsheet-ruby'
-  s.add_dependency 'roo'
+  s.add_dependency 'spreadsheet', '0.6.8'
+  s.add_dependency 'google-spreadsheet-ruby', '0.1.8'
+  s.add_dependency 'roo', '1.10.1'
 
   s.files = Dir.glob('lib/**/*.rb') + Dir.glob('lib/**/*.rake') + ["Gemfile", "README.md", "Rakefile", "VERSION"]
 

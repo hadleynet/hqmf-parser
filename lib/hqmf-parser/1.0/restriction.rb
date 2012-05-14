@@ -5,18 +5,26 @@ module HQMF1
     include HQMF1::Utilities
     
     attr_reader :range, :comparison, :restrictions, :subset, :preconditions
+    attr_accessor :from_parent
     
     def initialize(entry, parent, doc)
       @doc = doc
       @entry = entry
       @restrictions = []
+      
       range_def = @entry.at_xpath('./cda:pauseQuantity')
       if range_def
         @range = Range.new(range_def)
       end
       if parent
-        @restrictions.concat(parent.restrictions.select {|r| r.field==nil})
+        parent_restrictions = get_restrictions_from_parent(parent)
+        @restrictions.concat(parent_restrictions)
       end
+      local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
+        Restriction.new(entry, self, @doc)
+      end
+      @restrictions.concat(local_restrictions)
+      
       @subset = attr_val('./cda:subsetCode/@code')
       
       comparison_def = @entry.at_xpath('./*/cda:sourceOf[@typeCode="COMP"]')
@@ -52,12 +60,18 @@ module HQMF1
           'subset' => @subset
         )
         p = Precondition.new(entry, parent, @doc)
+        
       end
     end
     
     # The type of restriction, e.g. SBS, SBE etc
     def type
       attr_val('./@typeCode')
+    end
+
+    # is this type negated? true or false
+    def negation
+      attr_val('./@inversionInd') == "true"
     end
     
     # The id of the data criteria or measurement property that the value
@@ -75,7 +89,8 @@ module HQMF1
     end
     
     def to_json 
-      json = build_hash(self, [:subset,:type,:target_id,:field,:value])
+#      return {} if from_parent
+      json = build_hash(self, [:subset,:type,:target_id,:field,:value,:from_parent, :negation])
       json[:range] = range.to_json if range
       json[:comparison] = comparison.to_json if comparison
       json[:restrictions] = json_array(self.restrictions)

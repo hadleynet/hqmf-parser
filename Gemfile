@@ -7,9 +7,9 @@ gem 'nokogiri'
 gem 'rubyzip'
 
 # below are gems required for excel spreadsheet processing
-gem 'spreadsheet', '~> 0.6.8'
-gem 'google-spreadsheet-ruby', '~> 0.1.8'
-gem 'roo', '~> 1.10.1'
+gem 'spreadsheet', '0.6.8'
+gem 'google-spreadsheet-ruby', '0.1.8'
+gem 'roo', '1.10.1'
 
 group :test do
   gem 'minitest'
