@@ -18,10 +18,11 @@ module HQMF
       @data_criteria_converter = DataCriteriaConverter.new(json, measure_period)
       
       data_criteria_by_id = @data_criteria_converter.v1_data_criteria_by_id
-      data_criteria = @data_criteria_converter.v2_data_criteria
       
       @population_criteria_converter = PopulationCriteriaConverter.new(json, @data_criteria_converter)
       population_criteria = @population_criteria_converter.population_criteria
+
+      data_criteria = @data_criteria_converter.final_v2_data_criteria
       
       # Create a new HQMF::Document which can be converted to JavaScript
       # @param [String] title

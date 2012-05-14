@@ -2,7 +2,7 @@ module HQMF
   # Class for converting an HQMF 1.0 representation to an HQMF 2.0 representation
   class RestrictionConverter
    
-    def self.applyRestrictionsToDataCriteria(precondition,data_criteria, restrictions,data_criteria_converter)
+    def self.applyRestrictionsToDataCriteria(data_criteria, restrictions,data_criteria_converter)
       
       return unless restrictions
       
@@ -13,30 +13,23 @@ module HQMF
           next
         end
         
-        new_data_criteria = data_criteria.clone
-        
         case restriction[:type]
         when 'DURING'
           data_criteria.effective_time = restricted_by.value
         when 'SBS'
-          new_data_criteria.effective_time ||= HQMF::EffectiveTime.new(nil,nil,nil)
+          data_criteria.effective_time ||= HQMF::EffectiveTime.new(nil,nil,nil)
           if restricted_by.value
-            new_data_criteria.effective_time.high = restricted_by.value.low
+            data_criteria.effective_time.high = restricted_by.value.low
           else
             Kernel.warn "Temporal Reference for SBS"
           end 
           if (restriction[:range])
             
-            new_data_criteria.value = HQMF::Range.new('IVL_PQ',nil,nil,nil) unless new_data_criteria.value
-            low_restriction = restriction[:range][:low] unless new_data_criteria.value.low
-            high_restriction = restriction[:range][:high] unless new_data_criteria.value.high
-            new_data_criteria.value.low = HQMF::Value.new('PQ',low_restriction[:unit],low_restriction[:value],low_restriction[:inclusive?],low_restriction[:derived?],low_restriction[:expression]) if low_restriction
-            new_data_criteria.value.high = HQMF::Value.new('PQ',high_restriction[:unit],high_restriction[:value],high_restriction[:inclusive?],high_restriction[:derived?],high_restriction[:expression]) if high_restriction
-            
-            new_data_criteria.id = "#{new_data_criteria.id}_precondition_#{precondition.id}"
-            precondition.reference.id = new_data_criteria.id
-            
-            data_criteria_converter.v2_data_criteria << new_data_criteria
+            data_criteria.value = HQMF::Range.new('IVL_PQ',nil,nil,nil) unless data_criteria.value
+            low_restriction = restriction[:range][:low] unless data_criteria.value.low
+            high_restriction = restriction[:range][:high] unless data_criteria.value.high
+            data_criteria.value.low = HQMF::Value.new('PQ',low_restriction[:unit],low_restriction[:value],low_restriction[:inclusive?],low_restriction[:derived?],low_restriction[:expression]) if low_restriction
+            data_criteria.value.high = HQMF::Value.new('PQ',high_restriction[:unit],high_restriction[:value],high_restriction[:inclusive?],high_restriction[:derived?],high_restriction[:expression]) if high_restriction
             
           end
 #        when 'EAS'
@@ -56,7 +49,7 @@ module HQMF
 #          raise "The restriction type is not yet supported: #{restriction[:type]}"
         end
         
-        applyRestrictionsToDataCriteria(precondition,data_criteria, restriction[:restrictions],data_criteria_converter) if restriction[:restrictions]
+        applyRestrictionsToDataCriteria(data_criteria, restriction[:restrictions],data_criteria_converter) if restriction[:restrictions]
         
       end
       

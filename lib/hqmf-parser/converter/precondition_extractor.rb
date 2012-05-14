@@ -60,10 +60,17 @@ module HQMF
 
       precondition = HQMF::Precondition.new(nil,preconditions,reference,conjunction_code, false)
       
+      new_data_criteria = data_criteria.clone
+      new_data_criteria.id = "#{new_data_criteria.id}_precondition_#{precondition.id}"
+      precondition.reference.id = new_data_criteria.id
+      data_criteria_converter.v2_data_criteria << new_data_criteria
+      # we want to delete the original for data criteria that have been duplicated
+      data_criteria_converter.v2_data_criteria_to_delete << data_criteria.id
+      
       if comparison[:restrictions]
         # push the restrictions down to the data criteria
         Kernel.warn('restrictions not pushed down to comparisons are not picked up')
-        HQMF::RestrictionConverter.applyRestrictionsToDataCriteria(precondition, data_criteria, comparison[:restrictions],data_criteria_converter)
+        HQMF::RestrictionConverter.applyRestrictionsToDataCriteria(new_data_criteria, comparison[:restrictions],data_criteria_converter)
       end
       
       precondition

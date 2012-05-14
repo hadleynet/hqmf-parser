@@ -15,7 +15,7 @@ module HQMF1
     def test_patient_criteria_backfill
       hqmf = HQMF::Parser.parse(@hqmf_contents, HQMF::Parser::HQMF_VERSION_1,@codes)
       
-      gender_female = hqmf.data_criteria("PatientCharacteristicGenderFemale")
+      gender_female = hqmf.data_criteria(hqmf.all_data_criteria.map(&:id).grep(/PatientCharacteristicGenderFemale/).first)
       gender_female.value.code.must_equal "F"
       gender_female.value.system.must_equal "Gender"
       gender_female.value.type.must_equal "CD"

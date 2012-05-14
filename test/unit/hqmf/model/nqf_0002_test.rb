@@ -18,13 +18,13 @@ module HQMFModel
             
       all_criteria = json[:data_criteria]
       refute_nil all_criteria
-      all_criteria.length.must_equal 12
+      all_criteria.length.must_equal 23
       all_criteria.length.must_equal hqmf.all_data_criteria.length
 
       [:PatientCharacteristicBirthDate, :EncounterEncounterAmbulatoryIncludingPediatrics, :LaboratoryTestPerformedGroupAStreptococcusTest,
        :DiagnosisActivePharyngitis, :MedicationActivePharyngitisAntibiotics, :MedicationDispensedPharyngitisAntibiotics,
        :MedicationOrderPharyngitisAntibiotics].each do |data_criteria_key|
-         refute_nil all_criteria[data_criteria_key]
+         assert all_criteria.keys.grep(/#{data_criteria_key.to_s}/).size > 0, "Could not find any data criteria for #{data_criteria_key}"
       end
       
       expected_dc = {}
@@ -130,7 +130,7 @@ module HQMFModel
         key = key.to_s.gsub(/_precondition_\d+/, '').to_sym
         found_matching = false
         expected_dc[key].each do |expected|
-          data_criteria = all_criteria[key]
+          data_criteria = all_criteria[orig_key]
           diff = expected.diff_hash(data_criteria)
           found_matching ||= diff.empty?
         end
@@ -260,11 +260,9 @@ module HQMFModel
     def test_finders
       model = HQMF::Parser.parse(@hqmf_contents, HQMF::Parser::HQMF_VERSION_1)
       
-      model.all_data_criteria.size.must_equal 12
+      model.all_data_criteria.size.must_equal 23
       
-      ["PatientCharacteristicBirthDate", "EncounterEncounterAmbulatoryIncludingPediatrics", "LaboratoryTestPerformedGroupAStreptococcusTest",
-       "DiagnosisActivePharyngitis", "MedicationActivePharyngitisAntibiotics", "MedicationDispensedPharyngitisAntibiotics",
-       "MedicationOrderPharyngitisAntibiotics"].each do |key|
+      model.all_data_criteria.map(&:id).each do |key|
         
         refute_nil model.data_criteria(key)
       end

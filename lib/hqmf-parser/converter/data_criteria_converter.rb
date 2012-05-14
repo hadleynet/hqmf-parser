@@ -2,14 +2,19 @@ module HQMF
   # Class representing an HQMF document
   class DataCriteriaConverter
 
-    attr_reader :v1_data_criteria_by_id, :v2_data_criteria
+    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete
 
     def initialize(doc, measure_period)
       @doc = doc
       @v1_data_criteria_by_id = {}
       @v2_data_criteria = []
+      @v2_data_criteria_to_delete = []
       @measure_period = measure_period
       parse()
+    end
+
+    def final_v2_data_criteria
+      v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete.include? criteria.id }
     end
 
 
