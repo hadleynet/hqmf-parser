@@ -11,51 +11,44 @@ module HQMF2
     def initialize(entry)
       @entry = entry
       @status = attr_val('./*/cda:statusCode/@code')
+      @effective_time = extract_effective_time
       @id_xpath = './cda:observationCriteria/cda:id/@extension'
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
-      @effective_time_xpath = './*/cda:effectiveTime'
       
       entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
       case entry_type
       when 'Problem', 'Problems'
         @type = :diagnosis
         @code_list_xpath = './cda:observationCriteria/cda:value'
-        @effective_time = extract_effective_time
         @section = 'conditions'
       when 'Encounter', 'Encounters'
         @type = :encounter
         @id_xpath = './cda:encounterCriteria/cda:id/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
-        @effective_time = extract_effective_time
         @section = 'encounters'
       when 'LabResults', 'Results'
         @type = :result
         @value = extract_value
-        @effective_time = extract_effective_time
         @section = 'results'
       when 'Procedure', 'Procedures'
         @id_xpath = './cda:procedureCriteria/cda:id/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
         @type = :procedure
         @section = 'procedures'
-        @effective_time = extract_effective_time
       when 'Medication', 'Medications'
         @type = :medication
         @id_xpath = './cda:substanceAdministrationCriteria/cda:id/@extension'
         @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
-        @effective_time = extract_effective_time
         @section = 'medications'
       when 'RX'
         @type = :medication
         @id_xpath = './cda:supplyCriteria/cda:id/@extension'
         @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
-        @effective_time = extract_effective_time
         @section = 'medications'
       when 'Demographics'
         @type = :characteristic
         @property = property_for_demographic
-        @effective_time = extract_effective_time
         @value = extract_value
       when nil
         @type = :variable
@@ -121,7 +114,7 @@ module HQMF2
     private
     
     def extract_effective_time
-      effective_time_def = @entry.at_xpath(@effective_time_xpath, HQMF2::Document::NAMESPACES)
+      effective_time_def = @entry.at_xpath('./*/cda:effectiveTime', HQMF2::Document::NAMESPACES)
       if effective_time_def
         EffectiveTime.new(effective_time_def)
       else
