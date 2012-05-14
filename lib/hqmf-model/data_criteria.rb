@@ -5,7 +5,7 @@ module HQMF
     include HQMF::Conversion::Utilities
 
     attr_reader :title,:description,:section,:subset_code,:code_list_id, :inline_code_list, :standard_category, :qds_data_type, :negation
-    attr_accessor :id, :value, :effective_time, :status, :temporal_references, :property, :type
+    attr_accessor :id, :value, :effective_time, :status, :temporal_reference, :property, :type
   
     # Create a new data criteria instance
     # @param [String] id
@@ -22,10 +22,10 @@ module HQMF
     # @param [Range] effective_time
     # @param [Hash<String,String>] inline_code_list
     # @param [boolean] negation
-    # @param [Array<TemporalReference>] temporal_references
+    # @param [TemporalReference] temporal_reference
     def initialize(id, title, description, standard_category, qds_data_type, subset_code, 
         code_list_id, property,type, status, value, effective_time, inline_code_list,
-        negation,temporal_references)
+        negation,temporal_reference)
       @id = id
       @title = title
       @description = description
@@ -40,7 +40,7 @@ module HQMF
       @effective_time = effective_time
       @inline_code_list = inline_code_list
       @negation = negation
-      @temporal_references = temporal_references
+      @temporal_reference = temporal_reference
     end
     
     # Create a new data criteria instance from a JSON hash keyed with symbols
@@ -55,17 +55,13 @@ module HQMF
       type = json["type"].to_sym if json["type"]
       status = json["status"] if json["status"]
       negation = json["negation"] || false
-      
-      temporal_references = json["temporal_references"].map do |temporal_reference|
-        HQMF::TemporalReference.from_json(temporal_reference)
-      end if (json['temporal_references'])
-
+      temporal_reference = HQMF::TemporalReference.from_json(json["temporal_reference"]) if (json['temporal_reference'])
       value = convert_value(json["value"]) if json["value"]
       effective_time = HQMF::Range.from_json(json["effective_time"]) if json["effective_time"]
       inline_code_list = json["inline_code_list"].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json["inline_code_list"]
       
       HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, code_list_id,
-                            property, type, status, value, effective_time, inline_code_list, negation, temporal_references)
+                            property, type, status, value, effective_time, inline_code_list, negation, temporal_reference)
     end
     
     def to_json
@@ -84,8 +80,7 @@ module HQMF
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
-      temporal_references = json_array(@temporal_references) if @temporal_references && !@temporal_references.empty?
-      json[:temporal_references] = temporal_references if temporal_references
+      json[:temporal_reference] = self.temporal_reference.to_json if self.temporal_reference
       json
     end
     

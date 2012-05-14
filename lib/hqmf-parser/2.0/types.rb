@@ -137,9 +137,29 @@ module HQMF2
     def to_json
       build_hash(self, [:type,:system,:code])
     end
-    
   end
   
+  class TemporalReference
+    include HQMF2::Utilities
+    
+    attr_reader :type, :reference, :offset
+
+    def initialize(entry)
+      @entry = entry
+      @type = attr_val('./@typeCode')
+      @reference = Reference.new(@entry.at_xpath('./*/cda:id', HQMF2::Document::NAMESPACES))
+      offset_def = @entry.at_xpath('./cda:pauseQuantity', HQMF2::Document::NAMESPACES)
+      @offset = Value.new(offset_def) if offset_def
+    end
+    
+    def to_json
+      json = build_hash(self, [:type])
+      json[:offset] = self.offset.to_json if self.offset
+      json[:reference] = self.reference.to_json if self.reference
+      json
+    end    
+  end
+
   # Represents a HQMF reference from a precondition to a data criteria
   class Reference
     include HQMF2::Utilities
@@ -152,6 +172,9 @@ module HQMF2
       attr_val('./@extension')
     end
     
+    def to_json
+      build_hash(self, [:id])
+    end
   end
   
 end

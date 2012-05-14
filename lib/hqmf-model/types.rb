@@ -136,61 +136,32 @@ module HQMF
     
   end
 
-  class LogicalReference
-    include HQMF::Conversion::Utilities
-    attr_reader :type, :references
-    # @param [String] type
-    # @param [Array#Reference] references
-    def initialize(type,references)
-      @type = type
-      @references = references
-    end
-    
-    def self.from_json(json)
-      type = json["type"] if json["type"]
-      references = json["references"].map do |reference|
-        HQMF::Reference.new(reference)
-      end
-      
-      HQMF::LogicalReference.new(type,references)
-    end
-    
-    def to_json
-      json = build_hash(self, [:type])
-      json[:references] = @references
-      json
-    end
-    
-  end
-
   class TemporalReference
     include HQMF::Conversion::Utilities
-    attr_reader :type, :references, :range
+    attr_reader :type, :reference, :offset
     # @param [String] type
-    # @param [Array#LogicalReference] references
-    # @param [Range] range
-    def initialize(type,references,range)
+    # @param [Reference] reference
+    # @param [Value] range
+    def initialize(type,reference,offset)
       @type = type
-      @references = references
-      @range = range
+      @reference = reference
+      @offset = offset
     end
     
     def self.from_json(json)
       type = json["type"] if json["type"]
-      references = json["references"].map do |reference|
-        HQMF::LogicalReference.from_json(reference)
-      end
-      range = HQMF::Range.from_json(json["range"]) if json["range"]
+      reference = HQMF::Reference.from_json(json["reference"]) if json["reference"]
+      offset = HQMF::Value.from_json(json["offset"]) if json["offset"]
       
-      HQMF::TemporalReference.new(type,references,range)
+      HQMF::TemporalReference.new(type,reference,offset)
     end
     
     
     def to_json
       x = nil
       json = build_hash(self, [:type])
-      json[:references] = x if x = json_array(@references)
-      json[:range] = self.range.to_json if self.range
+      json[:reference] = self.reference.to_json if self.reference
+      json[:offset] = self.offset.to_json if self.offset
       json
     end
     

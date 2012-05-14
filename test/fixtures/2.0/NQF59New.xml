@@ -327,9 +327,9 @@
         </observationCriteria>
       </entry>
       <entry>
-        <localVariableName>DummyProcedure</localVariableName>
+        <localVariableName>DummyProcedureAfterHasDiabetes</localVariableName>
         <procedureCriteria>
-          <id root="0" extension="DummyProcedure"/>
+          <id root="0" extension="DummyProcedureAfterHasDiabetes"/>
           <statusCode code="completed"/>
           <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.1"
            displayName="" code="127355002"/>
@@ -342,6 +342,12 @@
               <id root="0" extension="Procedure"/>
             </observationReference>
           </definition>
+          <temporallyRelatedInformation typeCode="SAS">
+            <pauseQuantity value="-1" unit="a"/>
+            <observationReference moodCode="EVN">
+              <id root="0" extension="HasDiabetes"/>
+            </observationReference>
+          </temporallyRelatedInformation>
         </procedureCriteria>
       </entry>
       <entry>

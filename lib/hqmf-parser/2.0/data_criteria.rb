@@ -4,58 +4,52 @@ module HQMF2
   
     include HQMF2::Utilities
     
-    attr_reader :property, :type, :status, :value, :effective_time, :section
+    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_reference
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
       @status = attr_val('./*/cda:statusCode/@code')
+      @effective_time = extract_effective_time
+      @temporal_reference = extract_temporal_reference
       @id_xpath = './cda:observationCriteria/cda:id/@extension'
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
-      @effective_time_xpath = './*/cda:effectiveTime'
       
       entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
       case entry_type
       when 'Problem', 'Problems'
         @type = :conditions
         @code_list_xpath = './cda:observationCriteria/cda:value'
-        @effective_time = extract_effective_time
         @section = 'conditions'
       when 'Encounter', 'Encounters'
         @type = :encounters
         @id_xpath = './cda:encounterCriteria/cda:id/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
-        @effective_time = extract_effective_time
         @section = 'encounters'
       when 'LabResults', 'Results'
         @type = :results
         @value = extract_value
-        @effective_time = extract_effective_time
         @section = 'results'
       when 'Procedure', 'Procedures'
         @id_xpath = './cda:procedureCriteria/cda:id/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
         @type = :procedures
         @section = 'procedures'
-        @effective_time = extract_effective_time
       when 'Medication', 'Medications'
         @type = :medications
         @id_xpath = './cda:substanceAdministrationCriteria/cda:id/@extension'
         @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
-        @effective_time = extract_effective_time
         @section = 'medications'
       when 'RX'
         @type = :medications
         @id_xpath = './cda:supplyCriteria/cda:id/@extension'
         @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
-        @effective_time = extract_effective_time
         @section = 'medications'
       when 'Demographics'
         @type = :characteristic
         @property = property_for_demographic
-        @effective_time = extract_effective_time
         @value = extract_value
       when nil
         @type = :variable
@@ -81,8 +75,8 @@ module HQMF2
       attr_val(@id_xpath)
     end
     
-    # Get the identifier of the criteria, used elsewhere within the document for referencing
-    # @return [String] the identifier of this data criteria
+    # Get the subset code (e.g. FIRST)
+    # @return [String] the subset code
     def subset_code
       attr_val('./cda:subsetCode/@code')
     end
@@ -114,6 +108,7 @@ module HQMF2
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
+      json[:temporal_reference] = self.temporal_reference.to_json if self.temporal_reference
       {self.id.to_sym => json}
     end
     
@@ -121,9 +116,18 @@ module HQMF2
     private
     
     def extract_effective_time
-      effective_time_def = @entry.at_xpath(@effective_time_xpath, HQMF2::Document::NAMESPACES)
+      effective_time_def = @entry.at_xpath('./*/cda:effectiveTime', HQMF2::Document::NAMESPACES)
       if effective_time_def
         EffectiveTime.new(effective_time_def)
+      else
+        nil
+      end
+    end
+    
+    def extract_temporal_reference
+      extract_temporal_reference_def = @entry.at_xpath('./*/cda:temporallyRelatedInformation', HQMF2::Document::NAMESPACES)
+      if extract_temporal_reference_def
+        TemporalReference.new(extract_temporal_reference_def)
       else
         nil
       end
