@@ -123,7 +123,7 @@ require_relative '../../../test_helper'
       assert_equal '2178-2', criteria.value.code
       assert_equal '2.16.840.1.113883.6.238', criteria.value.system
 
-      criteria = @doc.data_criteria('DummyProcedure')
+      criteria = @doc.data_criteria('DummyProcedureAfterHasDiabetes')
       assert_equal :procedures, criteria.type
       assert criteria.inline_code_list
       assert_equal '127355002', criteria.inline_code_list['SNOMED-CT'][0]
@@ -131,6 +131,11 @@ require_relative '../../../test_helper'
       assert_equal '20100101', criteria.effective_time.low.value
       assert_equal '20111231', criteria.effective_time.high.value
       assert_equal 'completed', criteria.status
+      assert criteria.temporal_reference
+      assert_equal 'SAS', criteria.temporal_reference.type
+      assert_equal 'HasDiabetes', criteria.temporal_reference.reference.id
+      assert_equal '-1', criteria.temporal_reference.offset.value
+      assert_equal 'a', criteria.temporal_reference.offset.unit
 
       criteria = @doc.data_criteria('EDorInpatientEncounter')
       assert_equal :encounters, criteria.type
@@ -141,6 +146,7 @@ require_relative '../../../test_helper'
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
       assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      assert !criteria.temporal_reference
 
       criteria = @doc.data_criteria('HasGestationalDiabetes')
       assert_equal :conditions, criteria.type

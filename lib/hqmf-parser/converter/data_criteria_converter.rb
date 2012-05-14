@@ -57,7 +57,7 @@ module HQMF
       effective_time = nil
       inline_code_list = nil
       subset_code = nil
-      temporal_references = []
+      temporal_references = nil
 
       HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, 
         code_list_id, property,type, status, value, effective_time, inline_code_list,

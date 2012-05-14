@@ -4,7 +4,7 @@ module HQMF2
   
     include HQMF2::Utilities
     
-    attr_reader :property, :type, :status, :value, :effective_time, :section
+    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_reference
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -12,6 +12,7 @@ module HQMF2
       @entry = entry
       @status = attr_val('./*/cda:statusCode/@code')
       @effective_time = extract_effective_time
+      @temporal_reference = extract_temporal_reference
       @id_xpath = './cda:observationCriteria/cda:id/@extension'
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
@@ -107,6 +108,7 @@ module HQMF2
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
+      json[:temporal_reference] = self.temporal_reference.to_json if self.temporal_reference
       {self.id.to_sym => json}
     end
     
@@ -117,6 +119,15 @@ module HQMF2
       effective_time_def = @entry.at_xpath('./*/cda:effectiveTime', HQMF2::Document::NAMESPACES)
       if effective_time_def
         EffectiveTime.new(effective_time_def)
+      else
+        nil
+      end
+    end
+    
+    def extract_temporal_reference
+      extract_temporal_reference_def = @entry.at_xpath('./*/cda:temporallyRelatedInformation', HQMF2::Document::NAMESPACES)
+      if extract_temporal_reference_def
+        TemporalReference.new(extract_temporal_reference_def)
       else
         nil
       end
