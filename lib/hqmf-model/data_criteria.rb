@@ -4,8 +4,8 @@ module HQMF
 
     include HQMF::Conversion::Utilities
 
-    attr_reader :title,:description,:section,:subset_code,:code_list_id, :inline_code_list, :standard_category, :qds_data_type, :negation
-    attr_accessor :id, :value, :effective_time, :status, :temporal_reference, :property, :type
+    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :inline_code_list, :standard_category, :qds_data_type, :negation
+    attr_accessor :id, :value, :effective_time, :status, :temporal_reference, :subset_code, :subset_value, :property, :type
   
     # Create a new data criteria instance
     # @param [String] id
@@ -14,7 +14,9 @@ module HQMF
     # @param [String] standard_category
     # @param [String] qds_data_type
     # @param [String] subset_code
+    # @param [Range] subset_value
     # @param [String] code_list_id
+    # @param [List<DataCriteria>] childrenCriteria
     # @param [String] property
     # @param [String] type
     # @param [String] status
@@ -23,8 +25,8 @@ module HQMF
     # @param [Hash<String,String>] inline_code_list
     # @param [boolean] negation
     # @param [TemporalReference] temporal_reference
-    def initialize(id, title, description, standard_category, qds_data_type, subset_code, 
-        code_list_id, property,type, status, value, effective_time, inline_code_list,
+    def initialize(id, title, description, standard_category, qds_data_type, subset_code, subset_value,
+        code_list_id, children_criteria, property,type, status, value, effective_time, inline_code_list,
         negation,temporal_reference)
       @id = id
       @title = title
@@ -33,6 +35,7 @@ module HQMF
       @qds_data_type = qds_data_type
       @subset_code = subset_code
       @code_list_id = code_list_id
+      @children_criteria = children_criteria
       @property = property
       @type = type
       @status = status
@@ -50,7 +53,9 @@ module HQMF
       standard_category = json["standard_category"] if json["standard_category"]
       qds_data_type = json["qds_data_type"] if json["standard_category"]
       subset_code = json["subset_code"] if json["subset_code"]
+      subset_value = HQMF::Range.from_json(json["subset_value"]) if json["subset_value"]
       code_list_id = json["code_list_id"] if json["code_list_id"]
+      children_criteria = json["children_criteria"].map {|child_criteria| HQMF::DataCriteria.from_json(child_criteria)} if json["children_criteria"]
       property = json["property"].to_sym if json["property"]
       type = json["type"].to_sym if json["type"]
       status = json["status"] if json["status"]
@@ -60,7 +65,7 @@ module HQMF
       effective_time = HQMF::Range.from_json(json["effective_time"]) if json["effective_time"]
       inline_code_list = json["inline_code_list"].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json["inline_code_list"]
       
-      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, code_list_id,
+      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, subset_value, code_list_id, children_criteria,
                             property, type, status, value, effective_time, inline_code_list, negation, temporal_reference)
     end
     
@@ -77,6 +82,10 @@ module HQMF
     
     def base_json
       json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:subset_code,:code_list_id, :property, :type, :status, :negation])
+      json[:subset_value] = self.subset_value.to_json if self.subset_value
+      children_criteria = []
+      self.children_criteria.each { |child| children_criteria << child.base_json } if self.children_criteria
+      json[:children_criteria] = children_criteria unless children_criteria.empty?
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list

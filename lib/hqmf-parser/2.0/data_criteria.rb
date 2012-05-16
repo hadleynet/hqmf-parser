@@ -23,6 +23,7 @@ module HQMF2
         @type = :conditions
         @code_list_xpath = './cda:observationCriteria/cda:value'
         @section = 'conditions'
+        @subset_xpath = "./cda:observationCriteria/"
       when 'Encounter', 'Encounters'
         @type = :encounters
         @id_xpath = './cda:encounterCriteria/cda:id/@extension'
@@ -78,7 +79,14 @@ module HQMF2
     # Get the subset code (e.g. FIRST)
     # @return [String] the subset code
     def subset_code
-      attr_val('./cda:subsetCode/@code')
+      attr_val('./*/cda:excerpt/cda:subsetCode/@code')
+    end
+
+    # Get the subset code (e.g. FIRST)
+    # @return [String] the subset code
+    def subset_value
+      subset_entry = @entry.at_xpath('./*/cda:excerpt/*/cda:repeatNumber', HQMF2::Document::NAMESPACES)
+      HQMF2::Range.new(subset_entry) if subset_entry
     end
     
     # Get the title of the criteria, provides a human readable description
@@ -109,6 +117,7 @@ module HQMF2
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list
       json[:temporal_reference] = self.temporal_reference.to_json if self.temporal_reference
+      json[:subset_value] = self.subset_value.to_json if self.subset_value
       {self.id.to_sym => json}
     end
     

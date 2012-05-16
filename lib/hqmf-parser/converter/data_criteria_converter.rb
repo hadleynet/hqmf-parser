@@ -62,10 +62,12 @@ module HQMF
       effective_time = nil
       inline_code_list = nil
       subset_code = nil
+      subset_value = nil
       temporal_references = nil
+      children_criteria = nil
 
-      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, 
-        code_list_id, property,type, status, value, effective_time, inline_code_list,
+      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, subset_code, subset_value,
+        code_list_id, children_criteria, property,type, status, value, effective_time, inline_code_list,
         negation, temporal_references)
  
     end
@@ -91,6 +93,8 @@ module HQMF
       effective_time = nil
       inline_code_list = nil
       subset_code = nil
+      subset_value = nil
+      children_criteria = nil
       
       #####
       ##
@@ -99,7 +103,7 @@ module HQMF
       #####
       
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,code_list_id,property,type,status,value,effective_time,inline_code_list, false,[])
+      measure_criteria = HQMF::DataCriteria.new('MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod','MeasurePeriod',subset_code,subset_value,code_list_id,children_criteria,property,type,status,value,effective_time,inline_code_list, false,[])
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria
