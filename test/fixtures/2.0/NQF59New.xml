@@ -267,7 +267,6 @@
       </entry>
       <entry>
         <localVariableName>AmbulatoryEncounter</localVariableName>
-        <subsetCode code="PREVSUM"/>
         <encounterCriteria>
           <id root="0" extension="AmbulatoryEncounter"/>
           <code valueSet="2.16.840.1.113883.3.464.1.1142"/>
@@ -285,6 +284,9 @@
               <id root="0" extension="Encounter"/>
             </observationReference>
           </definition>
+          <excerpt>
+            <subsetCode code="PREVSUM"/>
+          </excerpt>
         </encounterCriteria>
       </entry>
       <entry>
