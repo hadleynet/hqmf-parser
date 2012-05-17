@@ -196,7 +196,6 @@ require_relative '../../../test_helper'
       criteria = @doc.data_criteria('anyDiabetes')
       assert_equal :derived, criteria.type
       assert_equal 2, criteria.children_criteria.length
-      binding.pry
       assert criteria.children_criteria.include? 'HasDiabetes'
       assert criteria.children_criteria.include? 'HasGestationalDiabetes'
 
