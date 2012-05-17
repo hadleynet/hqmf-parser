@@ -4,8 +4,6 @@ module HQMF
 
     include HQMF::Conversion::Utilities
     
-    
-  
     attr_reader :id, :preconditions, :reference, :conjunction_code, :negation
   
     # Create a new population criteria

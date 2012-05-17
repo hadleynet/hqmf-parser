@@ -19,14 +19,19 @@ module HQMF
       # TODO: we are currently pulling preconditions from restrictions... these should be moved to temporal references on the data criteria
       Kernel.warn('pulled preconditions from restrictions... these should be temporal references on the data criteria')
       preconditions_from_restrictions = HQMF::PreconditionExtractor.extract_preconditions_from_restrictions(precondition[:restrictions], data_criteria_converter)
-      preconditions.concat(preconditions_from_restrictions)
+      
+      reference = nil
+      if (precondition[:expression])
+        # get back the reference to the new operator data criteria
+        # this is for things like COUNT which will create a new data criteria that calculates the count
+        reference = HQMF::OperatorConverter.applyOperatorToDataCriteria(precondition[:expression], preconditions_from_restrictions, data_criteria_converter)
+      else
+        preconditions.concat(preconditions_from_restrictions)
+      end
       
       conjunction_code = convert_logical_conjunction(precondition[:conjunction])
       negation = precondition[:negation]
       
-      Kernel.warn ("need to push down values, restrictions, effective_date to data criteria")
-      # reference is for data preconditions
-      reference = nil
       
       if (precondition[:comparison])
         preconditions ||= []

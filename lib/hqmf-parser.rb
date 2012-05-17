@@ -30,6 +30,7 @@ require_relative 'hqmf-parser/converter/population_criteria_converter'
 require_relative 'hqmf-parser/converter/precondition_converter'
 require_relative 'hqmf-parser/converter/precondition_extractor'
 require_relative 'hqmf-parser/converter/restriction_converter'
+require_relative 'hqmf-parser/converter/operator_converter'
 
 require_relative 'hqmf-model/data_criteria.rb'
 require_relative 'hqmf-model/document.rb'

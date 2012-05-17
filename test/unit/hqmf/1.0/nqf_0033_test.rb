@@ -1,5 +1,7 @@
 require_relative '../../../test_helper'
 module HQMF1
+  
+  # 0033 has patient characteristic gender, so it is used to verify the backfilling of the gender as part of the conversion
 
   class NQF0033Test  < Test::Unit::TestCase
     def setup

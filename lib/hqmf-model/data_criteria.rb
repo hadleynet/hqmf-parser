@@ -16,7 +16,7 @@ module HQMF
     # @param [String] subset_code
     # @param [Range] subset_value
     # @param [String] code_list_id
-    # @param [List<DataCriteria>] childrenCriteria
+    # @param [List<String>] childrenCriteria (ids of children data criteria)
     # @param [String] property
     # @param [String] type
     # @param [String] status
@@ -81,11 +81,9 @@ module HQMF
     private 
     
     def base_json
-      json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:subset_code,:code_list_id, :property, :type, :status, :negation])
+      json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:subset_code,:code_list_id,:children_criteria,:property, :type, :status, :negation])
       json[:subset_value] = self.subset_value.to_json if self.subset_value
-      children_criteria = []
-      self.children_criteria.each { |child| children_criteria << child.base_json } if self.children_criteria
-      json[:children_criteria] = children_criteria unless children_criteria.empty?
+      json[:children_criteria] = children_criteria unless children_criteria.nil? || children_criteria.empty?
       json[:value] = self.value.to_json if self.value
       json[:effective_time] = self.effective_time.to_json if self.effective_time
       json[:inline_code_list] = self.inline_code_list if self.inline_code_list

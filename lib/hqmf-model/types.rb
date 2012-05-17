@@ -45,6 +45,10 @@ module HQMF
       build_hash(self, [:type,:unit,:value,:inclusive?,:derived?,:expression])
     end
     
+    def stringify
+      "#{inclusive? ? '=' : ''}#{value}#{unit ? ' '+unit : ''}"
+    end
+    
   end
   
   # Represents a HQMF physical quantity which can have low and high bounds
@@ -80,6 +84,23 @@ module HQMF
       json[:high] = self.high.to_json if self.high
       json[:width] = self.width.to_json if self.width
       json
+    end
+    
+    def stringify
+      operator = ""
+      if (@high && @low)
+        if (@high.value == @low.value and @high.inclusive? and low.inclusive?)
+          "#{@low.stringify}"
+        else
+          ">#{@low.stringify} and <#{@high.stringify}}"
+        end
+      elsif (@high)
+        "<#{@high.stringify}"
+      elsif (@low)
+        ">#{@low.stringify}"
+      else
+        raise "cannot convert range to string"
+      end
     end
     
   end
