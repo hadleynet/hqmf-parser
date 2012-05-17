@@ -4,7 +4,7 @@ module HQMF2
   
     include HQMF2::Utilities
     
-    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_reference
+    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_reference, :children_criteria
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -13,6 +13,7 @@ module HQMF2
       @status = attr_val('./*/cda:statusCode/@code')
       @effective_time = extract_effective_time
       @temporal_reference = extract_temporal_reference
+      @children_criteria = extract_child_criteria
       @id_xpath = './cda:observationCriteria/cda:id/@extension'
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
@@ -52,6 +53,8 @@ module HQMF2
         @type = :characteristic
         @property = property_for_demographic
         @value = extract_value
+      when 'Derived'
+        @type = :derived
       when nil
         @type = :variable
         @value = extract_value
@@ -123,6 +126,12 @@ module HQMF2
     
     
     private
+    
+    def extract_child_criteria
+      @entry.xpath('./*/cda:excerpt/*/cda:id', HQMF2::Document::NAMESPACES).collect do |ref|
+        Reference.new(ref).id
+      end.compact
+    end
     
     def extract_effective_time
       effective_time_def = @entry.at_xpath('./*/cda:effectiveTime', HQMF2::Document::NAMESPACES)

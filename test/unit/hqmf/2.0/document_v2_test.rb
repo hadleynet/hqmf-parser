@@ -62,7 +62,7 @@ require_relative '../../../test_helper'
   
     def test_data_criteria
       data_criteria = @doc.all_data_criteria
-      assert_equal 29, data_criteria.length
+      assert_equal 30, data_criteria.length
     
       criteria = @doc.data_criteria('EndDate')
       assert criteria.to_xml.include?('extension="EndDate"')
@@ -192,6 +192,13 @@ require_relative '../../../test_helper'
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
       assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      
+      criteria = @doc.data_criteria('anyDiabetes')
+      assert_equal :derived, criteria.type
+      assert_equal 2, criteria.children_criteria.length
+      binding.pry
+      assert criteria.children_criteria.include? 'HasDiabetes'
+      assert criteria.children_criteria.include? 'HasGestationalDiabetes'
 
       assert_nil @doc.data_criteria('foo')
     end

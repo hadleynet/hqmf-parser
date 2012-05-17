@@ -385,6 +385,24 @@
         </procedureCriteria>
       </entry>
       <entry>
+        <localVariableName>anyDiabetes</localVariableName>
+        <observationCriteria>
+          <id root="0" extension="anyDiabetes"/>
+          <definition>
+            <observationReference moodCode="DEF">
+              <id root="0" extension="Derived"/>
+            </observationReference>
+          </definition>
+          <excerpt>
+            <subsetCode code="UNION"/>
+            <observationCriteria>
+              <id root="0" extension="HasDiabetes"/>
+              <id root="0" extension="HasGestationalDiabetes"/>
+            </observationCriteria>
+          </excerpt>
+        </observationCriteria>
+      </entry>
+      <entry>
         <localVariableName>HasDiabetes</localVariableName>
         <observationCriteria>
           <id root="0" extension="HasDiabetes"/>
