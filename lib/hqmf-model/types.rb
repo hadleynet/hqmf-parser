@@ -4,7 +4,8 @@ module HQMF
   # inclusive/exclusive indicator
   class Value
     include HQMF::Conversion::Utilities
-    attr_reader :type,:unit,:value,:expression
+    attr_reader :type,:unit,:expression
+    attr_accessor :value
     
     # Create a new HQMF::Value
     # @param [String] type
@@ -172,6 +173,15 @@ module HQMF
     def initialize(type,reference,offset)
       @type = type
       @reference = reference
+      if (offset.is_a? HQMF::Range)
+        if offset.high
+          raise "cannot handle range" if offset.low
+          offset = offset.high
+          offset.value = offset.value.to_f * -1
+        elsif offset.low
+          offset = offset.low
+        end
+      end
       @offset = offset
     end
     
@@ -187,8 +197,8 @@ module HQMF
     def to_json
       x = nil
       json = build_hash(self, [:type])
-      json[:reference] = self.reference.to_json if self.reference
-      json[:offset] = self.offset.to_json if self.offset
+      json[:reference] = @reference.to_json if @reference
+      json[:offset] = @offset.to_json if @offset
       json
     end
     
@@ -197,7 +207,7 @@ module HQMF
   class SubsetOperator
     include HQMF::Conversion::Utilities
     
-    TYPES = ['COUNT']
+    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST']
     
     attr_reader :type, :value
     # @param [String] type

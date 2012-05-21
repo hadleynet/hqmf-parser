@@ -9,13 +9,31 @@ module HQMF
       temporal_reference = nil
       if (restriction.single_target?)
         # multiple targets appears to be the result of restrictions with restrictions
-        Kernel.warn "multiple targets... need to check this" if restriction.multi_target?
-        temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(restriction.target),value)
+        target = restriction.target
+        if (restriction.multi_target?)
+          found = false
+          # restrictions with restrictions can have a target that is modified by the child restrcitons
+          restriction.preconditions.each do |precondition|
+            if precondition.reference.id.start_with? target
+              found = true
+              target = precondition.reference.id
+            end
+          end
+          unless found
+            Kernel.warn "multiple targets... need to check this" if restriction.multi_target?
+          end
+        end
+        temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)
       elsif (restriction.multi_target?)
         children_criteria = extract_data_criteria(restriction.preconditions, data_criteria_converter)
-        parent_id = precondition.reference.id
-        group_criteria = data_criteria_converter.create_group_data_criteria(children_criteria, "#{type}_CHILDREN", value, parent_id, @@ids.next, "temporal", "temporal")
-        temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(group_criteria.id), value)
+        if (children_criteria.length == 1)
+          target = children_criteria[0].id
+          temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)
+        else
+          parent_id = precondition.reference.id
+          group_criteria = data_criteria_converter.create_group_data_criteria(children_criteria, "#{type}_CHILDREN", value, parent_id, @@ids.next, "temporal", "temporal")
+          temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(group_criteria.id), value)
+        end
       else
         raise "no target for temporal restriction"
       end
@@ -37,7 +55,7 @@ module HQMF
     
     
     
-    def self.apply_summary(precondition, restriction, data_criteria_converter)
+    def self.apply_summary(data_criteria, precondition, restriction, data_criteria_converter)
 
       value = restriction.operator.value
       type = restriction.operator.type
@@ -57,11 +75,13 @@ module HQMF
           data_criteria.subset_operators ||= []
           data_criteria.subset_operators << subset_operator
         end
-      else
-        raise "no target for summary operator"
+        precondition.reference = HQMF::Reference.new(data_criteria.id)
+      elsif (restriction.single_target?)
+        subset_operator = HQMF::SubsetOperator.new(type, value)
+        data_criteria.subset_operators ||= []
+        data_criteria.subset_operators << subset_operator
       end
       
-      precondition.reference = HQMF::Reference.new(data_criteria.id)
       restriction.converted=true
     end
     

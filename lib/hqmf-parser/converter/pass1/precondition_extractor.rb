@@ -42,8 +42,14 @@ module HQMF
         end
       end
       
-      value = HQMF::Range.from_json(JSON.parse(restriction[:range].to_json)) if (restriction[:range])
-      operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value)
+      value = nil
+      if (restriction[:range])
+        value = HQMF::Range.from_json(JSON.parse(restriction[:range].to_json)) if (restriction[:range])
+      elsif(restriction[:value])
+        value = restriction[:value]
+      end
+      field = restriction[:field]
+      operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value, field)
       container = HQMF::Converter::SimpleRestriction.new(operator, target_id)
       
       # get the precondtions off of the restriction
@@ -80,14 +86,14 @@ module HQMF
       
       precondition = HQMF::Converter::SimplePrecondition.new(nil,preconditions,reference,conjunction_code, false)
       precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
-
-      # new_data_criteria = data_criteria_converter.duplicate_data_criteria(data_criteria, "precondition", precondition.id)
-      # precondition.reference.id = new_data_criteria.id
       
-      if comparison[:restrictions]
-        # push the restrictions down to the data criteria
-        # Kernel.warn('restrictions not pushed down to comparisons are not picked up')
-        # HQMF::RestrictionConverter.applyRestrictionsToDataCriteria(precondition, new_data_criteria, comparison[:restrictions],data_criteria_converter)
+      if (comparison[:subset])
+        # create a restriction for a comparison subset... this is for things like first, second, etc.
+        type = comparison[:subset]
+        operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, nil)
+        restriction = HQMF::Converter::SimpleRestriction.new(operator, reference.id, nil)
+        precondition.preconditions ||= []
+        precondition.preconditions << restriction
       end
 
       precondition

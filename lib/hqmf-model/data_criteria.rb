@@ -41,7 +41,7 @@ module HQMF
       @inline_code_list = inline_code_list
       @negation = negation
       @temporal_references = temporal_references
-      @subset_operators = temporal_references
+      @subset_operators = subset_operators
     end
     
     # Create a new data criteria instance from a JSON hash keyed with symbols
@@ -50,8 +50,6 @@ module HQMF
       description = json["description"] if json["description"]
       standard_category = json["standard_category"] if json["standard_category"]
       qds_data_type = json["qds_data_type"] if json["standard_category"]
-      subset_code = json["subset_code"] if json["subset_code"]
-      subset_value = HQMF::Range.from_json(json["subset_value"]) if json["subset_value"]
       code_list_id = json["code_list_id"] if json["code_list_id"]
       children_criteria = json["children_criteria"] if json["children_criteria"]
       property = json["property"].to_sym if json["property"]

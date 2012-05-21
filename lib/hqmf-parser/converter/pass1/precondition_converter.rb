@@ -42,7 +42,6 @@ module HQMF
         comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[restriction],reference,conjunction_code, false)
         comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
         preconditions << comparison_precondition
-        
       end
       
       

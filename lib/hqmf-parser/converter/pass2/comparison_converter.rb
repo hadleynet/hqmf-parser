@@ -17,24 +17,38 @@ module HQMF
        if (has_child_comparison(precondition))
          walk_up_tree(precondition.preconditions)
        end
-       if (precondition.comparison?)
+       if (precondition.comparison? && !precondition.processed)
          new_data_criteria = nil
          if precondition.reference
+           # binding.pry if precondition.reference.id.match /EncounterEncounterAmbulatoryIncludingPediatrics.*/
            data_criteria = @data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id] 
            new_data_criteria = @data_criteria_converter.duplicate_data_criteria(data_criteria, 'precondition', precondition.id)
            precondition.reference.id = new_data_criteria.id
          end
          if precondition.has_preconditions?
            precondition.restrictions.each do |restriction|
-             if (restriction.operator.temporal?)
+             operator = restriction.operator
+             if (operator.temporal?)
                HQMF::OperatorConverter.apply_temporal(new_data_criteria, precondition, restriction, @data_criteria_converter)
-             elsif(restriction.operator.summary?)
-               HQMF::OperatorConverter.apply_summary(precondition, restriction, @data_criteria_converter)
+             elsif(operator.summary?)
+               HQMF::OperatorConverter.apply_summary(new_data_criteria, precondition, restriction, @data_criteria_converter)
              else
-               Kernel.warn "Operator is unknown: #{restriction.operator.type}"
+               case operator.type
+               when 'REFR'
+                 if operator.field.downcase == 'status'
+                   new_data_criteria.status = operator.value.downcase
+                 else
+                   Kernel.warn "Cannot convert the field of REFR: #{restriction.field}"
+                 end
+                 restriction.converted=true
+               else
+                 Kernel.warn "Operator is unknown: #{restriction.operator.type}"
+                 restriction.converted=true
+               end
              end
            end
            precondition.delete_converted_restrictions!
+           precondition.processed = true
          end
        end
      end

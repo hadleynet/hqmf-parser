@@ -8,12 +8,13 @@ module HQMF
       SUMMARY = 'SUMMARY'
       UNKNOWN = 'UNKNOWN'
 
-      attr_accessor :type, :value, :category
+      attr_accessor :type, :value, :category, :field
 
-      def initialize(category, type, value)
+      def initialize(category, type, value, field = nil)
         @category = category
         @type = type
         @value = value
+        @field = field
       end
       
       def temporal?

@@ -95,10 +95,7 @@ module HQMF
       subset_operators = nil # filled out by operator code
       children_criteria = nil # filled out by operator and temporal reference code
 
-
-      # TODO: NEED TO FIGURE THIS OUT
-      Kernel.warn ("inline code list not used")
-      inline_code_list = nil
+      inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
 
       HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, 
         code_list_id, children_criteria, property,type, status, value, effective_time, inline_code_list,

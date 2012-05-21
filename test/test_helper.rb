@@ -24,7 +24,15 @@ class Hash
         elsif left.is_a? Array
           tmp = []
           left.each_with_index do |entry,i|
-            entry_diff = entry.diff_hash(right[i],ignore_id)
+            if (right and right[i])
+              if entry.is_a? Hash
+                entry_diff = entry.diff_hash(right[i],ignore_id)
+              elsif left != right
+                entry_diff = left.to_s
+              end
+            else
+              entry_diff = left.to_s
+            end
             tmp << entry_diff unless entry_diff.empty?
           end
           diff[k] = tmp unless tmp.empty?
