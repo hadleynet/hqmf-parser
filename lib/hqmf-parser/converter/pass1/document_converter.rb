@@ -21,6 +21,9 @@ module HQMF
       
       @population_criteria_converter = PopulationCriteriaConverter.new(json, @data_criteria_converter)
       population_criteria = @population_criteria_converter.population_criteria
+      
+      comparison_converter = HQMF::ComparisonConverter.new(@data_criteria_converter)
+      comparison_converter.convert_comparisons(population_criteria)
 
       data_criteria = @data_criteria_converter.final_v2_data_criteria
       

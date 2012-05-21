@@ -1,4 +1,5 @@
 module HQMF
+  
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator
   class Value
@@ -159,6 +160,11 @@ module HQMF
 
   class TemporalReference
     include HQMF::Conversion::Utilities
+    
+    TYPES = ['DURING','SBS','SAS','SBE','SAE','EBS','EAS','EBE','EAE','SDU','EDU','ECW','SCW','CONCURRENT']
+    INVERSION = {'SBS' => 'EAE','EAE' => 'SBS','SAS' => 'EBE','EBE' => 'SAS','SBE' => 'EAS','EAS' => 'SBE','SAE' => 'EBS','EBS' => 'SAE'}
+    
+    
     attr_reader :type, :reference, :offset
     # @param [String] type
     # @param [Reference] reference
@@ -171,7 +177,7 @@ module HQMF
     
     def self.from_json(json)
       type = json["type"] if json["type"]
-      reference = HQMF::Reference.from_json(json["reference"]) if json["reference"]
+      reference = HQMF::Reference.new(json["reference"]) if json["reference"]
       offset = HQMF::Value.from_json(json["offset"]) if json["offset"]
       
       HQMF::TemporalReference.new(type,reference,offset)
@@ -183,6 +189,36 @@ module HQMF
       json = build_hash(self, [:type])
       json[:reference] = self.reference.to_json if self.reference
       json[:offset] = self.offset.to_json if self.offset
+      json
+    end
+    
+  end
+
+  class SubsetOperator
+    include HQMF::Conversion::Utilities
+    
+    TYPES = ['COUNT']
+    
+    attr_reader :type, :value
+    # @param [String] type
+    # @param [Value] value
+    def initialize(type,value)
+      @type = type
+      @value = value
+    end
+    
+    def self.from_json(json)
+      type = json["type"] if json["type"]
+      value = HQMF::Value.from_json(json["value"]) if json["value"]
+      
+      HQMF::SubsetOperator.new(type,value)
+    end
+    
+    
+    def to_json
+      x = nil
+      json = build_hash(self, [:type])
+      json[:value] = @value.to_json if @value
       json
     end
     

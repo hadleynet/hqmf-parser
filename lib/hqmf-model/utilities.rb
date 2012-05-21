@@ -12,6 +12,7 @@ module HQMF
       end
 
       def json_array(elements) 
+        return nil if elements.nil?
         array = []
         elements.each do |element| 
           if (element.is_a? OpenStruct)

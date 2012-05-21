@@ -45,7 +45,7 @@ namespace :hqmf do
     
     doc = HQMF::Parser.parse(File.open(file).read, version)
     outfile = File.join(".","tmp",'json',"#{filename}.json")
-    File.open(outfile, 'w') {|f| f.write(doc.to_json.to_json.gsub(/",/,"\",\n")) }
+    File.open(outfile, 'w') {|f| f.write(doc.to_json.to_json(max_nesting: 100).gsub(/",/,"\",\n")) }
     
     puts "wrote result to: #{outfile}"
     

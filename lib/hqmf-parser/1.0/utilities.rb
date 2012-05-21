@@ -38,12 +38,13 @@ module HQMF1
     end
     
     def get_restrictions_from_parent(parent)
-      parent_restrictions = parent.restrictions.select {|r| r.field==nil}
-      parent_restrictions.map! do |restriction| 
-        restriction = restriction.clone
-        restriction.from_parent=true
-        restriction
-      end
+      # parent_restrictions = parent.restrictions.select {|r| r.field==nil}
+      # parent_restrictions.map! do |restriction| 
+      #   restriction = restriction.clone
+      #   restriction.from_parent=true
+      #   restriction
+      # end
+      return []
     end
     
   end

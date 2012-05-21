@@ -16,7 +16,6 @@ module HQMF
       @conjunction_code = conjunction_code
       @negation = negation
       @id = id
-      @id = @@ids.next if (@id.nil?)
     end
     
     # Create a new population criteria from a JSON hash keyed off symbols
@@ -48,17 +47,6 @@ module HQMF
       @preconditions.length>0
     end
 
-    # Simple class to issue monotonically increasing integer identifiers
-    class Counter
-      def initialize
-        @count = 0
-      end
-
-      def next
-        @count+=1
-      end
-    end
-    @@ids = Counter.new
   end
   
   

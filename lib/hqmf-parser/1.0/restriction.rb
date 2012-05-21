@@ -89,7 +89,7 @@ module HQMF1
     end
     
     def to_json 
-#      return {} if from_parent
+      return nil if from_parent
       json = build_hash(self, [:subset,:type,:target_id,:field,:value,:from_parent, :negation])
       json[:range] = range.to_json if range
       json[:comparison] = comparison.to_json if comparison
