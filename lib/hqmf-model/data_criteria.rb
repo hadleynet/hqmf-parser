@@ -41,7 +41,7 @@ module HQMF
       @inline_code_list = inline_code_list
       @negation = negation
       @temporal_references = temporal_references
-      @subset_operators = temporal_references
+      @subset_operators = subset_operators
     end
     
     # Create a new data criteria instance from a JSON hash keyed with symbols

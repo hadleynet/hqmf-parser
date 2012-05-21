@@ -39,7 +39,11 @@ module HQMF2
       json
     end
     
-    
+    def to_model
+      pcs = preconditions.collect {|p| p.to_model}
+      mr = reference ? reference.to_model : nil
+      HQMF::Precondition.new(nil, pcs, mr, conjunction_code, false)
+    end
   end
     
 end

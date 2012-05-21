@@ -88,6 +88,13 @@ module HQMF2
 
     end
     
+    def to_model
+      dcs = all_data_criteria.collect {|dc| dc.to_model}
+      pcs = all_population_criteria.collect {|pc| pc.to_model}
+      attrs = []
+      HQMF::Document.new(nil, title, description, pcs, dcs, attrs, measure_period.to_model)
+    end
+    
     private
     
     def find(collection, attribute, value)
