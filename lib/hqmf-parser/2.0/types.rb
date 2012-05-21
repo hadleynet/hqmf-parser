@@ -139,6 +139,28 @@ module HQMF2
     end
   end
   
+  class SubsetOperator
+    include HQMF2::Utilities
+
+    attr_reader :type, :value
+
+    def initialize(entry)
+      @entry = entry
+      @type = attr_val('./cda:subsetCode/@code')
+      value_def = @entry.at_xpath('./*/cda:repeatNumber', HQMF2::Document::NAMESPACES)
+      if value_def
+        @value = HQMF2::Range.new(value_def)
+      end
+    end
+
+    def to_json
+      x = nil
+      json = build_hash(self, [:type])
+      json[:value] = @value.to_json if @value
+      json
+    end
+  end
+  
   class TemporalReference
     include HQMF2::Utilities
     

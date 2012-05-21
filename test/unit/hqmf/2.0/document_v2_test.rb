@@ -131,11 +131,11 @@ require_relative '../../../test_helper'
       assert_equal '20100101', criteria.effective_time.low.value
       assert_equal '20111231', criteria.effective_time.high.value
       assert_equal 'completed', criteria.status
-      assert criteria.temporal_reference
-      assert_equal 'SAS', criteria.temporal_reference.type
-      assert_equal 'HasDiabetes', criteria.temporal_reference.reference.id
-      assert_equal '-1', criteria.temporal_reference.offset.value
-      assert_equal 'a', criteria.temporal_reference.offset.unit
+      assert_equal 1, criteria.temporal_references.length
+      assert_equal 'SAS', criteria.temporal_references[0].type
+      assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
+      assert_equal '-1', criteria.temporal_references[0].offset.value
+      assert_equal 'a', criteria.temporal_references[0].offset.unit
 
       criteria = @doc.data_criteria('EDorInpatientEncounter')
       assert_equal :encounters, criteria.type
@@ -146,7 +146,7 @@ require_relative '../../../test_helper'
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
       assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
-      assert !criteria.temporal_reference
+      assert_equal 0, criteria.temporal_references.length
 
       criteria = @doc.data_criteria('HasGestationalDiabetes')
       assert_equal :conditions, criteria.type
@@ -163,7 +163,8 @@ require_relative '../../../test_helper'
       criteria = @doc.data_criteria('HbA1C')
       assert_equal :results, criteria.type
       assert_equal 'HbA1C', criteria.title
-      assert_equal 'RECENT', criteria.subset_code
+      assert_equal 1, criteria.subset_operators.length
+      assert_equal 'RECENT', criteria.subset_operators[0].type
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
       assert_equal 'completed', criteria.status
       assert_equal nil, criteria.effective_time
