@@ -38,11 +38,11 @@ module HQMF
                  if operator.field.downcase == 'status'
                    new_data_criteria.status = operator.value.downcase
                  else
-                   Kernel.warn "Cannot convert the field of REFR: #{restriction.field}"
+                   Kernel.warn "Cannot convert the field of REFR: #{operator.field}"
                  end
                  restriction.converted=true
                else
-                 Kernel.warn "Operator is unknown: #{restriction.operator.type}"
+                 Kernel.warn "Operator is unknown: #{operator.type}"
                  restriction.converted=true
                end
              end
