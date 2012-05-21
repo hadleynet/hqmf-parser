@@ -16,18 +16,37 @@ module HQMF
       # grab child preconditions, and parse recursively
       preconditions = parse_and_merge_preconditions(precondition[:preconditions],data_criteria_converter) if precondition[:preconditions] || []
       
-      # TODO: we are currently pulling preconditions from restrictions... these should be moved to temporal references on the data criteria
-      Kernel.warn('pulled preconditions from restrictions... these should be temporal references on the data criteria')
       preconditions_from_restrictions = HQMF::PreconditionExtractor.extract_preconditions_from_restrictions(precondition[:restrictions], data_criteria_converter)
       
-      reference = nil
+      driv_preconditions = []
+      preconditions_from_restrictions.delete_if {|element| driv_preconditions << element if element.is_a? HQMF::Converter::SimpleRestriction and element.operator.type == 'DRIV'}
+      
+      apply_restrictions_to_comparisons(preconditions, preconditions_from_restrictions) unless preconditions_from_restrictions.empty?
+
+
+      operator = nil
       if (precondition[:expression])
-        # get back the reference to the new operator data criteria
-        # this is for things like COUNT which will create a new data criteria that calculates the count
-        reference = HQMF::OperatorConverter.applyOperatorToDataCriteria(precondition[:expression], preconditions_from_restrictions, data_criteria_converter)
-      else
-        preconditions.concat(preconditions_from_restrictions)
+        # this is for things like COUNT
+        type = precondition[:expression][:type]
+        operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, HQMF::Converter::SimpleOperator.parse_value(precondition[:expression][:value]))
+        children = []
+        if driv_preconditions and !driv_preconditions.empty?
+          children = driv_preconditions.map(&:preconditions).flatten
+        end
+        
+        reference = nil
+        conjunction_code = "operator"
+        
+        restriction = HQMF::Converter::SimpleRestriction.new(operator, nil, children)
+        
+        comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[restriction],reference,conjunction_code, false)
+        comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
+        preconditions << comparison_precondition
+        
       end
+      
+      
+      reference = nil
       
       conjunction_code = convert_logical_conjunction(precondition[:conjunction])
       negation = precondition[:negation]
@@ -39,11 +58,34 @@ module HQMF
         preconditions << comparison_precondition
       end
       
-      HQMF::Precondition.new(nil,preconditions,reference,conjunction_code, negation)
+      HQMF::Converter::SimplePrecondition.new(nil,preconditions,reference,conjunction_code, negation)
       
+    end
+
+    def self.get_comparison_preconditions(preconditions)
+      comparisons = []
+      preconditions.each do |precondition|
+        if (precondition.comparison?)
+          comparisons << precondition
+        elsif(precondition.has_preconditions?)
+          comparisons.concat(get_comparison_preconditions(precondition.preconditions))
+        else
+          raise "precondition with no comparison or children... not valid"
+        end
+      end
+      comparisons
+    end
+
+    def self.apply_restrictions_to_comparisons(preconditions, restrictions)
+      comparisons = get_comparison_preconditions(preconditions)
+      raise "no comparisons to apply restriction to" if comparisons.empty?
+      comparisons.each do |comparison|
+        comparison.preconditions.concat(restrictions)
+      end
     end
     
     private 
+    
     
     def self.parse_and_merge_preconditions(source,data_criteria_converter)
       return [] unless source and source.size > 0
@@ -65,8 +107,8 @@ module HQMF
           sub_conditions.concat precondition.preconditions if precondition.preconditions
         end
         negation = false
-        sub_conditions.each {|precondition| negation ||= precondition.negation}
-        joined << HQMF::Precondition.new(nil,sub_conditions,nil,conjunction_code, negation)
+        sub_conditions.each {|precondition| negation ||= precondition.negation }
+        joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, negation)
       end
       joined
     end

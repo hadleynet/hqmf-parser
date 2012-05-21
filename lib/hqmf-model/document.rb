@@ -1,6 +1,8 @@
 module HQMF
   # Class representing an HQMF document
   class Document
+    
+    MEASURE_PERIOD_ID = "MeasurePeriod"
 
     include HQMF::Conversion::Utilities
 
