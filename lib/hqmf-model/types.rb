@@ -11,8 +11,8 @@ module HQMF
     # @param [String] type
     # @param [String] unit
     # @param [String] value
-    # @param [String] inclusive
-    # @param [String] derived
+    # @param [Boolean] inclusive
+    # @param [Boolean] derived
     # @param [String] expression
     def initialize(type,unit,value,inclusive,derived,expression)
       @type = type

@@ -39,8 +39,8 @@ module HQMF2
       end
     end
     
-    def to_json
-      build_hash(self, [:type,:unit,:value,:inclusive?,:derived?,:expression])
+    def to_model
+      HQMF::Value.new(type,unit,value,inclusive?,derived?,expression)
     end
   end
   
@@ -62,12 +62,11 @@ module HQMF2
       attr_val('./@xsi:type')
     end
     
-    def to_json
-      json = build_hash(self, [:type])
-      json[:low] = self.low.to_json if self.low
-      json[:high] = self.high.to_json if self.high
-      json[:width] = self.width.to_json if self.width
-      json
+    def to_model
+      lm = low ? low.to_model : nil
+      hm = high ? high.to_model : nil
+      wm = width ? width.to_model : nil
+      HQMF::Range.new(type, lm, hm, wm)
     end
     
     private
@@ -134,8 +133,29 @@ module HQMF2
       nil
     end
     
-    def to_json
-      build_hash(self, [:type,:system,:code])
+    def to_model
+      HQMF::Coded.new(type, system, code)
+    end
+    
+  end
+  
+  class SubsetOperator
+    include HQMF2::Utilities
+
+    attr_reader :type, :value
+
+    def initialize(entry)
+      @entry = entry
+      @type = attr_val('./cda:subsetCode/@code')
+      value_def = @entry.at_xpath('./*/cda:repeatNumber', HQMF2::Document::NAMESPACES)
+      if value_def
+        @value = HQMF2::Range.new(value_def)
+      end
+    end
+
+    def to_model
+      vm = value ? value.to_model : nil
+      HQMF::SubsetOperator.new(type, vm)
     end
   end
   
@@ -152,12 +172,10 @@ module HQMF2
       @offset = Value.new(offset_def) if offset_def
     end
     
-    def to_json
-      json = build_hash(self, [:type])
-      json[:offset] = self.offset.to_json if self.offset
-      json[:reference] = self.reference.to_json if self.reference
-      json
-    end    
+    def to_model
+      om = offset ? offset.to_model : nil
+      HQMF::TemporalReference.new(type, reference.to_model, om)
+    end  
   end
 
   # Represents a HQMF reference from a precondition to a data criteria
@@ -172,8 +190,8 @@ module HQMF2
       attr_val('./@extension')
     end
     
-    def to_json
-      build_hash(self, [:id])
+    def to_model
+      HQMF::Reference.new(id)
     end
   end
   

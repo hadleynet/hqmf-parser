@@ -4,7 +4,7 @@ module HQMF2
   
     include HQMF2::Utilities
     
-    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_reference
+    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_references, :subset_operators, :children_criteria
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -12,7 +12,9 @@ module HQMF2
       @entry = entry
       @status = attr_val('./*/cda:statusCode/@code')
       @effective_time = extract_effective_time
-      @temporal_reference = extract_temporal_reference
+      @temporal_references = extract_temporal_references
+      @subset_operators = extract_subset_operators
+      @children_criteria = extract_child_criteria
       @id_xpath = './cda:observationCriteria/cda:id/@extension'
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
@@ -23,7 +25,6 @@ module HQMF2
         @type = :conditions
         @code_list_xpath = './cda:observationCriteria/cda:value'
         @section = 'conditions'
-        @subset_xpath = "./cda:observationCriteria/"
       when 'Encounter', 'Encounters'
         @type = :encounters
         @id_xpath = './cda:encounterCriteria/cda:id/@extension'
@@ -52,6 +53,8 @@ module HQMF2
         @type = :characteristic
         @property = property_for_demographic
         @value = extract_value
+      when 'Derived'
+        @type = :derived
       when nil
         @type = :variable
         @value = extract_value
@@ -76,19 +79,6 @@ module HQMF2
       attr_val(@id_xpath)
     end
     
-    # Get the subset code (e.g. FIRST)
-    # @return [String] the subset code
-    def subset_code
-      attr_val('./*/cda:excerpt/cda:subsetCode/@code')
-    end
-
-    # Get the subset code (e.g. FIRST)
-    # @return [String] the subset code
-    def subset_value
-      subset_entry = @entry.at_xpath('./*/cda:excerpt/*/cda:repeatNumber', HQMF2::Document::NAMESPACES)
-      HQMF2::Range.new(subset_entry) if subset_entry
-    end
-    
     # Get the title of the criteria, provides a human readable description
     # @return [String] the title of this data criteria
     def title
@@ -111,18 +101,23 @@ module HQMF2
       end
     end
     
-    def to_json
-      json = build_hash(self, [:title,:section,:subset_code,:code_list_id, :property, :type, :status])
-      json[:value] = self.value.to_json if self.value
-      json[:effective_time] = self.effective_time.to_json if self.effective_time
-      json[:inline_code_list] = self.inline_code_list if self.inline_code_list
-      json[:temporal_reference] = self.temporal_reference.to_json if self.temporal_reference
-      json[:subset_value] = self.subset_value.to_json if self.subset_value
-      {self.id.to_sym => json}
+    def to_model
+      mv = value ? value.to_model : nil
+      met = effective_time ? effective_time.to_model : nil
+      negation = false
+      mtr = temporal_references.collect {|ref| ref.to_model}
+      mso = subset_operators.collect {|opr| opr.to_model}
+      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, property, type, 
+        status, mv, met, inline_code_list, negation, mtr, mso)
     end
     
-    
     private
+    
+    def extract_child_criteria
+      @entry.xpath('./*/cda:excerpt/*/cda:id', HQMF2::Document::NAMESPACES).collect do |ref|
+        Reference.new(ref).id
+      end.compact
+    end
     
     def extract_effective_time
       effective_time_def = @entry.at_xpath('./*/cda:effectiveTime', HQMF2::Document::NAMESPACES)
@@ -133,12 +128,15 @@ module HQMF2
       end
     end
     
-    def extract_temporal_reference
-      extract_temporal_reference_def = @entry.at_xpath('./*/cda:temporallyRelatedInformation', HQMF2::Document::NAMESPACES)
-      if extract_temporal_reference_def
-        TemporalReference.new(extract_temporal_reference_def)
-      else
-        nil
+    def extract_subset_operators
+      @entry.xpath('./*/cda:excerpt', HQMF2::Document::NAMESPACES).collect do |subset_operator|
+        SubsetOperator.new(subset_operator)
+      end
+    end
+    
+    def extract_temporal_references
+      @entry.xpath('./*/cda:temporallyRelatedInformation', HQMF2::Document::NAMESPACES).collect do |temporal_reference|
+        TemporalReference.new(temporal_reference)
       end
     end
     

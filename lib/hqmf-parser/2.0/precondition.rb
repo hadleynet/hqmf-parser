@@ -30,16 +30,11 @@ module HQMF2
       @entry.at_xpath('./*[1]', HQMF2::Document::NAMESPACES).name
     end
     
-    def to_json
-      x = nil
-      json = {}
-      json[:reference] = self.reference.id if self.reference
-      json[:preconditions] = x if x = json_array(@preconditions)
-      json[:conjunction_code] = self.conjunction_code if self.conjunction_code
-      json
+    def to_model
+      pcs = preconditions.collect {|p| p.to_model}
+      mr = reference ? reference.to_model : nil
+      HQMF::Precondition.new(nil, pcs, mr, conjunction_code, false)
     end
-    
-    
   end
     
 end

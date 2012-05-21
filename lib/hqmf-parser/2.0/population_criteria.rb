@@ -42,11 +42,9 @@ module HQMF2
       end
     end
     
-    def to_json
-      x = nil
-      json = build_hash(self, [:conjunction?])
-      json[:preconditions] = x if x = json_array(@preconditions)
-      {self.id.to_sym => json}
+    def to_model
+      mps = preconditions.collect {|p| p.to_model}
+      HQMF::PopulationCriteria.new(id, mps)
     end
 
   end
