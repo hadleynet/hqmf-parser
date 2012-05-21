@@ -69,25 +69,6 @@ module HQMF2
       doc
     end
     
-    def to_json
-      json = build_hash(self, [:title, :description])
-
-      json[:population_criteria] = {}
-      @population_criteria.each do |population|
-        json[:population_criteria].merge! population.to_json
-      end
-
-      json[:data_criteria] = {}
-      @data_criteria.each do |data|
-        json[:data_criteria].merge! data.to_json
-      end
-      
-      json[:measure_period] = @measure_period.to_json
-
-      json
-
-    end
-    
     def to_model
       dcs = all_data_criteria.collect {|dc| dc.to_model}
       pcs = all_population_criteria.collect {|pc| pc.to_model}

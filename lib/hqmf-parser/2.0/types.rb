@@ -39,10 +39,6 @@ module HQMF2
       end
     end
     
-    def to_json
-      build_hash(self, [:type,:unit,:value,:inclusive?,:derived?,:expression])
-    end
-    
     def to_model
       HQMF::Value.new(type,unit,value,inclusive?,derived?,expression)
     end
@@ -64,14 +60,6 @@ module HQMF2
     
     def type
       attr_val('./@xsi:type')
-    end
-    
-    def to_json
-      json = build_hash(self, [:type])
-      json[:low] = self.low.to_json if self.low
-      json[:high] = self.high.to_json if self.high
-      json[:width] = self.width.to_json if self.width
-      json
     end
     
     def to_model
@@ -145,10 +133,6 @@ module HQMF2
       nil
     end
     
-    def to_json
-      build_hash(self, [:type,:system,:code])
-    end
-    
     def to_model
       HQMF::Coded.new(type, system, code)
     end
@@ -169,13 +153,6 @@ module HQMF2
       end
     end
 
-    def to_json
-      x = nil
-      json = build_hash(self, [:type])
-      json[:value] = @value.to_json if @value
-      json
-    end
-    
     def to_model
       vm = value ? value.to_model : nil
       HQMF::SubsetOperator.new(type, vm)
@@ -195,13 +172,6 @@ module HQMF2
       @offset = Value.new(offset_def) if offset_def
     end
     
-    def to_json
-      json = build_hash(self, [:type])
-      json[:offset] = self.offset.to_json if self.offset
-      json[:reference] = self.reference.to_json if self.reference
-      json
-    end  
-    
     def to_model
       om = offset ? offset.to_model : nil
       HQMF::TemporalReference.new(type, reference.to_model, om)
@@ -218,10 +188,6 @@ module HQMF2
     
     def id
       attr_val('./@extension')
-    end
-    
-    def to_json
-      build_hash(self, [:id])
     end
     
     def to_model

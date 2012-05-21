@@ -101,16 +101,6 @@ module HQMF2
       end
     end
     
-    def to_json
-      json = build_hash(self, [:title,:section,:code_list_id, :property, :type, :status])
-      json[:value] = self.value.to_json if self.value
-      json[:effective_time] = self.effective_time.to_json if self.effective_time
-      json[:inline_code_list] = self.inline_code_list if self.inline_code_list
-      json[:temporal_references] = json_array(self.temporal_references)
-      json[:subset_operators] = json_array(self.subset_operators)
-      {self.id.to_sym => json}
-    end
-    
     def to_model
       mv = value ? value.to_model : nil
       met = effective_time ? effective_time.to_model : nil
