@@ -80,15 +80,9 @@ module HQMF1
       assert_equal 0, num.preconditions[0].preconditions[0].preconditions.length
       assert_equal 'OR', num.preconditions[0].preconditions[0].conjunction
       assert_equal '10165EC8-53EE-4242-A20D-B1D21CE0DC73', num.preconditions[0].preconditions[0].comparison.data_criteria_id
-      assert_equal 1, num.preconditions[0].preconditions[0].comparison.restrictions.length
-      assert_equal 'DURING', num.preconditions[0].preconditions[0].comparison.restrictions[0].type
-      assert_equal 'F8D5AD22-F49E-4181-B886-E5B12BEA8966', num.preconditions[0].preconditions[0].comparison.restrictions[0].target_id
       assert_equal 0, num.preconditions[0].preconditions[1].preconditions.length
       assert_equal 'OR', num.preconditions[0].preconditions[1].conjunction
       assert_equal '482902EC-E214-4FB4-8C5A-85A41250573C', num.preconditions[0].preconditions[1].comparison.data_criteria_id
-      assert_equal 1, num.preconditions[0].preconditions[1].comparison.restrictions.length
-      assert_equal 'DURING', num.preconditions[0].preconditions[1].comparison.restrictions[0].type
-      assert_equal 'F8D5AD22-F49E-4181-B886-E5B12BEA8966', num.preconditions[0].preconditions[1].comparison.restrictions[0].target_id
     
       excl = @doc.population_criteria_for_code('EXCL')
       assert_equal 0, excl.preconditions.length

@@ -62,7 +62,7 @@ module HQMF
     # step after the document has been converted.
     def self.backfill_patient_characteristics_with_codes(doc, codes)
       doc.all_data_criteria.each do |data_criteria|
-        if (data_criteria.type == :characteristic and data_criteria.property.nil?)
+        if (data_criteria.type == :characteristic and (data_criteria.property.nil? or data_criteria.property == :unknown))
           value_set = codes[data_criteria.code_list_id]
           raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
           

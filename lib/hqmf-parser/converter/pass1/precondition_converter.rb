@@ -78,7 +78,6 @@ module HQMF
 
     def self.apply_restrictions_to_comparisons(preconditions, restrictions)
       comparisons = get_comparison_preconditions(preconditions)
-      binding.pry if comparisons.empty?
       raise "no comparisons to apply restriction to" if comparisons.empty?
       comparisons.each do |comparison|
         comparison.preconditions.concat(restrictions)

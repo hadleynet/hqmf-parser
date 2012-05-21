@@ -95,11 +95,9 @@ module HQMF1
 
       assert !population_criteria[2][:negation]
       population_criteria[2][:preconditions][0][:conjunction].must_equal "OR"
-      population_criteria[2][:preconditions][0][:comparison][:restrictions].size.must_equal 2
-      assert population_criteria[2][:preconditions][0][:comparison][:restrictions][0][:from_parent]
-      assert !population_criteria[2][:preconditions][0][:comparison][:restrictions][1][:from_parent]
-      population_criteria[2][:preconditions][0][:comparison][:restrictions][1][:type].must_equal "DURING"
-      population_criteria[2][:preconditions][0][:comparison][:restrictions][1][:target_id].must_equal "D578142D-F78F-4BF4-8194-82015DE21A7F"
+      population_criteria[2][:preconditions][0][:comparison][:restrictions].size.must_equal 1
+      population_criteria[2][:preconditions][0][:comparison][:restrictions][0][:type].must_equal "DURING"
+      population_criteria[2][:preconditions][0][:comparison][:restrictions][0][:target_id].must_equal "D578142D-F78F-4BF4-8194-82015DE21A7F"
 
       assert population_criteria[3][:negation]
       

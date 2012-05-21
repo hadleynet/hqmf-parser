@@ -43,7 +43,7 @@ module HQMF
       
       def self.find_category(type)
         return TEMPORAL if HQMF::TemporalReference::TYPES.include? type
-        return SUMMARY if ['COUNT'].include? type
+        return SUMMARY if HQMF::SubsetOperator::TYPES.include? type
         return UNKNOWN
       end
 

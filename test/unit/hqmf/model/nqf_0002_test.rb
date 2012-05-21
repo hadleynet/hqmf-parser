@@ -18,7 +18,7 @@ module HQMFModel
             
       all_criteria = json[:data_criteria]
       refute_nil all_criteria
-      all_criteria.length.must_equal 23
+      all_criteria.length.must_equal 28
       all_criteria.length.must_equal hqmf.all_data_criteria.length
 
       [:PatientCharacteristicBirthDate, :EncounterEncounterAmbulatoryIncludingPediatrics, :LaboratoryTestPerformedGroupAStreptococcusTest,
@@ -124,6 +124,7 @@ module HQMFModel
          :value=>{:type=>"IVL_PQ",:high=>{:type=>"PQ", :unit=>"a", :value=>"17", inclusive?:true}},
          :effective_time=>{:type=>"IVL_TS", :high=>{:type=>"TS", :value=>"20100101"}}}
       
+          
       
       all_criteria.keys.each do |key|
         orig_key = key
@@ -260,7 +261,7 @@ module HQMFModel
     def test_finders
       model = HQMF::Parser.parse(@hqmf_contents, HQMF::Parser::HQMF_VERSION_1)
       
-      model.all_data_criteria.size.must_equal 23
+      model.all_data_criteria.size.must_equal 28
       
       model.all_data_criteria.map(&:id).each do |key|
         

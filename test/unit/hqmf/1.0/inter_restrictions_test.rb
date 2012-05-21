@@ -15,14 +15,13 @@ module HQMF1
       assert_equal 1, @precondition.preconditions.length
       assert_equal "OR", @precondition.preconditions[0].conjunction
       assert @precondition.preconditions[0].comparison
-      assert_equal 2, @precondition.preconditions[0].comparison.restrictions.length
+      assert_equal 1, @precondition.preconditions[0].comparison.restrictions.length
       assert_equal 1, @precondition.restrictions.length
       assert_equal 'SBS', @precondition.restrictions[0].type
       assert_equal 3, @precondition.restrictions[0].preconditions.length
       assert_equal 'OR', @precondition.restrictions[0].preconditions[0].conjunction
-      assert_equal 1, @precondition.restrictions[0].preconditions[0].restrictions.length
-      assert_equal 'SBS', @precondition.restrictions[0].preconditions[0].restrictions[0].type
-      #assert_not_nil @precondition.restrictions[0].preconditions[0].restrictions[0].comparison
+      # we no longer push down restrictions on V1 parse, we do it during conversion
+      assert_equal 0, @precondition.restrictions[0].preconditions[0].restrictions.length
     end
   end
 
