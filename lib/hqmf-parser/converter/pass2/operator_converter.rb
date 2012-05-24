@@ -45,7 +45,11 @@ module HQMF
       flattened = []
       preconditions.each do |precondition|
         if (precondition.comparison?) 
-          flattened << data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id]
+          if (precondition.reference.id == HQMF::Document::MEASURE_PERIOD_ID)
+            flattened << data_criteria_converter.measure_period_criteria
+          else
+            flattened << data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id]
+          end
         else
           flattened.concat(extract_data_criteria(precondition.preconditions,data_criteria_converter))
         end

@@ -71,12 +71,6 @@ module HQMF
       {self.id.to_s.to_sym => json}
     end
     
-    def clone
-      HQMF::DataCriteria.from_json(id, JSON.parse(base_json.to_json))
-    end
-    
-    private 
-    
     def base_json
       x = nil
       json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria,:property, :type, :status, :negation])
@@ -89,6 +83,8 @@ module HQMF
       json[:subset_operators] = x if x = json_array(@subset_operators)
       json
     end
+
+    private 
     
     def self.convert_value(json)
       value = nil

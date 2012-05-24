@@ -49,16 +49,17 @@ module HQMFModel
          :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
          :temporal_references=>
           [{:type=>"DURING", :reference=>"MeasurePeriod"},
-           {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-3.0, inclusive?:true}}]}
+           {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
            
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
          :description=>"SBS_CHILDREN(MedicationDispensedPharyngitisAntibiotics,MedicationOrderPharyngitisAntibiotics,MedicationActivePharyngitisAntibiotics)<=3 d",
          :standard_category=>"temporal",:qds_data_type=>"temporal",
-         :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"]}
+         :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"],
+         :type=>:derived}
          
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test",
          :standard_category=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:property=>:unknown,:type=>:laboratoryTests,:status=>"performed",
-         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-3.0, inclusive?:true}}]}
+         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
           
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics",
          :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"dispensed"}
@@ -73,17 +74,18 @@ module HQMFModel
           :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
           :temporal_references=>
            [{:type=>"DURING", :reference=>"MeasurePeriod"},
-            {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-3.0, inclusive?:true}}]}
+            {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
             
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
           :description=>"SBS_CHILDREN(MedicationDispensedPharyngitisAntibiotics,MedicationOrderPharyngitisAntibiotics,MedicationActivePharyngitisAntibiotics)<=3 d",
           :standard_category=>"temporal",:qds_data_type=>"temporal",
-          :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"]}
+          :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"],
+          :type=>:derived}
           
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test",
           :standard_category=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:property=>:unknown,:type=>:laboratoryTests,:status=>"performed",
           :temporal_references=>
-           [{:type=>"SAE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-3.0, inclusive?:true}}]}
+           [{:type=>"SAE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
            
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"Encounter ambulatory including pediatrics",:description=>"Encounter: Encounter ambulatory including pediatrics",
           :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
@@ -111,12 +113,13 @@ module HQMFModel
            :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
            :temporal_references=>
             [{:type=>"DURING", :reference=>"MeasurePeriod"},
-             {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-3.0, inclusive?:true}}]}
+             {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
              
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
            :description=>"SBS_CHILDREN(MedicationDispensedPharyngitisAntibiotics,MedicationOrderPharyngitisAntibiotics,MedicationActivePharyngitisAntibiotics)<=3 d",
            :standard_category=>"temporal",:qds_data_type=>"temporal",
-           :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"]}
+           :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"],
+           :type=>:derived}
            
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"Encounter ambulatory including pediatrics",:description=>"Encounter: Encounter ambulatory including pediatrics",
            :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
@@ -124,23 +127,23 @@ module HQMFModel
            
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics",
             :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"dispensed",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-30.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
             
       expected_dc[:MedicationOrderPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Order: pharyngitis antibiotics",
             :standard_category=>"medication",:qds_data_type=>"medication_order",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"ordered",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-30.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
             
       expected_dc[:MedicationActivePharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Active: pharyngitis antibiotics",
             :standard_category=>"medication",:qds_data_type=>"medication_active",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"active",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:unit=>"d", :value=>-30.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
             
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date",
             :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:age,:type=>:characteristic,
-            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:unit=>"a", :value=>"2", inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:type=>'PQ', :unit=>"a", :value=>"2", inclusive?:true}}]}
             
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date",
             :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:age,:type=>:characteristic,
-            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:unit=>"a", :value=>-17.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:type=>'PQ', :unit=>"a", :value=>-17.0, inclusive?:true}}]}
        
       all_criteria.keys.each do |key|
         orig_key = key
@@ -150,7 +153,7 @@ module HQMFModel
           data_criteria = all_criteria[orig_key]
           found_matching ||= data_criteria_matches(expected, data_criteria)
         end
-        binding.pry if !found_matching
+        binding.pry unless found_matching
         assert found_matching, "could not find matching expected criteria for #{orig_key}"
       end
       
@@ -303,7 +306,6 @@ module HQMFModel
           this_matches &&= expected_ref[:value] == reference[:value]
           found ||= this_matches
         end
-        binding.pry unless found
         matches &&= found
       end unless (actual[:subset_operators] == expected[:subset_operators])
       

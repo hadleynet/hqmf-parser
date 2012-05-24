@@ -15,8 +15,6 @@ module HQMF1
       end
       @restrictions = []
       if parent
-        parent_restrictions = get_restrictions_from_parent(parent)
-        @restrictions.concat(parent_restrictions)
         @subset = parent.subset
       end
       restriction_def = @entry.at_xpath('./*/cda:sourceOf')

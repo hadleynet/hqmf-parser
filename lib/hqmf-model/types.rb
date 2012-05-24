@@ -4,8 +4,8 @@ module HQMF
   # inclusive/exclusive indicator
   class Value
     include HQMF::Conversion::Utilities
-    attr_reader :type,:unit,:expression
-    attr_accessor :value
+    attr_reader :unit,:expression
+    attr_accessor :type, :value, :inclusive
     
     # Create a new HQMF::Value
     # @param [String] type
@@ -56,8 +56,7 @@ module HQMF
   # Represents a HQMF physical quantity which can have low and high bounds
   class Range
     include HQMF::Conversion::Utilities
-    attr_reader :type
-    attr_accessor :low, :high, :width
+    attr_accessor :type, :low, :high, :width
     
     # Create a new HQMF::Value
     # @param [String] type
@@ -182,6 +181,7 @@ module HQMF
           offset = offset.low
         end
       end
+      offset.type ||= 'PQ' if offset
       @offset = offset
     end
     
@@ -214,12 +214,23 @@ module HQMF
     # @param [Value] value
     def initialize(type,value)
       @type = type
-      @value = value
+      if (value.is_a? HQMF::Value)
+        value.inclusive = true
+        @value = HQMF::Range.new('IVL_PQ',value,value,nil)
+      else
+        @value = value
+      end
+      
+      if @value
+        @value.type ||= 'IVL_PQ' 
+        @value.low.type ||= 'PQ' if @value.low
+        @value.high.type ||= 'PQ' if @value.high
+      end
     end
     
     def self.from_json(json)
       type = json["type"] if json["type"]
-      value = HQMF::Value.from_json(json["value"]) if json["value"]
+      value = HQMF::Range.from_json(json["value"]) if json["value"]
       
       HQMF::SubsetOperator.new(type,value)
     end

@@ -11,19 +11,21 @@ module HQMF1
       @entry = entry
       @id = attr_val('./*/cda:id/@root')
       @restrictions = []
+      
+      #get subsets and push them down to comparisons
       if (parent)
-        parent_restrictions = get_restrictions_from_parent(parent)
-        @restrictions.concat(parent_restrictions)
         @subset = parent.subset
       end
-      local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
-        Restriction.new(entry, self, @doc)
-      end
-      @restrictions.concat(local_restrictions)
       local_subset = attr_val('./cda:subsetCode/@code')
       if local_subset
         @subset = local_subset
       end
+      #@subset = attr_val('./cda:subsetCode/@code')
+      
+      local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
+        Restriction.new(entry, self, @doc)
+      end
+      @restrictions.concat(local_restrictions)
 
       @expression = Expression.new(@entry) if @entry.at_xpath('./*/cda:derivationExpr')
 

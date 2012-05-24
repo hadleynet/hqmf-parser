@@ -29,6 +29,7 @@ module HQMF1
       @standard_category = settings['standard_category']
       @qds_data_type = settings['qds_data_type']
       @description = settings['description']
+#      binding.pry unless @entry.at_xpath('.//cda:title')
     end
     
     # Get the identifier of the criteria, used elsewhere within the document for referencing

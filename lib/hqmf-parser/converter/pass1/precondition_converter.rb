@@ -24,7 +24,6 @@ module HQMF
       apply_restrictions_to_comparisons(preconditions, preconditions_from_restrictions) unless preconditions_from_restrictions.empty?
 
 
-      operator = nil
       if (precondition[:expression])
         # this is for things like COUNT
         type = precondition[:expression][:type]
@@ -43,7 +42,6 @@ module HQMF
         comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
         preconditions << comparison_precondition
       end
-      
       
       reference = nil
       

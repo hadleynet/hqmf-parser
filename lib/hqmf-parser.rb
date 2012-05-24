@@ -39,9 +39,9 @@ require_relative 'hqmf-parser/converter/pass1/precondition_extractor'
 require_relative 'hqmf-parser/converter/pass1/simple_restriction'
 require_relative 'hqmf-parser/converter/pass1/simple_operator'
 require_relative 'hqmf-parser/converter/pass1/simple_precondition'
-require_relative 'hqmf-parser/converter/pass2/comparison_converter'
+require_relative 'hqmf-parser/converter/pass1/simple_data_criteria'
 
-require_relative 'hqmf-parser/converter/pass2/restriction_converter'
+require_relative 'hqmf-parser/converter/pass2/comparison_converter'
 require_relative 'hqmf-parser/converter/pass2/operator_converter'
 
 require_relative 'hqmf-parser/value_sets/value_set_parser'

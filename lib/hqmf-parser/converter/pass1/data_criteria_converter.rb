@@ -2,7 +2,7 @@ module HQMF
   # Class representing an HQMF document
   class DataCriteriaConverter
 
-    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete
+    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete, :measure_period_criteria
 
     def initialize(doc, measure_period)
       @doc = doc
@@ -17,12 +17,18 @@ module HQMF
       v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete.include? criteria.id }
     end
 
-    def duplicate_data_criteria(data_criteria, scope, parent_id)
-      new_data_criteria = data_criteria.clone
-      new_data_criteria.id = "#{new_data_criteria.id}_#{scope}_#{parent_id}"
-      @v2_data_criteria << new_data_criteria
-      # we want to delete the original for data criteria that have been duplicated
-      @v2_data_criteria_to_delete << data_criteria.id
+    def duplicate_data_criteria(data_criteria, parent_id)
+      
+      if (data_criteria.is_a? HQMF::Converter::SimpleDataCriteria and data_criteria.precondition_id == parent_id)
+        new_data_criteria = data_criteria
+      else
+        new_data_criteria = HQMF::Converter::SimpleDataCriteria.from_data_criteria(data_criteria)
+        new_data_criteria.assign_precondition(parent_id)
+        @v2_data_criteria << new_data_criteria
+        # we want to delete the original for data criteria that have been duplicated
+        @v2_data_criteria_to_delete << data_criteria.id
+      end
+      
       new_data_criteria
     end
     
@@ -34,10 +40,11 @@ module HQMF
       id = "#{parent_id}_#{type}_#{id}"
       title = "#{id}#{value_string}"
       description = "#{type}(#{clean_ids.join(',')})#{value_string}"
-      _subset_code,_subset_value,_code_list_id,_property,_type,_status,_value,_effective_time,_inline_code_list,_negation = nil
+      type = :derived
+      _subset_code,_subset_value,_code_list_id,_property,_status,_value,_effective_time,_inline_code_list,_negation = nil
       
       group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, criteria_ids, _property,
-                                              _type, _status, _value, _effective_time, _inline_code_list,_negation,nil,nil)
+                                              type, _status, _value, _effective_time, _inline_code_list,_negation,nil,nil)
       
       @v2_data_criteria << group_criteria
       group_criteria
@@ -59,7 +66,7 @@ module HQMF
         @v2_data_criteria << parsed_criteria
         @v1_data_criteria_by_id[criteria[:id]] = parsed_criteria
       end
-      HQMF::DataCriteriaConverter.create_measure_period_v1_data_criteria(@doc,@measure_period,@v1_data_criteria_by_id)
+      create_measure_period_v1_data_criteria(@doc,@measure_period,@v1_data_criteria_by_id)
     end
 
     def self.convert(key, criteria)
@@ -106,7 +113,7 @@ module HQMF
     
     # this method creates V1 data criteria for the measurement period.  These data criteria can be
     # referenced properly within the restrictions
-    def self.create_measure_period_v1_data_criteria(doc,measure_period,v1_data_criteria_by_id)
+    def create_measure_period_v1_data_criteria(doc,measure_period,v1_data_criteria_by_id)
 
       attributes = doc[:attributes]
       attributes.keys.each {|key| attributes[key.to_s] = attributes[key]}
@@ -132,6 +139,7 @@ module HQMF
       v1_data_criteria_by_id[measure_period_key] = measure_criteria
       v1_data_criteria_by_id[measure_start_key] = measure_criteria
       v1_data_criteria_by_id[measure_end_key] = measure_criteria
+      @measure_period_criteria = measure_criteria
       
     end
 

@@ -16,20 +16,28 @@ module HQMF1
       if range_def
         @range = Range.new(range_def)
       end
-      if parent
-        parent_restrictions = get_restrictions_from_parent(parent)
-        @restrictions.concat(parent_restrictions)
-      end
+      
       local_restrictions = @entry.xpath('./*/cda:sourceOf[@typeCode!="PRCN" and @typeCode!="COMP"]').collect do |entry|
         Restriction.new(entry, self, @doc)
       end
+      
       @restrictions.concat(local_restrictions)
       
-      @subset = attr_val('./cda:subsetCode/@code')
+      #get subsets and push them down to comparisons
+      if (parent)
+        @subset = parent.subset
+      end
+      local_subset = attr_val('./cda:subsetCode/@code')
+      if local_subset
+        @subset = local_subset
+      end
+      
+      #@subset = attr_val('./cda:subsetCode/@code')
       
       comparison_def = @entry.at_xpath('./*/cda:sourceOf[@typeCode="COMP"]')
       if comparison_def
         data_criteria_id = attr_val('./*/cda:id/@root')
+        data_criteria_id = comparison_def.at_xpath('./*/cda:id/@root').value if (data_criteria_id.nil? and comparison_def.at_xpath('./*/cda:id/@root'))
         @comparison = Comparison.new(data_criteria_id, comparison_def, self, @doc)
       end
       

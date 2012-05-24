@@ -17,11 +17,11 @@ module HQMF
       measure_period = parse_measure_period(json)
       @data_criteria_converter = DataCriteriaConverter.new(json, measure_period)
       
-      data_criteria_by_id = @data_criteria_converter.v1_data_criteria_by_id
-      
+      # PASS 1
       @population_criteria_converter = PopulationCriteriaConverter.new(json, @data_criteria_converter)
       population_criteria = @population_criteria_converter.population_criteria
       
+      # PASS 2
       comparison_converter = HQMF::ComparisonConverter.new(@data_criteria_converter)
       comparison_converter.convert_comparisons(population_criteria)
 
@@ -74,7 +74,27 @@ module HQMF
             data_criteria.type = :allProblems
             Kernel.warn "backfilled data criteria: #{data_criteria.id}"
           end
+        
+        elsif (data_criteria.type == :characteristic and data_criteria.property == :age)
           
+          if (data_criteria.temporal_references.nil? or data_criteria.temporal_references.empty?)
+            Kernel.warn("Age with no value comparison found")
+          else
+            Kernel.warn("more than one temporal reference found for age... taking first") if data_criteria.temporal_references.size > 1
+            
+            value = HQMF::Value.from_json(JSON.parse(data_criteria.temporal_references.first.offset.to_json.to_json))
+            range = HQMF::Range.new('IVL_PQ',nil,nil,nil)
+            if (value.value.to_f < 0)
+              value.value = value.value.abs
+              range.high = value
+            else
+              range.low = value
+            end
+            
+            data_criteria.value = range
+          end
+          
+        
         end
       end
     end

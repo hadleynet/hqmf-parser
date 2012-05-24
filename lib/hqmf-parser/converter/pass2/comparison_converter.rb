@@ -19,15 +19,23 @@ module HQMF
        end
        if (precondition.comparison? && !precondition.processed)
          new_data_criteria = nil
-         if precondition.reference
-           # binding.pry if precondition.reference.id.match /EncounterEncounterAmbulatoryIncludingPediatrics.*/
+         # duplicate the data criteria referenced by the comparision
+         if precondition.reference and precondition.reference.id != HQMF::Document::MEASURE_PERIOD_ID
            data_criteria = @data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id] 
-           new_data_criteria = @data_criteria_converter.duplicate_data_criteria(data_criteria, 'precondition', precondition.id)
+           new_data_criteria = @data_criteria_converter.duplicate_data_criteria(data_criteria, precondition.id)
            precondition.reference.id = new_data_criteria.id
          end
+         # add restrictions to the duplicated data criteria
          if precondition.has_preconditions?
-           precondition.restrictions.each do |restriction|
+           restrictions = precondition.restrictions
+           # we want to process summary operators first since they can create new data criteria
+           restrictions.sort! {|left, right| (right.operator.summary? and !left.operator.summary?) ? 1 : 0 }
+           restrictions.each do |restriction|
              operator = restriction.operator
+             # check if the data criteria has been changed by either a grouping addition or an operator
+             if (precondition.reference and (new_data_criteria == nil or new_data_criteria.id != precondition.reference.id))
+               new_data_criteria = @data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id] 
+             end
              if (operator.temporal?)
                HQMF::OperatorConverter.apply_temporal(new_data_criteria, precondition, restriction, @data_criteria_converter)
              elsif(operator.summary?)
@@ -62,7 +70,7 @@ module HQMF
        elsif precondition.has_preconditions?
          value ||= has_child_comparison(precondition)
        end
-     end
+     end if node.preconditions
      value
    end
 
