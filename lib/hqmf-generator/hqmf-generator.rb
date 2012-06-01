@@ -29,6 +29,62 @@ module HQMF2
         binding
       end
       
+      def xml_for_data_criteria(data_criteria)
+        template_str = File.read(File.expand_path("../data_criteria.xml.erb", __FILE__))
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'criteria' => data_criteria}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+      
+      def reference_element_name(data_criteria)
+        case data_criteria.type
+        when :encounters
+          'encounterReference'
+        when :procedures
+          'procedureReference'
+        when :medications
+          'substanceAdministrationReference'
+        else
+          'observationReference'
+        end
+      end
+      
+      def criteria_element_name(data_criteria)
+        case data_criteria.type
+        when :encounters
+          'encounterCriteria'
+        when :procedures
+          'procedureCriteria'
+        when :medications
+          'substanceAdministrationCriteria'
+        else
+          'observationCriteria'
+        end
+      end
+
+      def section_name(data_criteria)
+        case data_criteria.type
+        when :conditions
+          'Problems'
+        when :encounters
+          'Encounters'
+        when :results
+          'Results'
+        when :procedures
+          'Procedures'
+        when :medications
+          'Medications'
+        when :characteristic
+          'Demographics'
+        when :derived
+          'Derived'
+        when :variable
+          'Demographics'
+        else
+          raise "Unknown data criteria type [#{data_criteria.type}]"
+        end
+      end
     end
     
     # Simple class to issue monotonically increasing integer identifiers

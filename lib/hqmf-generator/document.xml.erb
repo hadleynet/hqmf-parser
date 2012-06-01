@@ -33,54 +33,57 @@
     <dataCriteriaSection>
       <definition>
         <observationDefinition>
-          <id root="0" extension="Derived" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Derived" />
         </observationDefinition>
       </definition>
       <definition>
         <observationDefinition>
-          <id root="0" extension="Demographics" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Demographics" />
         </observationDefinition>
       </definition>
       <definition>
         <encounterDefinition>
-          <id root="0" extension="Encounters" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Encounters" />
         </encounterDefinition>
       </definition>
       <definition>
         <observationDefinition>
-          <id root="0" extension="Problems" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Problems" />
         </observationDefinition>
       </definition>
       <definition>
         <observationDefinition>
-          <id root="0" extension="Allergies" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Allergies" />
         </observationDefinition>
       </definition>
       <definition>
         <procedureDefinition>
-          <id root="0" extension="Procedures" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Procedures" />
         </procedureDefinition>
       </definition>
       <definition>
         <observationDefinition>
-          <id root="0" extension="Results" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Results" />
         </observationDefinition>
       </definition>
       <definition>
         <observationDefinition>
-          <id root="0" extension="Vitals" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Vitals" />
         </observationDefinition>
       </definition>
       <definition>
         <substanceAdministrationDefinition>
-          <id root="0" extension="Medications" />
+          <id root="2.16.840.1.113883.3.100.1" extension="Medications" />
         </substanceAdministrationDefinition>
       </definition>
       <definition>
         <supplyDefinition>
-          <id root="0" extension="RX" />
+          <id root="2.16.840.1.113883.3.100.1" extension="RX" />
         </supplyDefinition>
       </definition>
+      <%- doc.all_data_criteria.each do |data_criteria| -%>
+      <%= xml_for_data_criteria(data_criteria) %>
+      <%- end -%>
     </dataCriteriaSection>
   </component>
   <component>

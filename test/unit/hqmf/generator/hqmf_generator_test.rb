@@ -17,6 +17,14 @@ class HQFGeneratorTest < Test::Unit::TestCase
     assert_equal 'foo', @model.id
     assert_equal "Sample Quality Measure Document", @model.title
     assert_equal "This is the measure description.", @model.description
+    data_criteria = @model.all_data_criteria
+    assert_equal 30, data_criteria.length
+
+    criteria = @model.data_criteria('DummyProcedureAfterHasDiabetes')
+    assert_equal :procedures, criteria.type
+
+    criteria = @model.data_criteria('EDorInpatientEncounter')
+    assert_equal :encounters, criteria.type
   end
   
   def test_schema_valid
