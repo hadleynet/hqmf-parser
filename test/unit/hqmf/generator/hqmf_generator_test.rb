@@ -14,11 +14,20 @@ class HQFGeneratorTest < Test::Unit::TestCase
   end
 
   def test_roundtrip
+    assert_equal 'foo', @model.id
     assert_equal "Sample Quality Measure Document", @model.title
     assert_equal "This is the measure description.", @model.description
   end
   
   def test_schema_valid
-    # TODO test generated XML is valid according to the HQMF V2 schema
+    doc = Nokogiri.XML(@hqmf_xml)
+    xsd_file = File.open("test/fixtures/2.0/schema/EMeasureNew.xsd")
+    xsd = Nokogiri::XML.Schema(xsd_file)
+    error_count = 0
+    xsd.validate(doc).each do |error|
+      puts error.message
+      error_count = error_count + 1
+    end
+    assert_equal 0, error_count
   end
 end

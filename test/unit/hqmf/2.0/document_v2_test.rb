@@ -14,6 +14,7 @@ require_relative '../../../test_helper'
     end
   
     def test_metadata
+      assert_equal 'foo', @doc.id
       assert_equal "Sample Quality Measure Document", @doc.title
       assert_equal "This is the measure description.", @doc.description
       assert @doc.measure_period
@@ -22,6 +23,7 @@ require_relative '../../../test_helper'
     end
 
     def test_model_metadata
+      assert_equal 'foo', @model.id
       assert_equal "Sample Quality Measure Document", @model.title
       assert_equal "This is the measure description.", @model.description
       assert @model.measure_period
