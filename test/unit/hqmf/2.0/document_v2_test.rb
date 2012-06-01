@@ -19,8 +19,6 @@ require_relative '../../../test_helper'
       assert @doc.measure_period
       assert_equal '20110101', @doc.measure_period.low.value
       assert_equal '20111231', @doc.measure_period.high.value
-      assert_equal '1', @doc.measure_period.width.value
-      assert_equal 'a', @doc.measure_period.width.unit
     end
 
     def test_model_metadata
@@ -29,8 +27,6 @@ require_relative '../../../test_helper'
       assert @model.measure_period
       assert_equal '20110101', @model.measure_period.low.value
       assert_equal '20111231', @model.measure_period.high.value
-      assert_equal '1', @model.measure_period.width.value
-      assert_equal 'a', @model.measure_period.width.unit
     end
   
     def test_population_criteria
