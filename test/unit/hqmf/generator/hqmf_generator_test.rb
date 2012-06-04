@@ -22,6 +22,15 @@ class HQFGeneratorTest < Test::Unit::TestCase
 
     criteria = @model.data_criteria('DummyProcedureAfterHasDiabetes')
     assert_equal :procedures, criteria.type
+    assert_equal 'completed', criteria.status
+    assert_equal '20100101', criteria.effective_time.low.value
+    assert_equal '20111231', criteria.effective_time.high.value
+    assert criteria.effective_time.low.inclusive
+    assert criteria.effective_time.high.inclusive
+    assert_equal 1, criteria.temporal_references.length
+    assert_equal '-1', criteria.temporal_references[0].offset.value
+    assert_equal 'a', criteria.temporal_references[0].offset.unit
+    assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
 
     criteria = @model.data_criteria('EDorInpatientEncounter')
     assert_equal :encounters, criteria.type

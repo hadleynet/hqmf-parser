@@ -2,10 +2,20 @@
         <localVariableName><%= criteria.id %></localVariableName>
         <procedureCriteria classCode="PROC">
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
+          <%- if criteria.effective_time -%>
+          <effectiveTime>
+            <%= "<low value='#{criteria.effective_time.low.value}' inclusive='#{criteria.effective_time.low.inclusive}'/>" if criteria.effective_time.low %>
+            <%= "<high value='#{criteria.effective_time.high.value}' inclusive='#{criteria.effective_time.low.inclusive}'/>" if criteria.effective_time.high %>
+          </effectiveTime>
+          <%- end -%>
           <definition>
             <procedureReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </procedureReference>
           </definition>
+          <%- criteria.temporal_references.each do |relationship| -%>
+          <%= xml_for_temporal_reference(relationship) %>
+          <%- end -%>
         </procedureCriteria>
       </entry>

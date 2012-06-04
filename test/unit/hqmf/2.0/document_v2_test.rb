@@ -128,7 +128,7 @@ require_relative '../../../test_helper'
       assert_equal '17', criteria.value.low.value
       assert_equal 'a', criteria.value.low.unit
       assert_equal false, criteria.value.low.derived?
-      assert_equal false, criteria.value.low.inclusive?
+      assert_equal true, criteria.value.low.inclusive?
       assert_equal '64', criteria.value.high.value
       assert_equal 'a', criteria.value.high.unit
       assert_equal false, criteria.value.high.derived?
@@ -270,7 +270,7 @@ require_relative '../../../test_helper'
       assert_equal '17', criteria.value.low.value
       assert_equal 'a', criteria.value.low.unit
       assert_equal false, criteria.value.low.derived?
-      assert_equal false, criteria.value.low.inclusive?
+      assert_equal true, criteria.value.low.inclusive?
       assert_equal '64', criteria.value.high.value
       assert_equal 'a', criteria.value.high.unit
       assert_equal false, criteria.value.high.derived?

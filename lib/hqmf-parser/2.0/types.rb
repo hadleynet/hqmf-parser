@@ -15,10 +15,10 @@ module HQMF2
     
     def inclusive?
       case attr_val('./@inclusive')
-      when 'true'
-        true
-      else
+      when 'false'
         false
+      else
+        true
       end
     end
     

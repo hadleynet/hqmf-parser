@@ -38,6 +38,15 @@ module HQMF2
         template.result(context.get_binding)
       end
       
+      def xml_for_temporal_reference(reference)
+        template_path = File.expand_path(File.join('..', 'temporal_relationship.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'relationship' => reference}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+      
       def data_criteria_template_name(data_criteria)
         case data_criteria.type
         when :encounters

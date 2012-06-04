@@ -109,7 +109,7 @@ module HQMF
   # Represents a HQMF effective time which is a specialization of a interval
   class EffectiveTime < Range
     def initialize(low,high,width)
-      super('LVL_TS', low, high, width)
+      super('IVL_TS', low, high, width)
     end
     
     def type
