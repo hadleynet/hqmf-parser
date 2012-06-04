@@ -30,36 +30,24 @@ module HQMF2
       end
       
       def xml_for_data_criteria(data_criteria)
-        template_str = File.read(File.expand_path("../data_criteria.xml.erb", __FILE__))
+        template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
+        template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
         params = {'criteria' => data_criteria}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
       
-      def reference_element_name(data_criteria)
+      def data_criteria_template_name(data_criteria)
         case data_criteria.type
         when :encounters
-          'encounterReference'
+          'encounter_criteria.xml.erb'
         when :procedures
-          'procedureReference'
+          'procedure_criteria.xml.erb'
         when :medications
-          'substanceAdministrationReference'
+          'substance_criteria.xml.erb'
         else
-          'observationReference'
-        end
-      end
-      
-      def criteria_element_name(data_criteria)
-        case data_criteria.type
-        when :encounters
-          'encounterCriteria'
-        when :procedures
-          'procedureCriteria'
-        when :medications
-          'substanceAdministrationCriteria'
-        else
-          'observationCriteria'
+          'observation_criteria.xml.erb'
         end
       end
 

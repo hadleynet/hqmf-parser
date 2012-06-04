@@ -1,11 +1,11 @@
       <entry>
         <localVariableName><%= criteria.id %></localVariableName>
-        <<%= criteria_element_name(criteria) %><%= ' classCode="PROC"' if criteria.type==:procedures %>>
+        <procedureCriteria classCode="PROC">
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
           <definition>
-            <<%= reference_element_name(criteria) %> moodCode="DEF">
+            <procedureReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
-            </<%= reference_element_name(criteria) %>>
+            </procedureReference>
           </definition>
-        </<%= criteria_element_name(criteria) %>>
+        </procedureCriteria>
       </entry>
