@@ -1,6 +1,6 @@
 require_relative '../../../test_helper'
 
-class HQFGeneratorTest < Test::Unit::TestCase
+class HQMFGeneratorTest < Test::Unit::TestCase
   def setup
     # Parse the sample file and convert to the model
     hqmf_xml = File.open("test/fixtures/2.0/NQF59New.xml").read
@@ -9,14 +9,14 @@ class HQFGeneratorTest < Test::Unit::TestCase
     # serialize the model using the generator back to XML and then
     # reparse it
     @hqmf_xml = HQMF2::Generator::ModelProcessor.to_hqmf(model)
-    doc = HQMF2::Document.new(hqmf_xml)
+    doc = HQMF2::Document.new(@hqmf_xml)
     @model = doc.to_model
   end
 
   def test_roundtrip
     assert_equal 'foo', @model.id
-    assert_equal "Sample Quality Measure Document", @model.title
-    assert_equal "This is the measure description.", @model.description
+    assert_equal "Sample Quality Measure Document", @model.title.strip
+    assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
     assert_equal 30, data_criteria.length
 
@@ -31,9 +31,15 @@ class HQFGeneratorTest < Test::Unit::TestCase
     assert_equal '-1', criteria.temporal_references[0].offset.value
     assert_equal 'a', criteria.temporal_references[0].offset.unit
     assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
+    assert !criteria.code_list_id
+    assert criteria.inline_code_list
+    assert criteria.inline_code_list['SNOMED-CT']
+    assert_equal '127355002', criteria.inline_code_list['SNOMED-CT'][0]
 
     criteria = @model.data_criteria('EDorInpatientEncounter')
     assert_equal :encounters, criteria.type
+    assert !criteria.inline_code_list
+    assert_equal '2.16.840.1.113883.3.464.1.42', criteria.code_list_id
   end
   
   def test_schema_valid

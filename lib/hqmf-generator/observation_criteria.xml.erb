@@ -2,10 +2,16 @@
         <localVariableName><%= criteria.id %></localVariableName>
         <observationCriteria>
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%- if criteria.type == :characteristic -%>
+          <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="2.16.840.1.113883.6.96"
+            displayName="<%= criteria.property.to_s.capitalize %>"/>
+          <%- end -%>
+          <%- if criteria.type != :variable -%>
           <definition>
             <observationReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </observationReference>
           </definition>
+          <%- end -%>
         </observationCriteria>
       </entry>

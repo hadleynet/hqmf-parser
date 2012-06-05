@@ -47,6 +47,27 @@ module HQMF2
         template.result(context.get_binding)
       end
       
+      def oid_for_name(code_system_name)
+        HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(code_system_name)
+      end
+      
+      def code_for_characteristic(characteristic)
+        case characteristic
+        when :age
+          '424144002'
+        when :gender
+          '263495000'
+        when :languages
+          '102902016'
+        when :maritalStatus
+          '125680007'
+        when :race
+          '103579009'
+        else
+          raise "Unknown demographic code [#{characteristic}]"
+        end
+      end
+      
       def data_criteria_template_name(data_criteria)
         case data_criteria.type
         when :encounters

@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'pry'
 require 'json'
 require 'ostruct'
+require 'health-data-standards'
 
 # require_relative
 require_relative 'hqmf-model/utilities.rb'
