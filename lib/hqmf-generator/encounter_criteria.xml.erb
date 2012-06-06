@@ -1,0 +1,20 @@
+      <entry>
+        <localVariableName><%= criteria.id %></localVariableName>
+        <encounterCriteria>
+          <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%- if criteria.inline_code_list -%>
+          <%- code_system_name = criteria.inline_code_list.keys[0] -%>
+          <%- code = criteria.inline_code_list[code_system_name][0] -%>
+          <%- code_system_oid = oid_for_name(code_system_name) -%>
+          <code codeSystemName="<%= code_system_name %>" codeSystem="<%= code_system_oid %>"
+            code="<%= code %>"
+          <%- elsif criteria.code_list_id -%>
+          <code valueSet="<%= criteria.code_list_id %>"/>
+          <%- end -%>
+          <definition>
+            <encounterReference moodCode="DEF">
+              <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
+            </encounterReference>
+          </definition>
+        </encounterCriteria>
+      </entry>

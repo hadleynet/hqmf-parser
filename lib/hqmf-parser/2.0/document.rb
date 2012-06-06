@@ -5,12 +5,13 @@ module HQMF2
     include HQMF2::Utilities
     NAMESPACES = {'cda' => 'urn:hl7-org:v3', 'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'}
 
-    attr_reader :measure_period
+    attr_reader :measure_period, :id
   
     # Create a new HQMF2::Document instance by parsing at file at the supplied path
     # @param [String] path the path to the HQMF document
     def initialize(hqmf_contents)
-      @doc = Document.parse(hqmf_contents)
+      @doc = @entry = Document.parse(hqmf_contents)
+      @id = attr_val('cda:QualityMeasureDocument/cda:id/@extension')
       measure_period_def = @doc.at_xpath('cda:QualityMeasureDocument/cda:controlVariable/cda:measurePeriod/cda:value', NAMESPACES)
       if measure_period_def
         @measure_period = EffectiveTime.new(measure_period_def)
@@ -73,7 +74,7 @@ module HQMF2
       dcs = all_data_criteria.collect {|dc| dc.to_model}
       pcs = all_population_criteria.collect {|pc| pc.to_model}
       attrs = []
-      HQMF::Document.new(nil, title, description, pcs, dcs, attrs, measure_period.to_model)
+      HQMF::Document.new(id, title, description, pcs, dcs, attrs, measure_period.to_model)
     end
     
     private

@@ -14,23 +14,21 @@ require_relative '../../../test_helper'
     end
   
     def test_metadata
+      assert_equal 'foo', @doc.id
       assert_equal "Sample Quality Measure Document", @doc.title
       assert_equal "This is the measure description.", @doc.description
       assert @doc.measure_period
       assert_equal '20110101', @doc.measure_period.low.value
       assert_equal '20111231', @doc.measure_period.high.value
-      assert_equal '1', @doc.measure_period.width.value
-      assert_equal 'a', @doc.measure_period.width.unit
     end
 
     def test_model_metadata
+      assert_equal 'foo', @model.id
       assert_equal "Sample Quality Measure Document", @model.title
       assert_equal "This is the measure description.", @model.description
       assert @model.measure_period
       assert_equal '20110101', @model.measure_period.low.value
       assert_equal '20111231', @model.measure_period.high.value
-      assert_equal '1', @model.measure_period.width.value
-      assert_equal 'a', @model.measure_period.width.unit
     end
   
     def test_population_criteria
@@ -130,7 +128,7 @@ require_relative '../../../test_helper'
       assert_equal '17', criteria.value.low.value
       assert_equal 'a', criteria.value.low.unit
       assert_equal false, criteria.value.low.derived?
-      assert_equal false, criteria.value.low.inclusive?
+      assert_equal true, criteria.value.low.inclusive?
       assert_equal '64', criteria.value.high.value
       assert_equal 'a', criteria.value.high.unit
       assert_equal false, criteria.value.high.derived?
@@ -272,7 +270,7 @@ require_relative '../../../test_helper'
       assert_equal '17', criteria.value.low.value
       assert_equal 'a', criteria.value.low.unit
       assert_equal false, criteria.value.low.derived?
-      assert_equal false, criteria.value.low.inclusive?
+      assert_equal true, criteria.value.low.inclusive?
       assert_equal '64', criteria.value.high.value
       assert_equal 'a', criteria.value.high.unit
       assert_equal false, criteria.value.high.derived?

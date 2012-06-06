@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<QualityMeasureDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <id root="2.16.840.1.113883.3.100.1" extension="<%= doc.id %>" />
+  <code code="57024-2" codeSystem="2.16.840.1.113883.6.1" displayName="HQMF Document" />
+  <title>
+    <%= doc.title %>
+  </title>
+  <text>
+    <%= doc.description %>
+  </text>
+  <statusCode code="completed" />
+  <setId root="2.16.840.1.113883.3.100.1" extension="1" />
+  <versionNumber />
+  <author>
+    <assignedPerson classCode="ASSIGNED" />
+  </author>
+  <author>
+    <assignedPerson classCode="ASSIGNED" />
+  </author>
+  <custodian>
+    <assignedPerson classCode="ASSIGNED" />
+  </custodian>
+  <controlVariable>
+    <measurePeriod>
+      <id root="2.16.840.1.113883.3.100.1" extension="MeasurePeriod" />
+      <value>
+        <low inclusive="true" value="20101023" />
+        <high inclusive="true" value="20101231" />
+      </value>
+    </measurePeriod>
+  </controlVariable>
+  <component>
+    <dataCriteriaSection>
+      <definition>
+        <observationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Derived" />
+        </observationDefinition>
+      </definition>
+      <definition>
+        <observationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Demographics" />
+        </observationDefinition>
+      </definition>
+      <definition>
+        <encounterDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Encounters" />
+        </encounterDefinition>
+      </definition>
+      <definition>
+        <observationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Problems" />
+        </observationDefinition>
+      </definition>
+      <definition>
+        <observationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Allergies" />
+        </observationDefinition>
+      </definition>
+      <definition>
+        <procedureDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Procedures" />
+        </procedureDefinition>
+      </definition>
+      <definition>
+        <observationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Results" />
+        </observationDefinition>
+      </definition>
+      <definition>
+        <observationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Vitals" />
+        </observationDefinition>
+      </definition>
+      <definition>
+        <substanceAdministrationDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="Medications" />
+        </substanceAdministrationDefinition>
+      </definition>
+      <definition>
+        <supplyDefinition>
+          <id root="2.16.840.1.113883.3.100.1" extension="RX" />
+        </supplyDefinition>
+      </definition>
+      <%- doc.all_data_criteria.each do |data_criteria| -%>
+      <%= xml_for_data_criteria(data_criteria) %>
+      <%- end -%>
+    </dataCriteriaSection>
+  </component>
+  <component>
+    <populationCriteriaSection></populationCriteriaSection>
+  </component>
+</QualityMeasureDocument>

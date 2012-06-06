@@ -1,0 +1,30 @@
+      <entry>
+        <localVariableName><%= criteria.id %></localVariableName>
+        <procedureCriteria classCode="PROC">
+          <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%- if criteria.inline_code_list -%>
+          <%- code_system_name = criteria.inline_code_list.keys[0] -%>
+          <%- code = criteria.inline_code_list[code_system_name][0] -%>
+          <%- code_system_oid = oid_for_name(code_system_name) -%>
+          <code codeSystemName="<%= code_system_name %>" codeSystem="<%= code_system_oid %>"
+            code="<%= code %>"
+          <%- elsif criteria.code_list_id -%>
+          <code valueSet="<%= criteria.code_list_id %>"/>
+          <%- end -%>
+          <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
+          <%- if criteria.effective_time -%>
+          <effectiveTime>
+            <%= "<low value='#{criteria.effective_time.low.value}' inclusive='#{criteria.effective_time.low.inclusive}'/>" if criteria.effective_time.low %>
+            <%= "<high value='#{criteria.effective_time.high.value}' inclusive='#{criteria.effective_time.low.inclusive}'/>" if criteria.effective_time.high %>
+          </effectiveTime>
+          <%- end -%>
+          <definition>
+            <procedureReference moodCode="DEF">
+              <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
+            </procedureReference>
+          </definition>
+          <%- criteria.temporal_references.each do |relationship| -%>
+          <%= xml_for_temporal_reference(relationship) %>
+          <%- end -%>
+        </procedureCriteria>
+      </entry>

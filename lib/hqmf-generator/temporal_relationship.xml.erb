@@ -1,0 +1,8 @@
+          <temporallyRelatedInformation typeCode="<%= relationship.type %>">
+            <%- if relationship.offset -%>
+            <pauseQuantity value="<%= relationship.offset.value %>" unit="<%= relationship.offset.unit %>"/>
+            <%- end -%>
+            <observationReference moodCode="EVN">
+              <id root="2.16.840.1.113883.3.100.1" extension="<%= relationship.reference.id %>"/>
+            </observationReference>
+          </temporallyRelatedInformation>
