@@ -11,6 +11,9 @@ module HQMF1
       @data_criteria = @doc.xpath('//cda:section[cda:code/@code="57025-9"]/cda:entry').collect do |entry|
         DataCriteria.new(entry)
       end
+      
+      backfill_derived_code_lists
+      
       @attributes = @doc.xpath('//cda:subjectOf/cda:measureAttribute').collect do |attr|
         Attribute.new(attr)
       end
@@ -90,6 +93,24 @@ module HQMF1
       doc = Nokogiri::XML(hqmf_contents)
       doc.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
       doc
+    end
+    
+    # if the data criteria is derived from another criteria, then we want to grab the properties from the derived criteria
+    # this is typically the case with Occurrence A, Occurrence B type data criteria
+    def backfill_derived_code_lists
+      data_criteria_by_id = {}
+      @data_criteria.each {|criteria| data_criteria_by_id[criteria.id] = criteria}
+      @data_criteria.each do |criteria|
+        if (criteria.derived_from)
+          derived_from = data_criteria_by_id[criteria.derived_from]
+          criteria.property = derived_from.property
+          criteria.type = derived_from.type
+          criteria.status = derived_from.status
+          criteria.standard_category = derived_from.standard_category
+          criteria.qds_data_type = derived_from.qds_data_type
+          criteria.code_list_id = derived_from.code_list_id
+        end
+      end
     end
 
     def to_json

@@ -2,13 +2,14 @@ module HQMF
   # Class representing an HQMF document
   class DataCriteriaConverter
 
-    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete, :measure_period_criteria
+    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete, :measure_period_criteria, :specific_occurrences
 
     def initialize(doc, measure_period)
       @doc = doc
       @v1_data_criteria_by_id = {}
       @v2_data_criteria = []
       @v2_data_criteria_to_delete = []
+      @specific_occurrences = {}
       @measure_period = measure_period
       parse()
     end
@@ -18,6 +19,10 @@ module HQMF
     end
 
     def duplicate_data_criteria(data_criteria, parent_id)
+      
+      # if this is a specific occurrence, then we do not want to duplicate it.
+      # we may need to duplicate it for a population however.
+      return data_criteria if (specific_occurrences[data_criteria.id]) 
       
       if (data_criteria.is_a? HQMF::Converter::SimpleDataCriteria and data_criteria.precondition_id == parent_id)
         new_data_criteria = data_criteria
@@ -32,8 +37,16 @@ module HQMF
       new_data_criteria
     end
     
+    # make sure that if a data criteria is used as a target, that it is not deleted by someone else.
+    # this is required for birthdate in NQF0106
+    def validate_not_deleted(target)
+      @v2_data_criteria_to_delete.delete(target) if @v2_data_criteria_to_delete.include? target
+    end
+    
     def create_group_data_criteria(children_criteria, type, value, parent_id, id, standard_category, qds_data_type)
       criteria_ids = children_criteria.map(&:id)
+      criteria_ids.each {|target| validate_not_deleted(target)}
+      
       clean_ids = criteria_ids.map {|key| key.gsub /_precondition_\d+/, ''}
       
       value_string = (value.stringify if value) || ""
@@ -57,7 +70,7 @@ module HQMF
       end
       criteria_by_id
     end
-
+    
     private 
 
     def parse()
@@ -65,6 +78,7 @@ module HQMF
         parsed_criteria = HQMF::DataCriteriaConverter.convert(key, criteria)
         @v2_data_criteria << parsed_criteria
         @v1_data_criteria_by_id[criteria[:id]] = parsed_criteria
+        @specific_occurrences[parsed_criteria.id] = criteria[:derived_from] != nil
       end
       create_measure_period_v1_data_criteria(@doc,@measure_period,@v1_data_criteria_by_id)
     end

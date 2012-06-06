@@ -207,9 +207,9 @@ module HQMF
   class SubsetOperator
     include HQMF::Conversion::Utilities
     
-    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST']
+    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST', 'MIN', 'MAX']
     
-    attr_reader :type, :value
+    attr_accessor :type, :value
     # @param [String] type
     # @param [Value] value
     def initialize(type,value)

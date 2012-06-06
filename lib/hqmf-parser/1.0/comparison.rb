@@ -14,9 +14,6 @@ module HQMF1
         @title = title_def.inner_text
       end
       @restrictions = []
-      if parent
-        @subset = parent.subset
-      end
       restriction_def = @entry.at_xpath('./*/cda:sourceOf')
       if restriction_def
         @entry.xpath('./*/cda:sourceOf').each do |restriction|

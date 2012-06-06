@@ -56,7 +56,7 @@ class ValueSetParserTest < Test::Unit::TestCase
     
     final = vsp.collapse_groups(structure)
     
-    final.length.must_equal 2
+    final.length.must_equal 4
     
     by_oid = {}
     final.each {|value_set| by_oid[value_set["oid"]] = value_set}

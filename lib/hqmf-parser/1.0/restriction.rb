@@ -23,10 +23,6 @@ module HQMF1
       
       @restrictions.concat(local_restrictions)
       
-      #get subsets and push them down to comparisons
-      if (parent)
-        @subset = parent.subset
-      end
       local_subset = attr_val('./cda:subsetCode/@code')
       if local_subset
         @subset = local_subset
@@ -70,6 +66,7 @@ module HQMF1
         p = Precondition.new(entry, parent, @doc)
         
       end
+      
     end
     
     # The type of restriction, e.g. SBS, SBE etc
@@ -93,13 +90,34 @@ module HQMF1
     end
     
     def value
-      attr_val('./cda:observation/cda:value/@displayName')
+      
+      type = attr_val('./cda:observation/cda:value/@xsi:type')
+      case type
+      when 'IVL_PQ'
+        value = Range.new(@entry.xpath('./cda:observation/cda:value'))
+      when 'PQ'
+        value = Value.new(@entry.xpath('./cda:observation/cda:value'))
+      when 'CD'
+        value = attr_val('./cda:observation/cda:value/@displayName')
+      when 'ANYNonNull'
+        Kernel.warn "Ignoring ANYNonNull restriction value type"
+      else
+        raise "Unknown restriction value type #{type}"
+      end if type
+      value
     end
     
     def to_json 
       return nil if from_parent
-      json = build_hash(self, [:subset,:type,:target_id,:field,:value,:from_parent, :negation])
+      json = build_hash(self, [:subset,:type,:target_id,:field,:from_parent, :negation])
       json[:range] = range.to_json if range
+      if value
+        if value.is_a? String
+          json[:value] = value
+        else
+          json[:value] = value.to_json
+        end
+      end
       json[:comparison] = comparison.to_json if comparison
       json[:restrictions] = json_array(self.restrictions)
       json[:preconditions] = json_array(self.preconditions)

@@ -15,6 +15,8 @@ module HQMF1
         @value = Range.new(@entry.xpath('./*/cda:value'))
       when 'PQ'
         @value = Value.new(@entry.xpath('./*/cda:value'))
+      when 'ANYNonNull'
+        Kernel.warn "ignoring ANYNonNull expression value type"
       else
         raise "Unknown expression value type #{type}"
       end
@@ -25,8 +27,12 @@ module HQMF1
       case @text
         when /^COUNT(.*)$/
           "COUNT"
+        when /^MIN(.*)$/
+          "MIN"
+        when /^MAX(.*)$/
+          "MAX"
         else
-          "UNKNOWN"
+          raise "unknown expression type: #{@text}"
       end
     end
     

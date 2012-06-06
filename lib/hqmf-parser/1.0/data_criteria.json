@@ -166,6 +166,13 @@
     "qds_data_type": "",
     "property": "birthtime"
   },
+  "2.16.840.1.113883.3.560.1.400": {
+    "description": "Patient characteristic",
+    "type": "characteristic",
+    "standard_category": "individual_characteristic",
+    "qds_data_type": "",
+    "property": "birthtime"
+  },
   "2.16.840.1.113883.3.560.1.29": {
     "description": "Communication provider to provider",
     "type": "procedures",
@@ -316,6 +323,27 @@
     "negation": true,
     "status":"ordered"
   },
+  "2.16.840.1.113883.3.560.1.79": {
+    "description": "Encounter performed",
+    "type": "encounters",
+    "standard_category": "encounter",
+    "qds_data_type": "encounter_performed",
+    "status":"performed"
+  },
+  "2.16.840.1.113883.3.560.1.83": {
+    "description": "Encounter order",
+    "type": "encounters",
+    "standard_category": "encounter",
+    "qds_data_type": "encounter_order",
+    "status":"order"
+  },
+  "2.16.840.1.113883.3.560.1.84": {
+    "description": "Encounter recommended",
+    "type": "encounters",
+    "standard_category": "encounter",
+    "qds_data_type": "encounter_recommended",
+    "status":"recommended"
+  },
   "2.16.840.1.113883.3.560.1.103": {
     "description": "Diagnostic study performed not done",
     "type": "procedures",
@@ -426,6 +454,7 @@
     "negation": true,
     "status": "performed"
   },
+  
   "2.16.840.1.113883.3.560.1.1001": {
     "description": "Patient characteristic",
     "type": "characteristic",

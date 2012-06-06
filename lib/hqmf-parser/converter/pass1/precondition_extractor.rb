@@ -30,7 +30,7 @@ module HQMF
     #   restriction.comparison
     #   restriction.restriction
     def self.extract_preconditions_from_restriction(restriction,data_criteria_converter)
-
+      
       target_id = data_criteria_converter.v1_data_criteria_by_id[restriction[:target_id]].id if restriction[:target_id]
       type = restriction[:type]
       if (restriction[:negation]) 
@@ -46,26 +46,51 @@ module HQMF
       if (restriction[:range])
         value = HQMF::Range.from_json(JSON.parse(restriction[:range].to_json)) if (restriction[:range])
       elsif(restriction[:value])
-        value = restriction[:value]
+        value = HQMF::Converter::SimpleOperator.parse_value(restriction[:value])
       end
       field = restriction[:field]
       operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value, field)
-      container = HQMF::Converter::SimpleRestriction.new(operator, target_id)
       
       # get the precondtions off of the restriction
-      container.preconditions = HQMF::PreconditionConverter.parse_and_merge_preconditions(restriction[:preconditions],data_criteria_converter) if restriction[:preconditions]
+      children = HQMF::PreconditionConverter.parse_and_merge_preconditions(restriction[:preconditions],data_criteria_converter) if restriction[:preconditions]
       
       if restriction[:comparison]
-        container.preconditions ||= []
+        children ||= []
         # check comparison and convert it to a precondition
         comparison = convert_comparison_to_precondition(restriction[:comparison], data_criteria_converter)
-        container.preconditions << comparison
+        children << comparison
       end
       
       # check restrictions
       restrictions = extract_preconditions_from_restrictions(restriction[:restrictions], data_criteria_converter) if restriction[:restrictions]
+      HQMF::PreconditionConverter.apply_restrictions_to_comparisons(children, restrictions) unless restrictions.nil? or restrictions.empty?
       
-      HQMF::PreconditionConverter.apply_restrictions_to_comparisons(container.preconditions, restrictions) unless restrictions.nil? or restrictions.empty?
+      container = nil
+      # check if there is a subset on the restriction
+      if restriction[:subset]
+        # if we have a subset, we want to create a Comparison Precondition for the subset and have it be the child of the operator on the restriction.
+        # the reason for this is that we want the order of operations to be SBS the FIRST of a data criteria, rather than FIRST of SBS of a data criteria
+        
+        
+        
+        
+        subset_type = restriction[:subset]
+        subset_operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(subset_type), subset_type, nil, nil)
+        
+        reference = nil
+        conjunction_code = "operator"
+        
+        restriction = HQMF::Converter::SimpleRestriction.new(subset_operator, target_id)
+        restriction.preconditions = children
+        
+        comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[restriction],reference,conjunction_code, false)
+        comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
+        
+        container = HQMF::Converter::SimpleRestriction.new(operator, nil, [comparison_precondition])
+      else
+        container = HQMF::Converter::SimpleRestriction.new(operator, target_id)
+        container.preconditions = children
+      end
       
       [container]
     end

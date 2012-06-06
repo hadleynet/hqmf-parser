@@ -33,6 +33,8 @@ module HQMF
       end
 
       def self.parse_value(value)
+        return nil unless value
+        return value if value.is_a? String
         if (value[:value])
           # values should be inclusive since we will be asking if it equals the value, ranther than being part of a range
           # if it's an offset we do not care that it is inclusive

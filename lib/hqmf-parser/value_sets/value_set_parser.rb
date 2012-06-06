@@ -40,7 +40,9 @@ module HQMF
           by_oid_ungrouped.delete(value["oid"])
           codes = []
           value["codes"].each do |child_oid|
-            codes << by_oid_ungrouped.delete(child_oid)
+#            codes << by_oid_ungrouped.delete(child_oid)
+            # do not delete the children of a group.  These may be referenced by other groups or directly by the measure
+            codes << by_oid_ungrouped[child_oid]
             # for hierarchies we need to probably have codes be a hash that we select from if we don't find the
             # element in by_oid_ungrouped we may need to look for it in final
           end

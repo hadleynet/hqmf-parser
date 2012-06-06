@@ -4,7 +4,7 @@ module HQMF
   
     class SimpleDataCriteria < HQMF::DataCriteria
 
-      attr_accessor :precondition_id
+      attr_accessor :precondition_id, :scalar_comparison
 
       def self.from_data_criteria(data_criteria)
         HQMF::Converter::SimpleDataCriteria.new(data_criteria.id, data_criteria.title, data_criteria.description, data_criteria.standard_category, data_criteria.qds_data_type,

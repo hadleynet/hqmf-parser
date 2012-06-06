@@ -24,11 +24,13 @@ module HQMF
           end
         end
         temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)
+        data_criteria_converter.validate_not_deleted(target)
       elsif (restriction.multi_target?)
         children_criteria = extract_data_criteria(restriction.preconditions, data_criteria_converter)
         if (children_criteria.length == 1)
           target = children_criteria[0].id
           temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)
+          data_criteria_converter.validate_not_deleted(target)
         else
           parent_id = precondition.reference.id
           group_criteria = data_criteria_converter.create_group_data_criteria(children_criteria, "#{type}_CHILDREN", value, parent_id, @@ids.next, "temporal", "temporal")
@@ -71,10 +73,24 @@ module HQMF
         data_criteria = nil
         if (children_criteria.length == 1)
           data_criteria = children_criteria[0]
+          subset_operator.value ||= data_criteria.scalar_comparison if data_criteria and data_criteria.respond_to? :scalar_comparison
           data_criteria.subset_operators ||= []
           data_criteria.subset_operators << subset_operator
         else
           parent_id = "GROUP"
+          
+          unless subset_operator.value
+            scalar_comparison = nil
+            children_criteria.each do |criteria|
+              if scalar_comparison.nil?
+                scalar_comparison = criteria.scalar_comparison if criteria.respond_to? :scalar_comparison
+              else
+                raise "multiple different scalar comparisons for a grouping data criteria" if scalar_comparison != criteria.scalar_comparison
+              end
+            end 
+            subset_operator.value ||= scalar_comparison
+          end
+          
           data_criteria = data_criteria_converter.create_group_data_criteria(children_criteria, type, value, parent_id, @@ids.next, "summary", "summary")
           data_criteria.subset_operators ||= []
           data_criteria.subset_operators << subset_operator

@@ -44,7 +44,6 @@ module HQMF1
     end
    
     def to_json
-      build_hash(self, [:low,:high])
       json = {}
       json[:low] = self.low.to_json if self.low
       json[:high] = self.high.to_json if self.high

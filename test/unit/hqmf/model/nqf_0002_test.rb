@@ -153,7 +153,6 @@ module HQMFModel
           data_criteria = all_criteria[orig_key]
           found_matching ||= data_criteria_matches(expected, data_criteria)
         end
-        binding.pry unless found_matching
         assert found_matching, "could not find matching expected criteria for #{orig_key}"
       end
       

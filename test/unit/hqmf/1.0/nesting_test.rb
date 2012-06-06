@@ -17,7 +17,6 @@ module HQMF1
       assert_equal false, @precondition.preconditions[0].negation
       assert_equal "FIRST", @precondition.preconditions[0].subset
       assert @precondition.preconditions[0].comparison
-      assert_equal "FIRST", @precondition.preconditions[0].comparison.subset
       assert_equal 1, @precondition.preconditions[0].comparison.restrictions.length
       assert_equal "CONCURRENT", @precondition.preconditions[0].comparison.restrictions[0].type
       assert_equal "SECOND", @precondition.preconditions[0].comparison.restrictions[0].subset

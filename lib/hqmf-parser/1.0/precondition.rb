@@ -12,10 +12,6 @@ module HQMF1
       @id = attr_val('./*/cda:id/@root')
       @restrictions = []
       
-      #get subsets and push them down to comparisons
-      if (parent)
-        @subset = parent.subset
-      end
       local_subset = attr_val('./cda:subsetCode/@code')
       if local_subset
         @subset = local_subset
@@ -73,7 +69,7 @@ module HQMF1
     
     def to_json
       
-      json = build_hash(self, [:id,:conjunction,:negation])
+      json = build_hash(self, [:id,:conjunction,:negation,:subset])
       json[:comparison] = self.comparison.to_json if self.comparison
       json[:expression] = self.expression.to_json if self.expression
       json[:preconditions] = json_array(self.preconditions)

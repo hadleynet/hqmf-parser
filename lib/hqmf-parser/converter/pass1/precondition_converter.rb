@@ -18,11 +18,11 @@ module HQMF
       
       preconditions_from_restrictions = HQMF::PreconditionExtractor.extract_preconditions_from_restrictions(precondition[:restrictions], data_criteria_converter)
       
+      # driv preconditions are preconditions that are the children of an expression
       driv_preconditions = []
       preconditions_from_restrictions.delete_if {|element| driv_preconditions << element if element.is_a? HQMF::Converter::SimpleRestriction and element.operator.type == 'DRIV'}
       
       apply_restrictions_to_comparisons(preconditions, preconditions_from_restrictions) unless preconditions_from_restrictions.empty?
-
 
       if (precondition[:expression])
         # this is for things like COUNT
@@ -54,6 +54,24 @@ module HQMF
         comparison_precondition = HQMF::PreconditionExtractor.convert_comparison_to_precondition(precondition[:comparison],data_criteria_converter)
         preconditions << comparison_precondition
       end
+
+
+      if (precondition[:subset])
+        # this is for things like FIRST on preconditions
+        type = precondition[:subset]
+        operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, nil)
+        children = preconditions
+        
+        reference = nil
+        conjunction_code = "operator"
+        
+        restriction = HQMF::Converter::SimpleRestriction.new(operator, nil, children)
+        
+        comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[restriction],reference,conjunction_code, false)
+        comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
+        preconditions = [comparison_precondition]
+      end
+
       
       HQMF::Converter::SimplePrecondition.new(nil,preconditions,reference,conjunction_code, negation)
       
