@@ -18,6 +18,8 @@ module HQMF
       v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete.include? criteria.id }
     end
 
+    # duplicates a data criteria.  This is important because we may be modifying source data criteria like patient characteristic birthdate to add restrictions
+    # the restrictions added may be different for the numerator, denominator, different IPP_1, IPP_2, etc.
     def duplicate_data_criteria(data_criteria, parent_id)
       
       # if this is a specific occurrence, then we do not want to duplicate it.
@@ -43,24 +45,87 @@ module HQMF
       @v2_data_criteria_to_delete.delete(target) if @v2_data_criteria_to_delete.include? target
     end
     
-    def create_group_data_criteria(children_criteria, type, value, parent_id, id, standard_category, qds_data_type)
-      criteria_ids = children_criteria.map(&:id)
+    # grouping data criteria are used to allow a single reference off of a temporal reference or subset operator
+    # grouping data criteria can reference either regular data criteria as children, or other grouping data criteria
+    def create_group_data_criteria(preconditions, type, value, parent_id, id, standard_category, qds_data_type)
+      extract_group_data_criteria_tree(HQMF::DataCriteria::UNION,preconditions, type, parent_id)
+    end
+    
+    def build_group_data_criteria(children, section, parent_id, derivation_operator)
+
+      criteria_ids = children.map(&:id)
+      # make sure nobody else is going to delete the criteria we've grouped
       criteria_ids.each {|target| validate_not_deleted(target)}
-      
-      clean_ids = criteria_ids.map {|key| key.gsub /_precondition_\d+/, ''}
-      
-      value_string = (value.stringify if value) || ""
-      id = "#{parent_id}_#{type}_#{id}"
-      title = "#{id}#{value_string}"
-      description = "#{type}(#{clean_ids.join(',')})#{value_string}"
+
+      id = "#{parent_id}_#{section}_#{@@ids.next}"
+      title = "#{id}"
+      description = ""
       type = :derived
-      _subset_code,_subset_value,_code_list_id,_property,_status,_value,_effective_time,_inline_code_list,_negation = nil
+      standard_category = "GROUP"
+      qds_data_type = "GROUP"
+      _code_list_id,_property,_status,_value,_effective_time,_inline_code_list,_negation = nil
       
-      group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, criteria_ids, _property,
+      group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, criteria_ids, derivation_operator, _property,
                                               type, _status, _value, _effective_time, _inline_code_list,_negation,nil,nil)
       
       @v2_data_criteria << group_criteria
+      
       group_criteria
+      
+    end
+
+    # pull the children data criteria out of a set of preconditions
+    def extract_group_data_criteria_tree(conjunction, preconditions, type, parent_id)
+      
+      children = []
+      preconditions.each do |precondition|
+        if (precondition.comparison?) 
+          if (precondition.reference.id == HQMF::Document::MEASURE_PERIOD_ID)
+            children << measure_period_criteria
+          else
+            children << v2_data_criteria_by_id[precondition.reference.id]
+          end
+        else
+          converted_conjunction = convert_grouping_conjunction(precondition.conjunction_code) 
+          children << extract_group_data_criteria_tree(converted_conjunction, precondition.preconditions, type, parent_id)
+        end
+      end
+      
+      # if we have just one child element, just return it.  An AND or OR of a single item is not useful.
+      if (children.size > 1)
+        build_group_data_criteria(children, type, parent_id, conjunction)
+      else
+        children.first
+      end
+      
+    end
+    
+    def convert_grouping_conjunction(conjunction)
+      case conjunction
+      when HQMF::Precondition::AT_LEAST_ONE_TRUE
+        HQMF::DataCriteria::UNION
+      when HQMF::Precondition::ALL_TRUE
+        HQMF::DataCriteria::XPRODUCT
+      else
+        'unknown'
+      end
+    end
+    
+    # pull the children data criteria out of a set of preconditions
+    def self.extract_data_criteria(preconditions, data_criteria_converter)
+      flattened = []
+      preconditions.each do |precondition|
+        if (precondition.comparison?) 
+          if (precondition.reference.id == HQMF::Document::MEASURE_PERIOD_ID)
+            flattened << data_criteria_converter.measure_period_criteria
+          else
+            flattened << data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id]
+          end
+        else
+          flattened.concat(extract_data_criteria(precondition.preconditions,data_criteria_converter))
+        end
+      end
+      flattened
     end
     
     def v2_data_criteria_by_id
@@ -115,11 +180,12 @@ module HQMF
       temporal_references = # filled out by operator code
       subset_operators = nil # filled out by operator code
       children_criteria = nil # filled out by operator and temporal reference code
+      derivation_operator = nil # filled out by operator and temporal reference code
 
       inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
 
       HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, 
-        code_list_id, children_criteria, property,type, status, value, effective_time, inline_code_list,
+        code_list_id, children_criteria, derivation_operator, property,type, status, value, effective_time, inline_code_list,
         negation, temporal_references, subset_operators)
  
     end
@@ -137,7 +203,7 @@ module HQMF
       measure_end_key = attributes['MEASUREMENT_END_DATE'][:id]
       
       type = 'variable'
-      code_list_id,property,status,effective_time,inline_code_list,children_criteria,temporal_references,subset_operators=nil
+      code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
       
       #####
       ##
@@ -147,7 +213,7 @@ module HQMF
       
       measure_period_id = HQMF::Document::MEASURE_PERIOD_ID
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,children_criteria,property,type,status,value,effective_time,inline_code_list, false,temporal_references,subset_operators)
+      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,children_criteria,derivation_operator,property,type,status,value,effective_time,inline_code_list, false,temporal_references,subset_operators)
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria
@@ -178,6 +244,19 @@ module HQMF
     def self.convert_key(key)
       key.to_s.downcase.gsub('_', ' ').split(' ').map {|w| w.capitalize }.join('')
     end 
+    
+    # Simple class to issue monotonically increasing integer identifiers
+    class Counter
+      def initialize
+        @count = 0
+      end
+
+      def next
+        @count+=1
+      end
+    end
+    @@ids = Counter.new
+    
     
   end
 end

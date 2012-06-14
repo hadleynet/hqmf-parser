@@ -26,14 +26,24 @@ module HQMF
         temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)
         data_criteria_converter.validate_not_deleted(target)
       elsif (restriction.multi_target?)
-        children_criteria = extract_data_criteria(restriction.preconditions, data_criteria_converter)
+        
+        children_criteria = HQMF::DataCriteriaConverter.extract_data_criteria(restriction.preconditions, data_criteria_converter)
+        
         if (children_criteria.length == 1)
           target = children_criteria[0].id
           temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)
           data_criteria_converter.validate_not_deleted(target)
         else
-          parent_id = precondition.reference.id
-          group_criteria = data_criteria_converter.create_group_data_criteria(children_criteria, "#{type}_CHILDREN", value, parent_id, @@ids.next, "temporal", "temporal")
+          parent_id = "GROUP"
+          if restriction.generated_data_criteria.nil?
+            # we pass in restriction.preconditions here rather than children_criteria because we need to be able to create grouping data criteria for and and or preconditions in a tree
+            group_criteria = data_criteria_converter.create_group_data_criteria(restriction.preconditions, "#{type}_CHILDREN", value, parent_id, @@ids.next, "grouping", "temporal")
+            # save the generated grouping criteria so that we can reference it from other locations
+            restriction.generated_data_criteria = group_criteria
+          else
+            # we have already processed this restriction and have a grouping criteria for it.  Take the one we have previously generated
+            group_criteria = restriction.generated_data_criteria
+          end
           temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(group_criteria.id), value)
         end
       else
@@ -43,23 +53,6 @@ module HQMF
       data_criteria.temporal_references << temporal_reference
     end
     
-    def self.extract_data_criteria(preconditions, data_criteria_converter)
-      flattened = []
-      preconditions.each do |precondition|
-        if (precondition.comparison?) 
-          if (precondition.reference.id == HQMF::Document::MEASURE_PERIOD_ID)
-            flattened << data_criteria_converter.measure_period_criteria
-          else
-            flattened << data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id]
-          end
-        else
-          flattened.concat(extract_data_criteria(precondition.preconditions,data_criteria_converter))
-        end
-      end
-      flattened
-    end
-    
-    
     
     def self.apply_summary(data_criteria, precondition, restriction, data_criteria_converter)
 
@@ -68,7 +61,7 @@ module HQMF
       subset_operator = HQMF::SubsetOperator.new(type, value)
 
       if (restriction.multi_target?)
-        children_criteria = extract_data_criteria(restriction.preconditions, data_criteria_converter)
+        children_criteria = HQMF::DataCriteriaConverter.extract_data_criteria(restriction.preconditions, data_criteria_converter)
         
         data_criteria = nil
         if (children_criteria.length == 1)
@@ -80,6 +73,7 @@ module HQMF
           parent_id = "GROUP"
           
           unless subset_operator.value
+            # scalar comparisons are used for MIN>90 etc.  The value is on a REFR restriction.  We need to store it on the data criteria since the value is processed before the operator is created.
             scalar_comparison = nil
             children_criteria.each do |criteria|
               if scalar_comparison.nil?
@@ -91,7 +85,16 @@ module HQMF
             subset_operator.value ||= scalar_comparison
           end
           
-          data_criteria = data_criteria_converter.create_group_data_criteria(children_criteria, type, value, parent_id, @@ids.next, "summary", "summary")
+          if restriction.generated_data_criteria.nil?
+            # we pass in restriction.preconditions here rather than children_criteria because we need to be able to create grouping data criteria for and and or preconditions in a tree
+            data_criteria = data_criteria_converter.create_group_data_criteria(restriction.preconditions, type, value, parent_id, @@ids.next, "grouping", "summary")
+            # save the generated grouping criteria so that we can reference it from other locations
+            restriction.generated_data_criteria = data_criteria
+          else
+            # we have already processed this restriction and have a grouping criteria for it.  Take the one we have previously generated
+            data_criteria = restriction.generated_data_criteria
+          end
+          
           data_criteria.subset_operators ||= []
           data_criteria.subset_operators << subset_operator
         end

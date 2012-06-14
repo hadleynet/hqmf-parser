@@ -4,6 +4,9 @@ module HQMF
 
     include HQMF::Conversion::Utilities
     
+    AT_LEAST_ONE_TRUE = 'atLeastOneTrue'
+    ALL_TRUE = 'allTrue'
+    
     attr_reader :id, :preconditions, :reference, :conjunction_code, :negation
   
     # Create a new population criteria

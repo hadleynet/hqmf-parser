@@ -24,6 +24,8 @@ module HQMF
       
       apply_restrictions_to_comparisons(preconditions, preconditions_from_restrictions) unless preconditions_from_restrictions.empty?
 
+      conjunction_code = convert_logical_conjunction(precondition[:conjunction])
+
       if (precondition[:expression])
         # this is for things like COUNT
         type = precondition[:expression][:type]
@@ -34,7 +36,7 @@ module HQMF
         end
         
         reference = nil
-        conjunction_code = "operator"
+        # take the conjunction code from the parent precondition
         
         restriction = HQMF::Converter::SimpleRestriction.new(operator, nil, children)
         
@@ -45,7 +47,6 @@ module HQMF
       
       reference = nil
       
-      conjunction_code = convert_logical_conjunction(precondition[:conjunction])
       negation = precondition[:negation]
       
       
@@ -63,7 +64,7 @@ module HQMF
         children = preconditions
         
         reference = nil
-        conjunction_code = "operator"
+        # take the conjunction code from the parent precondition
         
         restriction = HQMF::Converter::SimpleRestriction.new(operator, nil, children)
         
@@ -131,9 +132,9 @@ module HQMF
     def self.convert_logical_conjunction(code)
       case code
         when 'OR'
-          'atLeastOneTrue'
+          HQMF::Precondition::AT_LEAST_ONE_TRUE
         when 'AND'
-          'allTrue'
+          HQMF::Precondition::ALL_TRUE
         else
           raise "unsupported logical conjunction code conversion: #{code}"
       end

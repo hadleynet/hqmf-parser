@@ -35,6 +35,8 @@ module HQMFModel
       expected_dc[:MedicationActivePharyngitisAntibiotics] = []
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] = []
       expected_dc[:MedicationOrderPharyngitisAntibiotics] = []
+      expected_dc[:GROUP_SBS] = []
+      
       
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics",
          :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"dispensed"}
@@ -49,11 +51,11 @@ module HQMFModel
          :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
          :temporal_references=>
           [{:type=>"DURING", :reference=>"MeasurePeriod"},
-           {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+           {:type=>"SBS",:reference=>"GROUP_SBS",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
            
-      expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
-         :description=>"SBS_CHILDREN(MedicationDispensedPharyngitisAntibiotics,MedicationOrderPharyngitisAntibiotics,MedicationActivePharyngitisAntibiotics)<=3 d",
-         :standard_category=>"temporal",:qds_data_type=>"temporal",
+      expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
+         :description=>"",
+         :standard_category=>"GROUP",:qds_data_type=>"GROUP",
          :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"],
          :type=>:derived}
          
@@ -74,11 +76,11 @@ module HQMFModel
           :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
           :temporal_references=>
            [{:type=>"DURING", :reference=>"MeasurePeriod"},
-            {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+            {:type=>"SBS",:reference=>"GROUP_SBS",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
             
-      expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
-          :description=>"SBS_CHILDREN(MedicationDispensedPharyngitisAntibiotics,MedicationOrderPharyngitisAntibiotics,MedicationActivePharyngitisAntibiotics)<=3 d",
-          :standard_category=>"temporal",:qds_data_type=>"temporal",
+      expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
+          :description=>"",
+          :standard_category=>"GROUP",:qds_data_type=>"GROUP",
           :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"],
           :type=>:derived}
           
@@ -113,11 +115,11 @@ module HQMFModel
            :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
            :temporal_references=>
             [{:type=>"DURING", :reference=>"MeasurePeriod"},
-             {:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+             {:type=>"SBS",:reference=>"GROUP_SBS",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
              
-      expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
-           :description=>"SBS_CHILDREN(MedicationDispensedPharyngitisAntibiotics,MedicationOrderPharyngitisAntibiotics,MedicationActivePharyngitisAntibiotics)<=3 d",
-           :standard_category=>"temporal",:qds_data_type=>"temporal",
+      expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
+           :description=>"",
+           :standard_category=>"GROUP",:qds_data_type=>"GROUP",
            :children_criteria=>["MedicationDispensedPharyngitisAntibiotics","MedicationOrderPharyngitisAntibiotics","MedicationActivePharyngitisAntibiotics"],
            :type=>:derived}
            
@@ -148,7 +150,9 @@ module HQMFModel
       all_criteria.keys.each do |key|
         orig_key = key
         key = key.to_s.gsub(/_precondition_\d+.*/, '').to_sym
+        key = key.to_s.gsub(/_CHILDREN_\d+.*/, '').to_sym
         found_matching = false
+        binding.pry unless expected_dc[key] 
         expected_dc[key].each do |expected|
           data_criteria = all_criteria[orig_key]
           found_matching ||= data_criteria_matches(expected, data_criteria)
@@ -288,8 +292,9 @@ module HQMFModel
           this_matches = true
           this_matches &&= expected_ref[:type] == reference[:type]
           this_matches &&= expected_ref[:offset] == reference[:offset]
-          key = reference[:reference].to_s.gsub(/_precondition_\d+.*/, '')
-          this_matches &&= expected_ref[:reference] == key
+          key1 = reference[:reference].to_s.gsub(/_precondition_\d+.*/, '')
+          key2 = reference[:reference].to_s.gsub(/_CHILDREN_\d+.*/, '')
+          this_matches &&= (expected_ref[:reference] == key1 || expected_ref[:reference] == key2)
           found ||= this_matches
         end
         matches &&= found

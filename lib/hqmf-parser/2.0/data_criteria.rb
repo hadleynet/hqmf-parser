@@ -4,7 +4,7 @@ module HQMF2
   
     include HQMF2::Utilities
     
-    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_references, :subset_operators, :children_criteria
+    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_references, :subset_operators, :children_criteria, :derivation_operator
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -107,8 +107,7 @@ module HQMF2
       negation = false
       mtr = temporal_references.collect {|ref| ref.to_model}
       mso = subset_operators.collect {|opr| opr.to_model}
-      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, property, type, 
-        status, mv, met, inline_code_list, negation, mtr, mso)
+      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, derivation_operator, property, type, status, mv, met, inline_code_list, negation, mtr, mso)
     end
     
     private

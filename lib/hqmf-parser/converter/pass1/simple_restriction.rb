@@ -6,7 +6,7 @@ module HQMF
 
       include HQMF::Conversion::Utilities
     
-      attr_accessor :operator, :target, :preconditions, :negation, :converted
+      attr_accessor :operator, :target, :preconditions, :negation, :converted, :generated_data_criteria
       def initialize(operator, target, preconditions = [])
         @operator = operator
         @target = target

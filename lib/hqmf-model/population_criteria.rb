@@ -38,14 +38,14 @@ module HQMF
       true
     end
 
-    # Get the conjunction code, e.g. allTrue, allFalse
+    # Get the conjunction code, e.g. allTrue, atLeastOneTrue
     # @return [String] conjunction code
     def conjunction_code
       case id
       when 'IPP', 'DENOM', 'NUMER'
-        'allTrue'
+        HQMF::Precondition::ALL_TRUE
       when 'DENEXCEP'
-        'atLeastOneTrue'
+        HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
         raise "Unknown population type [#{id}]"
       end
