@@ -13,6 +13,7 @@ module HQMF2
       @status = attr_val('./*/cda:statusCode/@code')
       @effective_time = extract_effective_time
       @temporal_references = extract_temporal_references
+      @derivation_operator = extract_derivation_operator
       @subset_operators = extract_subset_operators
       @children_criteria = extract_child_criteria
       @id_xpath = './cda:observationCriteria/cda:id/@extension'
@@ -127,9 +128,23 @@ module HQMF2
       end
     end
     
-    def extract_subset_operators
+    def all_subset_operators
       @entry.xpath('./*/cda:excerpt', HQMF2::Document::NAMESPACES).collect do |subset_operator|
         SubsetOperator.new(subset_operator)
+      end
+    end
+    
+    def extract_derivation_operator
+      derivation_operators = all_subset_operators.select do |operator|
+        ['UNION', 'XPRODUCT'].include?(operator.type)
+      end
+      raise "More than one derivation operator in data criteria" if derivation_operators.size>1
+      derivation_operators.first ? derivation_operators.first.type : nil
+    end
+    
+    def extract_subset_operators
+      all_subset_operators.select do |operator|
+        operator.type != 'UNION' && operator.type != 'XPRODUCT'
       end
     end
     
