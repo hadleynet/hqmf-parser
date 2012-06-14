@@ -385,6 +385,8 @@ require_relative '../../../test_helper'
       
       criteria = @model.data_criteria('anyDiabetes')
       assert_equal :derived, criteria.type
+      assert_equal HQMF::DataCriteria::UNION, criteria.derivation_operator
+      assert_equal 0, criteria.subset_operators.size
       assert_equal 2, criteria.children_criteria.length
       assert criteria.children_criteria.include? 'HasDiabetes'
       assert criteria.children_criteria.include? 'HasGestationalDiabetes'
