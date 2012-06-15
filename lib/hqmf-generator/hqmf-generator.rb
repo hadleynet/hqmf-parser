@@ -29,11 +29,70 @@ module HQMF2
         binding
       end
       
+      def xml_for_reference_id(id)
+        reference = HQMF::Reference.new(id)
+        xml_for_reference(reference)
+      end
+      
+      def xml_for_reference(reference)
+        template_path = File.expand_path(File.join('..', 'reference.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'reference' => reference}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)        
+      end
+      
+      def xml_for_value(value, element_name='value')
+        template_path = File.expand_path(File.join('..', 'value.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'value' => value, 'name' => element_name}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)        
+      end
+      
+      def xml_for_code(criteria, element_name='code')
+        template_path = File.expand_path(File.join('..', 'code.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'criteria' => criteria, 'name' => element_name}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+           
+      def xml_for_derivation(data_criteria)
+        xml = ''
+        if data_criteria.derivation_operator
+            template_path = File.expand_path(File.join('..', 'derivation.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'doc' => doc, 'criteria' => data_criteria}
+            context = ErbContext.new(params)
+            xml = template.result(context.get_binding)
+        end
+        xml
+      end
+      
+      def xml_for_subsets(data_criteria)
+        if data_criteria.subset_operators
+          subsets_xml = data_criteria.subset_operators.collect do |operator|
+            template_path = File.expand_path(File.join('..', 'subset.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'doc' => doc, 'subset' => operator, 'criteria' => data_criteria}
+            context = ErbContext.new(params)
+            template.result(context.get_binding)
+          end
+        end
+        subsets_xml.join()
+      end
+      
       def xml_for_data_criteria(data_criteria)
         template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'criteria' => data_criteria}
+        params = {'doc' => doc, 'criteria' => data_criteria}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
@@ -42,13 +101,18 @@ module HQMF2
         template_path = File.expand_path(File.join('..', 'temporal_relationship.xml.erb'), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'relationship' => reference}
+        params = {'doc' => doc, 'relationship' => reference}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
       
       def oid_for_name(code_system_name)
         HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(code_system_name)
+      end
+      
+      def reference_element_name(id)
+        referenced_criteria = doc.data_criteria(id)
+        element_name_prefix(referenced_criteria)
       end
       
       def code_for_characteristic(characteristic)
@@ -101,6 +165,19 @@ module HQMF2
           'Demographics'
         else
           raise "Unknown data criteria type [#{data_criteria.type}]"
+        end
+      end
+
+      def element_name_prefix(data_criteria)
+        case data_criteria.type
+        when :encounters
+          'encounter'
+        when :procedures
+          'procedure'
+        when :medications
+          'substanceAdministration'
+        else
+          'observation'
         end
       end
     end

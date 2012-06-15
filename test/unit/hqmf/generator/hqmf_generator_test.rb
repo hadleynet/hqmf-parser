@@ -20,7 +20,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     data_criteria = @model.all_data_criteria
     assert_equal 30, data_criteria.length
 
-    criteria = @model.data_criteria('DummyProcedureAfterHasDiabetes')
+    criteria = @model.data_criteria('DummyProcedureAfterHasDiabetesWithCount')
     assert_equal :procedures, criteria.type
     assert_equal 'completed', criteria.status
     assert_equal '20100101', criteria.effective_time.low.value
@@ -35,11 +35,19 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert criteria.inline_code_list
     assert criteria.inline_code_list['SNOMED-CT']
     assert_equal '127355002', criteria.inline_code_list['SNOMED-CT'][0]
+    assert_equal 1, criteria.subset_operators.size
+    assert_equal 'SUMMARY', criteria.subset_operators[0].type
+    assert_equal '2', criteria.subset_operators[0].value.low.value
 
     criteria = @model.data_criteria('EDorInpatientEncounter')
     assert_equal :encounters, criteria.type
     assert !criteria.inline_code_list
     assert_equal '2.16.840.1.113883.3.464.1.42', criteria.code_list_id
+
+    criteria = @model.data_criteria('anyDiabetes')
+    assert_equal :derived, criteria.type
+    assert_equal 'UNION', criteria.derivation_operator
+    assert_equal 2, criteria.children_criteria.size
   end
   
   def test_schema_valid

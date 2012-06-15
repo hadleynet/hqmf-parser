@@ -1,0 +1,8 @@
+<<%= name %>>
+  <%- if value.low -%>
+  <low value="<%= value.low.value %>"<%= "unit=\"#{value.low.unit}\"" if value.low.unit %>/>
+  <%- end -%>
+  <%- if value.high -%>
+  <high value="<%= value.high.value %>"<%= "unit=\"#{value.high.unit}\"" if value.high.unit %>/>
+  <%- end -%>
+</<%= name %>>
