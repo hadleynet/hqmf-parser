@@ -1,0 +1,8 @@
+          <excerpt>
+            <subsetCode code="<%= subset.type %>"/>
+            <<%= element_name_prefix(criteria) %>Criteria<%= ' classCode="PROC"' if criteria.type==:procedures %>>
+            <%- if subset.value -%>
+              <%= xml_for_value(subset.value, 'repeatNumber') %>
+            <%- end -%>
+            </<%= element_name_prefix(criteria) %>Criteria>
+          </excerpt>

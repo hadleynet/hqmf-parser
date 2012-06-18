@@ -1,0 +1,9 @@
+          <%- if criteria.inline_code_list -%>
+          <%- code_system_name = criteria.inline_code_list.keys[0] -%>
+          <%- code = criteria.inline_code_list[code_system_name][0] -%>
+          <%- code_system_oid = oid_for_name(code_system_name) -%>
+          <<%= name %> codeSystemName="<%= code_system_name %>" codeSystem="<%= code_system_oid %>"
+            code="<%= code %>"/>
+          <%- elsif criteria.code_list_id -%>
+          <<%= name %> valueSet="<%= criteria.code_list_id %>"/>
+          <%- end -%>

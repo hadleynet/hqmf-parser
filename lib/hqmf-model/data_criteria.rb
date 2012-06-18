@@ -17,7 +17,7 @@ module HQMF
     # @param [String] standard_category
     # @param [String] qds_data_type
     # @param [String] code_list_id
-    # @param [List<String>] childrenCriteria (ids of children data criteria)
+    # @param [List<String>] children_criteria (ids of children data criteria)
     # @param [String] derivation_operator
     # @param [String] property
     # @param [String] type
