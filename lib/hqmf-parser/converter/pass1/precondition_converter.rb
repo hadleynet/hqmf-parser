@@ -132,8 +132,16 @@ module HQMF
           end
         end
         
-        joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, false) unless (sub_conditions.empty?)
-        joined << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true) unless (negated_conditions.empty?)
+        if (!sub_conditions.empty?)
+          # if we have negated conditions, add them to a new precondition of the same conjunction that is negated
+          if (!negated_conditions.empty?)
+            sub_conditions << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true)
+          end
+          joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, false)
+        elsif (!negated_conditions.empty?)
+          joined << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true)
+        end
+        
       end
       joined
     end

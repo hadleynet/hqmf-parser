@@ -202,21 +202,22 @@ module HQMFModel
       {conjunction?:true,
        :preconditions=>
         [{:preconditions=>
-           [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics", :conjunction_code=>"encountersReference"},
-            {:reference=>"DiagnosisActivePharyngitis", :conjunction_code=>"activeDiagnosesReference"},
-            {:preconditions=>[{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"}], :conjunction_code=>"atLeastOneTrue"}],
-          :conjunction_code=>"allTrue"},
-         {:preconditions=>
-           [{:preconditions=>
-              [{:reference=>"MedicationDispensedPharyngitisAntibiotics", :conjunction_code=>"allMedicationsReference"},
-               {:reference=>"MedicationOrderPharyngitisAntibiotics", :conjunction_code=>"allMedicationsReference"},
-               {:reference=>"MedicationActivePharyngitisAntibiotics", :conjunction_code=>"allMedicationsReference"}],
-             :conjunction_code=>"atLeastOneTrue"}],
-          :conjunction_code=>"allTrue",
-          :negation=>true}]}
+           [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"},
+            {:reference=>"DiagnosisActivePharyngitis",:conjunction_code=>"activeDiagnosesReference"},
+            {:preconditions=>
+              [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"}],
+             :conjunction_code=>"atLeastOneTrue"},
+            {:preconditions=>
+              [{:preconditions=>
+                 [{:reference=>"MedicationDispensedPharyngitisAntibiotics",:conjunction_code=>"allMedicationsReference"},
+                  {:reference=>"MedicationOrderPharyngitisAntibiotics",:conjunction_code=>"allMedicationsReference"},
+                  {:reference=>"MedicationActivePharyngitisAntibiotics",:conjunction_code=>"allMedicationsReference"}],
+                :conjunction_code=>"atLeastOneTrue"}],
+             :conjunction_code=>"allTrue",
+             :negation=>true}],
+          :conjunction_code=>"allTrue"}]}
       
       diff = denom.diff_hash(population_criteria,true)
-      
       assert diff.empty?, "differences: #{diff.to_json}"
       
     end
