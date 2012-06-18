@@ -93,7 +93,12 @@ module HQMF2
     end
     
     def inline_code_list
-      codeSystemName = attr_val("#{@code_list_xpath}/@codeSystemName")
+      codeSystem = attr_val("#{@code_list_xpath}/@codeSystem")
+      if codeSystem
+        codeSystemName = HealthDataStandards::Util::CodeSystemHelper.code_system_for(codeSystem)
+      else
+        codeSystemName = attr_val("#{@code_list_xpath}/@codeSystemName")
+      end
       codeValue = attr_val("#{@code_list_xpath}/@code")
       if codeSystemName && codeValue
         {codeSystemName => [codeValue]}

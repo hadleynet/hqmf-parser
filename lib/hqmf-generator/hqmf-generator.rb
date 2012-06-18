@@ -43,11 +43,11 @@ module HQMF2
         template.result(context.get_binding)        
       end
       
-      def xml_for_value(value, element_name='value')
+      def xml_for_value(value, element_name='value', include_type=true)
         template_path = File.expand_path(File.join('..', 'value.xml.erb'), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'value' => value, 'name' => element_name}
+        params = {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type}
         context = ErbContext.new(params)
         template.result(context.get_binding)        
       end
@@ -68,6 +68,19 @@ module HQMF2
             template_str = File.read(template_path)
             template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
             params = {'doc' => doc, 'criteria' => data_criteria}
+            context = ErbContext.new(params)
+            xml = template.result(context.get_binding)
+        end
+        xml
+      end
+      
+      def xml_for_effective_time(data_criteria)
+        xml = ''
+        if data_criteria.effective_time
+            template_path = File.expand_path(File.join('..', 'effective_time.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'doc' => doc, 'effective_time' => data_criteria.effective_time}
             context = ErbContext.new(params)
             xml = template.result(context.get_binding)
         end
@@ -140,6 +153,10 @@ module HQMF2
           'procedure_criteria.xml.erb'
         when :medications
           'substance_criteria.xml.erb'
+        when :characteristic
+          'characteristic_criteria.xml.erb'
+        when :variable
+          'variable_criteria.xml.erb'
         else
           'observation_criteria.xml.erb'
         end

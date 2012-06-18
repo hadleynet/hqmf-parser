@@ -48,6 +48,8 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal :derived, criteria.type
     assert_equal 'UNION', criteria.derivation_operator
     assert_equal 2, criteria.children_criteria.size
+    assert_equal 'HasDiabetes', criteria.children_criteria[0]
+    assert_equal 'HasGestationalDiabetes', criteria.children_criteria[1]
   end
   
   def test_schema_valid

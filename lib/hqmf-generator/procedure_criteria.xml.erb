@@ -4,12 +4,7 @@
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
           <%= xml_for_code(criteria) %>
           <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
-          <%- if criteria.effective_time -%>
-          <effectiveTime>
-            <%= "<low value='#{criteria.effective_time.low.value}' inclusive='#{criteria.effective_time.low.inclusive}'/>" if criteria.effective_time.low %>
-            <%= "<high value='#{criteria.effective_time.high.value}' inclusive='#{criteria.effective_time.low.inclusive}'/>" if criteria.effective_time.high %>
-          </effectiveTime>
-          <%- end -%>
+          <%= xml_for_effective_time(criteria) %>
           <definition>
             <procedureReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>

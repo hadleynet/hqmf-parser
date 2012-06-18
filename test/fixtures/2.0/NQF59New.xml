@@ -382,7 +382,7 @@
         <localVariableName>DummyProcedureAfterHasDiabetes</localVariableName>
         <procedureCriteria classCode="PROC">
           <id root="0" extension="DummyProcedureAfterHasDiabetes"/>
-          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.1"
+          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.96"
             code="127355002"/>
           <statusCode code="completed"/>
           <effectiveTime>
@@ -406,7 +406,7 @@
         <localVariableName>DummyProcedureAfterHasDiabetesWithCount</localVariableName>
         <procedureCriteria classCode="PROC">
           <id root="0" extension="DummyProcedureAfterHasDiabetesWithCount"/>
-          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.1"
+          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.96"
             code="127355002"/>
           <statusCode code="completed"/>
           <effectiveTime>

@@ -1,8 +1,16 @@
-<<%= name %>>
-  <%- if value.low -%>
-  <low value="<%= value.low.value %>"<%= "unit=\"#{value.low.unit}\"" if value.low.unit %>/>
+<%- if value.class==HQMF::Range -%>
+  <<%= name %> xsi:type="<%= value.type %>">
+    <%= xml_for_value(value.low, 'low', false) if value.low -%>
+    <%= xml_for_value(value.high, 'high', false) if value.high -%>
+  </<%= name %>>
+<%- elsif value.class==HQMF::Coded -%>
+  <<%= name %> xsi:type="<%= value.type %>" codeSystem="<%= value.system %>" code="<%= value.code %>"/>
+<%- elsif value.class==HQMF::Value -%>
+  <%- if value.derived? -%>
+  <<%= name %> nullFlavor="DER">
+    <expression><%= value.expression %></expression>
+  </<%= name %>>
+  <%- else -%>
+  <<%= name %> <%= "xsi:type=\"#{value.type}\"" if include_type %> value="<%= value.value %>"<%= " unit=\"#{value.unit}\"" if value.unit %>/>
   <%- end -%>
-  <%- if value.high -%>
-  <high value="<%= value.high.value %>"<%= "unit=\"#{value.high.unit}\"" if value.high.unit %>/>
-  <%- end -%>
-</<%= name %>>
+<%- end -%>
