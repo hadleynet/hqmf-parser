@@ -3,11 +3,15 @@ module HQMF
   class PreconditionConverter
     
     def self.parse_preconditions(source,data_criteria_converter)
-      preconditions = []
-      source.each do |precondition|
-        preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
-      end
-      preconditions
+
+      # preconditions = []
+      # source.each do |precondition|
+      #   preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
+      # end
+      # 
+      # preconditions
+      
+      parse_and_merge_preconditions(source,data_criteria_converter)
     end
    
     # converts a precondtion to a hqmf model
