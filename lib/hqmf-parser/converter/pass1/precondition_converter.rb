@@ -123,12 +123,17 @@ module HQMF
       joined = []
       preconditions_by_conjunction.each do |conjunction_code, preconditions|
         sub_conditions = []
+        negated_conditions = []
         preconditions.each do |precondition|
-          sub_conditions.concat precondition.preconditions if precondition.preconditions
+          unless (precondition.negation)
+            sub_conditions.concat precondition.preconditions if precondition.preconditions
+          else
+            negated_conditions.concat precondition.preconditions if precondition.preconditions
+          end
         end
-        negation = false
-        sub_conditions.each {|precondition| negation ||= precondition.negation }
-        joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, negation)
+        
+        joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, false) unless (sub_conditions.empty?)
+        joined << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true) unless (negated_conditions.empty?)
       end
       joined
     end

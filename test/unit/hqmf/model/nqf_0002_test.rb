@@ -169,19 +169,17 @@ module HQMFModel
       
       population_criteria = logic[:NUMER]
       population_criteria[:conjunction?].must_equal true
-      population_criteria[:preconditions].size.must_equal 2
+      population_criteria[:preconditions].size.must_equal 1
 
       numerator = 
       {conjunction?:true,
        :preconditions=>
         [{:preconditions=>
            [{:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest",
-             :conjunction_code=>"laboratoryTestsReference"}],
+             :conjunction_code=>"laboratoryTestsReference"}, {:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest",
+                :conjunction_code=>"laboratoryTestsReference"}],
           :conjunction_code=>"allTrue"},
-         {:preconditions=>
-           [{:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest",
-             :conjunction_code=>"laboratoryTestsReference"}],
-          :conjunction_code=>"allTrue"}]}
+        ]}
       
       diff = numerator.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"
@@ -192,9 +190,7 @@ module HQMFModel
       {
         conjunction?:true,
         :preconditions=>[
-          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}],:conjunction_code=>"allTrue"},
-          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}],:conjunction_code=>"allTrue"}
-        ]
+          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}, {:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}],:conjunction_code=>"allTrue"}]
       }
       
       diff = ipp.diff_hash(population_criteria,true)
@@ -206,25 +202,21 @@ module HQMFModel
       {conjunction?:true,
        :preconditions=>
         [{:preconditions=>
-           [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"}],
-          :conjunction_code=>"allTrue"},
-         {:preconditions=>[{:reference=>"DiagnosisActivePharyngitis",:conjunction_code=>"activeDiagnosesReference"}],
-          :conjunction_code=>"allTrue"},
-         {:preconditions=>
-           [{:preconditions=>
-              [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"}],
-             :conjunction_code=>"atLeastOneTrue"}],
+           [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics", :conjunction_code=>"encountersReference"},
+            {:reference=>"DiagnosisActivePharyngitis", :conjunction_code=>"activeDiagnosesReference"},
+            {:preconditions=>[{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"}], :conjunction_code=>"atLeastOneTrue"}],
           :conjunction_code=>"allTrue"},
          {:preconditions=>
            [{:preconditions=>
-              [{:reference=>"MedicationDispensedPharyngitisAntibiotics",:conjunction_code=>"allMedicationsReference"},
-               {:reference=>"MedicationOrderPharyngitisAntibiotics",:conjunction_code=>"allMedicationsReference"},
-               {:reference=>"MedicationActivePharyngitisAntibiotics",:conjunction_code=>"allMedicationsReference"}],
+              [{:reference=>"MedicationDispensedPharyngitisAntibiotics", :conjunction_code=>"allMedicationsReference"},
+               {:reference=>"MedicationOrderPharyngitisAntibiotics", :conjunction_code=>"allMedicationsReference"},
+               {:reference=>"MedicationActivePharyngitisAntibiotics", :conjunction_code=>"allMedicationsReference"}],
              :conjunction_code=>"atLeastOneTrue"}],
           :conjunction_code=>"allTrue",
           :negation=>true}]}
       
       diff = denom.diff_hash(population_criteria,true)
+      
       assert diff.empty?, "differences: #{diff.to_json}"
       
     end
