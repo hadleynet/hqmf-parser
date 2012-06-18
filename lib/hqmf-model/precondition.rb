@@ -7,7 +7,8 @@ module HQMF
     AT_LEAST_ONE_TRUE = 'atLeastOneTrue'
     ALL_TRUE = 'allTrue'
     
-    attr_reader :id, :preconditions, :reference, :conjunction_code, :negation
+    attr_reader :id, :preconditions, :reference, :conjunction_code
+    attr_accessor :negation
   
     # Create a new population criteria
     # @param [Array#Precondition] preconditions 

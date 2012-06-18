@@ -3,11 +3,15 @@ module HQMF
   class PreconditionConverter
     
     def self.parse_preconditions(source,data_criteria_converter)
-      preconditions = []
-      source.each do |precondition|
-        preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
-      end
-      preconditions
+
+      # preconditions = []
+      # source.each do |precondition|
+      #   preconditions << HQMF::PreconditionConverter.parse_precondition(precondition,data_criteria_converter)
+      # end
+      # 
+      # preconditions
+      
+      parse_and_merge_preconditions(source,data_criteria_converter)
     end
    
     # converts a precondtion to a hqmf model
@@ -119,12 +123,25 @@ module HQMF
       joined = []
       preconditions_by_conjunction.each do |conjunction_code, preconditions|
         sub_conditions = []
+        negated_conditions = []
         preconditions.each do |precondition|
-          sub_conditions.concat precondition.preconditions if precondition.preconditions
+          unless (precondition.negation)
+            sub_conditions.concat precondition.preconditions if precondition.preconditions
+          else
+            negated_conditions.concat precondition.preconditions if precondition.preconditions
+          end
         end
-        negation = false
-        sub_conditions.each {|precondition| negation ||= precondition.negation }
-        joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, negation)
+        
+        if (!sub_conditions.empty?)
+          # if we have negated conditions, add them to a new precondition of the same conjunction that is negated
+          if (!negated_conditions.empty?)
+            sub_conditions << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true)
+          end
+          joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, false)
+        elsif (!negated_conditions.empty?)
+          joined << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true)
+        end
+        
       end
       joined
     end
