@@ -19,7 +19,7 @@ module HQMF2
       @data_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:dataCriteriaSection/cda:entry', NAMESPACES).collect do |entry|
         DataCriteria.new(entry)
       end
-      @population_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection/cda:entry', NAMESPACES).collect do |attr|
+      @population_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection/cda:entry[not(cda:stratifierCriteria)]', NAMESPACES).collect do |attr|
         PopulationCriteria.new(attr, self)
       end
     end

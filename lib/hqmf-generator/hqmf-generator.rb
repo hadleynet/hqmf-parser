@@ -101,11 +101,29 @@ module HQMF2
         subsets_xml.join()
       end
       
+      def xml_for_precondition(precondition)
+        template_path = File.expand_path(File.join('..', 'precondition.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'precondition' => precondition}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+      
       def xml_for_data_criteria(data_criteria)
         template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
         params = {'doc' => doc, 'criteria' => data_criteria}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+      
+      def xml_for_population_criteria(population_criteria)
+        template_path = File.expand_path(File.join('..', 'population_criteria.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'criteria' => population_criteria}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
@@ -199,8 +217,25 @@ module HQMF2
           'procedure'
         when :medications
           'substanceAdministration'
+        when :medication_supply
+          'supply'
         else
           'observation'
+        end
+      end
+      
+      def population_element_prefix(population_criteria_code)
+        case population_criteria_code
+        when 'IPP'
+          'patientPopulation'
+        when 'DENOM'
+          'denominator'
+        when 'NUMER'
+          'numerator'
+        when 'DENEXCEP'
+          'denominatorException'
+        else
+          raise "Unknown population criteria type #{population_criteria_code}"
         end
       end
     end

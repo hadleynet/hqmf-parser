@@ -33,7 +33,7 @@ require_relative '../../../test_helper'
   
     def test_population_criteria
       all_population_criteria = @doc.all_population_criteria
-      assert_equal 6, all_population_criteria.length
+      assert_equal 4, all_population_criteria.length
     
       codes = all_population_criteria.collect {|p| p.id}
       %w(IPP DENOM NUMER DENEXCEP).each do |c|
@@ -71,7 +71,7 @@ require_relative '../../../test_helper'
   
     def test_model_population_criteria
       all_population_criteria = @model.all_population_criteria
-      assert_equal 6, all_population_criteria.length
+      assert_equal 4, all_population_criteria.length
     
       codes = all_population_criteria.collect {|p| p.id}
       %w(IPP DENOM NUMER DENEXCEP).each do |c|

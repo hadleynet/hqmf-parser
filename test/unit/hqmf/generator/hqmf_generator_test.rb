@@ -60,6 +60,76 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert criteria.effective_time.high
     assert criteria.effective_time.high.derived?
     assert_equal 'EndDate', criteria.effective_time.high.expression
+
+    criteria = @model.data_criteria('HbA1C')
+    assert_equal :results, criteria.type
+    assert_equal 'HbA1C', criteria.title
+    assert_equal 1, criteria.subset_operators.length
+    assert_equal 'RECENT', criteria.subset_operators[0].type
+    assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+    assert_equal 'completed', criteria.status
+    assert_equal nil, criteria.effective_time
+    assert_equal HQMF::Range, criteria.value.class
+    assert_equal nil, criteria.value.high
+    assert criteria.value.low
+    assert_equal '9', criteria.value.low.value
+    assert_equal '%', criteria.value.low.unit
+
+    criteria = @model.data_criteria('DiabetesMedAdministered')
+    assert_equal :medications, criteria.type
+    assert_equal 'DiabetesMedAdministered', criteria.title
+    assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
+    assert criteria.effective_time
+    assert_equal nil, criteria.effective_time.high
+    assert criteria.effective_time.low
+    assert_equal true, criteria.effective_time.low.derived?
+    assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
+
+    criteria = @model.data_criteria('DiabetesMedSupplied')
+    assert_equal :medication_supply, criteria.type
+    assert_equal 'DiabetesMedSupplied', criteria.title
+    assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
+    assert criteria.effective_time
+    assert_equal nil, criteria.effective_time.low
+    assert criteria.effective_time.high
+    assert_equal true, criteria.effective_time.high.derived?
+    assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      
+    all_population_criteria = @model.all_population_criteria
+    assert_equal 4, all_population_criteria.length
+  
+    codes = all_population_criteria.collect {|p| p.id}
+    %w(IPP DENOM NUMER DENEXCEP).each do |c|
+      assert codes.include?(c)
+    end
+
+    ipp = @model.population_criteria('IPP')
+    assert ipp.conjunction?
+    assert_equal 'allTrue', ipp.conjunction_code
+    assert_equal 1, ipp.preconditions.length
+    assert_equal false, ipp.preconditions[0].conjunction?
+    assert_equal 'ageBetween17and64', ipp.preconditions[0].reference.id
+
+    den = @model.population_criteria('DENOM')
+    assert_equal 1, den.preconditions.length
+    assert den.preconditions[0].conjunction?
+    assert_equal 'atLeastOneTrue', den.preconditions[0].conjunction_code
+    assert_equal 5, den.preconditions[0].preconditions.length
+    assert den.preconditions[0].preconditions[0].conjunction?
+    assert_equal 'allTrue', den.preconditions[0].preconditions[0].conjunction_code
+    assert_equal 2, den.preconditions[0].preconditions[0].preconditions.length
+    assert_equal false, den.preconditions[0].preconditions[0].preconditions[0].conjunction?
+    assert_equal 'HasDiabetes', den.preconditions[0].preconditions[0].preconditions[0].reference.id
+  
+    num = @model.population_criteria('NUMER')
+    assert_equal 1, num.preconditions.length
+    assert_equal false, num.preconditions[0].conjunction?
+    assert_equal 'HbA1C', num.preconditions[0].reference.id
+
+    ipp = @model.population_criteria('DENEXCEP')
+    assert ipp.conjunction?
+    assert_equal 'atLeastOneTrue', ipp.conjunction_code
+    assert_equal 3, ipp.preconditions.length
   end
   
   def test_schema_valid
