@@ -232,7 +232,7 @@ require_relative '../../../test_helper'
       assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
 
       criteria = @doc.data_criteria('DiabetesMedSupplied')
-      assert_equal :medications, criteria.type
+      assert_equal :medication_supply, criteria.type
       assert_equal 'DiabetesMedSupplied', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
       assert criteria.effective_time
@@ -374,7 +374,7 @@ require_relative '../../../test_helper'
       assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
 
       criteria = @model.data_criteria('DiabetesMedSupplied')
-      assert_equal :medications, criteria.type
+      assert_equal :medication_supply, criteria.type
       assert_equal 'DiabetesMedSupplied', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
       assert criteria.effective_time

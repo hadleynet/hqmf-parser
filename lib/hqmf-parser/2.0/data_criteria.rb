@@ -46,7 +46,7 @@ module HQMF2
         @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
         @section = 'medications'
       when 'RX'
-        @type = :medications
+        @type = :medication_supply
         @id_xpath = './cda:supplyCriteria/cda:id/@extension'
         @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
         @section = 'medications'
@@ -169,7 +169,7 @@ module HQMF2
           case value_type
           when 'TS'
             value = Value.new(value_def)
-          when 'IVL_PQ'
+          when 'IVL_PQ', 'IVL_INT'
             value = Range.new(value_def)
           when 'CD'
             value = Coded.new(value_def)

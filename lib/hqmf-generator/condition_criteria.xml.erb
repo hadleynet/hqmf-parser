@@ -1,22 +1,19 @@
       <entry>
         <localVariableName><%= criteria.id %></localVariableName>
-        <supplyCriteria>
+        <observationCriteria>
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
           <%= xml_for_effective_time(criteria) %>
-          <participant typeCode="PRD">
-            <roleParticipant classCode="THER">
-              <%= xml_for_code(criteria, 'code', false) %>
-            </roleParticipant>
-          </participant>
+          <%= xml_for_code(criteria, 'value') %>
           <definition>
-            <supplyReference moodCode="DEF">
+            <observationReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
-            </supplyReference>
+            </observationReference>
           </definition>
           <%= xml_for_derivation(criteria) %>
           <%= xml_for_subsets(criteria) %>
           <%- criteria.temporal_references.each do |relationship| -%>
           <%= xml_for_temporal_reference(relationship) %>
           <%- end -%>
-        </supplyCriteria>
+        </observationCriteria>
       </entry>

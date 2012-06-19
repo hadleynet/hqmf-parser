@@ -2,7 +2,12 @@
         <localVariableName><%= criteria.id %></localVariableName>
         <observationCriteria>
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%= xml_for_code(criteria) %>
+          <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
           <%= xml_for_effective_time(criteria) %>
+          <%- if criteria.value -%>
+          <%= xml_for_value(criteria.value) %>
+          <%- end -%>
           <definition>
             <observationReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>

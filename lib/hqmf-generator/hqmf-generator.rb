@@ -52,11 +52,11 @@ module HQMF2
         template.result(context.get_binding)        
       end
       
-      def xml_for_code(criteria, element_name='code')
+      def xml_for_code(criteria, element_name='code', include_type=true)
         template_path = File.expand_path(File.join('..', 'code.xml.erb'), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => criteria, 'name' => element_name}
+        params = {'doc' => doc, 'criteria' => criteria, 'name' => element_name, 'include_type' => include_type}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
@@ -147,12 +147,16 @@ module HQMF2
       
       def data_criteria_template_name(data_criteria)
         case data_criteria.type
-        when :encounters
+        when :conditions 
+          'condition_criteria.xml.erb'
+        when :encounters 
           'encounter_criteria.xml.erb'
         when :procedures
           'procedure_criteria.xml.erb'
         when :medications
           'substance_criteria.xml.erb'
+        when :medication_supply
+          'supply_criteria.xml.erb'
         when :characteristic
           'characteristic_criteria.xml.erb'
         when :variable
@@ -174,6 +178,8 @@ module HQMF2
           'Procedures'
         when :medications
           'Medications'
+        when :medication_supply
+          'RX'
         when :characteristic
           'Demographics'
         when :derived

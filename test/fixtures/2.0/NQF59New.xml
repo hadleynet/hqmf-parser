@@ -325,18 +325,11 @@
               <expression>EndDate.add(new PQ(-2,"a"))</expression>
             </high>
           </effectiveTime>
-          <repeatNumber>
-            <low value="2" inclusive="true"/>
-          </repeatNumber>
           <definition>
             <encounterReference moodCode="DEF">
               <id root="0" extension="Encounters"/>
             </encounterReference>
           </definition>
-          <excerpt>
-            <subsetCode code="PREVSUM"/>
-            <encounterCriteria></encounterCriteria>
-          </excerpt>
         </encounterCriteria>
       </entry>
       <entry>

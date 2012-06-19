@@ -43,6 +43,9 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal :encounters, criteria.type
     assert !criteria.inline_code_list
     assert_equal '2.16.840.1.113883.3.464.1.42', criteria.code_list_id
+    assert criteria.effective_time.high
+    assert criteria.effective_time.high.derived?
+    assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
 
     criteria = @model.data_criteria('anyDiabetes')
     assert_equal :derived, criteria.type
@@ -50,6 +53,13 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 2, criteria.children_criteria.size
     assert_equal 'HasDiabetes', criteria.children_criteria[0]
     assert_equal 'HasGestationalDiabetes', criteria.children_criteria[1]
+
+    criteria = @model.data_criteria('HasPolycysticOvaries')
+    assert_equal :conditions, criteria.type
+    assert_equal '2.16.840.1.113883.3.464.1.98', criteria.code_list_id
+    assert criteria.effective_time.high
+    assert criteria.effective_time.high.derived?
+    assert_equal 'EndDate', criteria.effective_time.high.expression
   end
   
   def test_schema_valid
