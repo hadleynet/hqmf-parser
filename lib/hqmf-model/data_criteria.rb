@@ -7,8 +7,8 @@ module HQMF
     XPRODUCT = 'XPRODUCT'
     UNION = 'UNION'
 
-    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :inline_code_list, :standard_category, :qds_data_type, :negation
-    attr_accessor :id, :value, :effective_time, :status, :temporal_references, :subset_operators, :property, :type
+    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type, :negation
+    attr_accessor :id, :value, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list
   
     # Create a new data criteria instance
     # @param [String] id
@@ -24,7 +24,7 @@ module HQMF
     # @param [String] status
     # @param [Value|Range|Coded] value
     # @param [Range] effective_time
-    # @param [Hash<String,String>] inline_code_list
+    # @param [Hash<String,[String]>] inline_code_list
     # @param [boolean] negation
     # @param [List<TemporalReference>] temporal_references
     # @param [List<SubsetOperator>] subset_operators

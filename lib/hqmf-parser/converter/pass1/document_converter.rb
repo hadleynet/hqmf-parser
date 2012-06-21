@@ -2,6 +2,7 @@ module HQMF
   # Class for converting an HQMF 1.0 representation to an HQMF 2.0 representation
   class DocumentConverter
    
+    BIRTHTIME_CODE_LIST = {'LOINC'=>['21112-8']}
     
     def self.convert(json, codes)
       
@@ -35,7 +36,7 @@ module HQMF
       # @param [Range] measure_period
       doc = HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period)
        
-      backfill_patient_characteristics_with_codes(doc, codes) if (codes)
+      backfill_patient_characteristics_with_codes(doc, codes)
       
       doc
       
@@ -63,8 +64,13 @@ module HQMF
     def self.backfill_patient_characteristics_with_codes(doc, codes)
       doc.all_data_criteria.each do |data_criteria|
         if (data_criteria.type == :characteristic and (data_criteria.property.nil? or data_criteria.property == :unknown))
-          value_set = codes[data_criteria.code_list_id]
-          raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
+          if (codes)
+            value_set = codes[data_criteria.code_list_id]
+            raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
+          else
+            Kernel.warn "no code set to back fill"
+            next
+          end
           
           # looking for Gender: Female
           if value_set["HL7"] and value_set["HL7"] == ["10174"]
@@ -75,24 +81,26 @@ module HQMF
             Kernel.warn "backfilled data criteria: #{data_criteria.id}"
           end
         
-        elsif (data_criteria.type == :characteristic and data_criteria.property == :age)
+        elsif (data_criteria.type == :characteristic and data_criteria.property == :birthtime)
           
-          if (data_criteria.temporal_references.nil? or data_criteria.temporal_references.empty?)
-            Kernel.warn("Age with no value comparison found")
-          else
-            Kernel.warn("more than one temporal reference found for age... taking first") if data_criteria.temporal_references.size > 1
-            
-            value = HQMF::Value.from_json(JSON.parse(data_criteria.temporal_references.first.offset.to_json.to_json))
-            range = HQMF::Range.new('IVL_PQ',nil,nil,nil)
-            if (value.value.to_f < 0)
-              value.value = value.value.abs
-              range.high = value
-            else
-              range.low = value
-            end
-            
-            data_criteria.value = range
-          end
+          data_criteria.inline_code_list = BIRTHTIME_CODE_LIST
+          
+          # if (data_criteria.temporal_references.nil? or data_criteria.temporal_references.empty?)
+          #   Kernel.warn("Age with no value comparison found")
+          # else
+          #   Kernel.warn("more than one temporal reference found for age... taking first") if data_criteria.temporal_references.size > 1
+          #   
+          #   value = HQMF::Value.from_json(JSON.parse(data_criteria.temporal_references.first.offset.to_json.to_json))
+          #   range = HQMF::Range.new('IVL_PQ',nil,nil,nil)
+          #   if (value.value.to_f < 0)
+          #     value.value = value.value.abs
+          #     range.high = value
+          #   else
+          #     range.low = value
+          #   end
+          #   
+          #   data_criteria.value = range
+          # end
           
         
         end

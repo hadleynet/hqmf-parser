@@ -139,12 +139,13 @@ module HQMFModel
             :standard_category=>"medication",:qds_data_type=>"medication_active",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"active",
             :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
             
+      age_codes = {'LOINC'=>['21112-8']}      
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date",
-            :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:age,:type=>:characteristic,
+            :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:birthtime,:inline_code_list=>age_codes,:type=>:characteristic,
             :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:type=>'PQ', :unit=>"a", :value=>"2", inclusive?:true}}]}
             
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date",
-            :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:age,:type=>:characteristic,
+            :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:birthtime,:inline_code_list=>age_codes,:type=>:characteristic,
             :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:type=>'PQ', :unit=>"a", :value=>-17.0, inclusive?:true}}]}
        
       all_criteria.keys.each do |key|
