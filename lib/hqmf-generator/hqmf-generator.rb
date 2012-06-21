@@ -155,6 +155,8 @@ module HQMF2
       
       def code_for_characteristic(characteristic)
         case characteristic
+        when :birthtime
+          '21112-8'
         when :age
           '424144002'
         when :gender
@@ -167,6 +169,15 @@ module HQMF2
           '103579009'
         else
           raise "Unknown demographic code [#{characteristic}]"
+        end
+      end
+      
+      def oid_for_characteristic(characteristic)
+        case characteristic
+        when :birthtime
+          '2.16.840.1.113883.6.1'
+        else
+          '2.16.840.1.113883.6.96'
         end
       end
       

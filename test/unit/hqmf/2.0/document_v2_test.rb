@@ -109,7 +109,7 @@ require_relative '../../../test_helper'
   
     def test_data_criteria
       data_criteria = @doc.all_data_criteria
-      assert_equal 30, data_criteria.length
+      assert_equal 31, data_criteria.length
     
       criteria = @doc.data_criteria('EndDate')
       assert criteria.to_xml.include?('extension="EndDate"')
@@ -118,6 +118,16 @@ require_relative '../../../test_helper'
       assert_equal HQMF2::Value, criteria.value.class
       assert_equal '20101231', criteria.value.value
       assert_equal 'TS', criteria.value.type
+
+      criteria = @doc.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
+      assert_equal :characteristic, criteria.type
+      assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+      assert_equal :birthtime, criteria.property
+      assert_equal 1, criteria.temporal_references.length
+      assert_equal 'SBS', criteria.temporal_references[0].type
+      assert_equal 'MeasurePeriod', criteria.temporal_references[0].reference.id
+      assert_equal '-50', criteria.temporal_references[0].offset.value
+      assert_equal 'a', criteria.temporal_references[0].offset.unit
 
       criteria = @doc.data_criteria('ageBetween17and64')
       assert_equal :characteristic, criteria.type
@@ -252,7 +262,7 @@ require_relative '../../../test_helper'
     
     def test_model_data_criteria
       data_criteria = @model.all_data_criteria
-      assert_equal 30, data_criteria.length
+      assert_equal 31, data_criteria.length
     
       criteria = @model.data_criteria('EndDate')
       assert_equal :variable, criteria.type
@@ -260,6 +270,16 @@ require_relative '../../../test_helper'
       assert_equal HQMF::Value, criteria.value.class
       assert_equal '20101231', criteria.value.value
       assert_equal 'TS', criteria.value.type
+
+      criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
+      assert_equal :characteristic, criteria.type
+      assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+      assert_equal :birthtime, criteria.property
+      assert_equal 1, criteria.temporal_references.length
+      assert_equal 'SBS', criteria.temporal_references[0].type
+      assert_equal 'MeasurePeriod', criteria.temporal_references[0].reference.id
+      assert_equal '-50', criteria.temporal_references[0].offset.value
+      assert_equal 'a', criteria.temporal_references[0].offset.unit
 
       criteria = @model.data_criteria('ageBetween17and64')
       assert_equal :characteristic, criteria.type

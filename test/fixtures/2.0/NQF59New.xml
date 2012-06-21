@@ -107,6 +107,25 @@
         </observationCriteria>
       </entry>
       <entry>
+        <localVariableName>birthdateFiftyYearsBeforeMeasurementPeriod</localVariableName>
+        <observationCriteria>
+          <id root="0" extension="birthdateFiftyYearsBeforeMeasurementPeriod"/>
+          <code code="21112-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+            displayName="Birthdate"/>
+          <definition>
+            <observationReference moodCode="DEF">
+              <id root="0" extension="Demographics"/>
+            </observationReference>
+          </definition>
+          <temporallyRelatedInformation typeCode="SBS">
+            <pauseQuantity value="-50" unit="a"/>
+            <observationReference moodCode="EVN">
+              <id root="0" extension="MeasurePeriod"/>
+            </observationReference>
+          </temporallyRelatedInformation>
+        </observationCriteria>
+      </entry>
+      <entry>
         <localVariableName>ageBetween17and64</localVariableName>
         <observationCriteria>
           <id root="0" extension="ageBetween17and64"/>

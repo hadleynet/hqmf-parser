@@ -18,7 +18,17 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal "Sample Quality Measure Document", @model.title.strip
     assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
-    assert_equal 30, data_criteria.length
+    assert_equal 31, data_criteria.length
+
+    criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
+    assert_equal :characteristic, criteria.type
+    assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+    assert_equal :birthtime, criteria.property
+    assert_equal 1, criteria.temporal_references.length
+    assert_equal 'SBS', criteria.temporal_references[0].type
+    assert_equal 'MeasurePeriod', criteria.temporal_references[0].reference.id
+    assert_equal '-50', criteria.temporal_references[0].offset.value
+    assert_equal 'a', criteria.temporal_references[0].offset.unit
 
     criteria = @model.data_criteria('DummyProcedureAfterHasDiabetesWithCount')
     assert_equal :procedures, criteria.type

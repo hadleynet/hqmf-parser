@@ -184,6 +184,8 @@ module HQMF2
     def property_for_demographic
       demographic_type = attr_val('./cda:observationCriteria/cda:code/@code')
       case demographic_type
+      when '21112-8'
+        :birthtime
       when '424144002'
         :age
       when '263495000'

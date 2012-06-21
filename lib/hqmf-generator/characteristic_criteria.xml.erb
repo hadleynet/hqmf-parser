@@ -2,7 +2,7 @@
         <localVariableName><%= criteria.id %></localVariableName>
         <observationCriteria>
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
-          <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="2.16.840.1.113883.6.96"
+          <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="<%= oid_for_characteristic(criteria.property) %>"
             displayName="<%= criteria.property.to_s.capitalize %>"/>
           <%= xml_for_effective_time(criteria) %>
           <%- if criteria.value -%>
@@ -13,5 +13,6 @@
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </observationReference>
           </definition>
+          <%= xml_for_temporal_references(criteria) %>
         </observationCriteria>
       </entry>
