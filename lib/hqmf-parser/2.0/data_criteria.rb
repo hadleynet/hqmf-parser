@@ -46,7 +46,7 @@ module HQMF2
         @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
         @section = 'medications'
       when 'RX'
-        @type = :medications
+        @type = :medication_supply
         @id_xpath = './cda:supplyCriteria/cda:id/@extension'
         @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
         @section = 'medications'
@@ -93,7 +93,12 @@ module HQMF2
     end
     
     def inline_code_list
-      codeSystemName = attr_val("#{@code_list_xpath}/@codeSystemName")
+      codeSystem = attr_val("#{@code_list_xpath}/@codeSystem")
+      if codeSystem
+        codeSystemName = HealthDataStandards::Util::CodeSystemHelper.code_system_for(codeSystem)
+      else
+        codeSystemName = attr_val("#{@code_list_xpath}/@codeSystemName")
+      end
       codeValue = attr_val("#{@code_list_xpath}/@code")
       if codeSystemName && codeValue
         {codeSystemName => [codeValue]}
@@ -164,7 +169,7 @@ module HQMF2
           case value_type
           when 'TS'
             value = Value.new(value_def)
-          when 'IVL_PQ'
+          when 'IVL_PQ', 'IVL_INT'
             value = Range.new(value_def)
           when 'CD'
             value = Coded.new(value_def)

@@ -49,7 +49,8 @@ module HQMF2
     include HQMF2::Utilities
     attr_reader :low, :high, :width
     
-    def initialize(entry)
+    def initialize(entry, type=nil)
+      @type = type
       @entry = entry
       if @entry
         @low = optional_value('./cda:low', default_bounds_type)
@@ -59,7 +60,7 @@ module HQMF2
     end
     
     def type
-      attr_val('./@xsi:type')
+      @type || attr_val('./@xsi:type')
     end
     
     def to_model
@@ -149,7 +150,7 @@ module HQMF2
       @type = attr_val('./cda:subsetCode/@code')
       value_def = @entry.at_xpath('./*/cda:repeatNumber', HQMF2::Document::NAMESPACES)
       if value_def
-        @value = HQMF2::Range.new(value_def)
+        @value = HQMF2::Range.new(value_def, 'IVL_INT')
       end
     end
 

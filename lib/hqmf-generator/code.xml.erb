@@ -5,5 +5,5 @@
           <<%= name %> codeSystemName="<%= code_system_name %>" codeSystem="<%= code_system_oid %>"
             code="<%= code %>"/>
           <%- elsif criteria.code_list_id -%>
-          <<%= name %> valueSet="<%= criteria.code_list_id %>"/>
+          <<%= name %><%= " xsi:type=\"CD\"" if include_type %> valueSet="<%= criteria.code_list_id %>"/>
           <%- end -%>

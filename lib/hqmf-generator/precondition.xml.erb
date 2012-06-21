@@ -1,0 +1,13 @@
+<precondition>
+  <%- if precondition.conjunction? -%>
+  <<%= precondition.conjunction_code %>>
+    <%- precondition.preconditions.each do |child| -%>
+    <%= xml_for_precondition(child) %>
+    <%- end -%>
+  </<%= precondition.conjunction_code %>>
+  <%- else -%>
+    <<%= reference_element_name(precondition.reference.id) %>Reference>
+      <id root="2.16.840.1.113883.3.100.1" extension="<%= precondition.reference.id %>"/>
+    </<%= reference_element_name(precondition.reference.id) %>Reference>
+  <%- end -%>
+</precondition>

@@ -2,8 +2,8 @@
         <localVariableName><%= criteria.id %></localVariableName>
         <observationCriteria>
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
-          <%= xml_for_code(criteria) %>
-          <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
+          <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="2.16.840.1.113883.6.96"
+            displayName="<%= criteria.property.to_s.capitalize %>"/>
           <%= xml_for_effective_time(criteria) %>
           <%- if criteria.value -%>
           <%= xml_for_value(criteria.value) %>
@@ -13,10 +13,5 @@
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </observationReference>
           </definition>
-          <%= xml_for_derivation(criteria) %>
-          <%= xml_for_subsets(criteria) %>
-          <%- criteria.temporal_references.each do |relationship| -%>
-          <%= xml_for_temporal_reference(relationship) %>
-          <%- end -%>
         </observationCriteria>
       </entry>

@@ -2,10 +2,21 @@
         <localVariableName><%= criteria.id %></localVariableName>
         <substanceAdministrationCriteria>
           <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          <%= xml_for_effective_time(criteria) %>
+          <participant typeCode="CSM">
+            <roleParticipant classCode="THER">
+              <%= xml_for_code(criteria, 'code', false) %>
+            </roleParticipant>
+          </participant>
           <definition>
             <substanceAdministrationReference moodCode="DEF">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </substanceAdministrationReference>
           </definition>
+          <%= xml_for_derivation(criteria) %>
+          <%= xml_for_subsets(criteria) %>
+          <%- criteria.temporal_references.each do |relationship| -%>
+          <%= xml_for_temporal_reference(relationship) %>
+          <%- end -%>
         </substanceAdministrationCriteria>
       </entry>

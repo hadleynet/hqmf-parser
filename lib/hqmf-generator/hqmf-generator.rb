@@ -43,20 +43,20 @@ module HQMF2
         template.result(context.get_binding)        
       end
       
-      def xml_for_value(value, element_name='value')
+      def xml_for_value(value, element_name='value', include_type=true)
         template_path = File.expand_path(File.join('..', 'value.xml.erb'), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'value' => value, 'name' => element_name}
+        params = {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type}
         context = ErbContext.new(params)
         template.result(context.get_binding)        
       end
       
-      def xml_for_code(criteria, element_name='code')
+      def xml_for_code(criteria, element_name='code', include_type=true)
         template_path = File.expand_path(File.join('..', 'code.xml.erb'), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => criteria, 'name' => element_name}
+        params = {'doc' => doc, 'criteria' => criteria, 'name' => element_name, 'include_type' => include_type}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
@@ -68,6 +68,19 @@ module HQMF2
             template_str = File.read(template_path)
             template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
             params = {'doc' => doc, 'criteria' => data_criteria}
+            context = ErbContext.new(params)
+            xml = template.result(context.get_binding)
+        end
+        xml
+      end
+      
+      def xml_for_effective_time(data_criteria)
+        xml = ''
+        if data_criteria.effective_time
+            template_path = File.expand_path(File.join('..', 'effective_time.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'doc' => doc, 'effective_time' => data_criteria.effective_time}
             context = ErbContext.new(params)
             xml = template.result(context.get_binding)
         end
@@ -88,11 +101,29 @@ module HQMF2
         subsets_xml.join()
       end
       
+      def xml_for_precondition(precondition)
+        template_path = File.expand_path(File.join('..', 'precondition.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'precondition' => precondition}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+      
       def xml_for_data_criteria(data_criteria)
         template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
         params = {'doc' => doc, 'criteria' => data_criteria}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)
+      end
+      
+      def xml_for_population_criteria(population_criteria)
+        template_path = File.expand_path(File.join('..', 'population_criteria.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'doc' => doc, 'criteria' => population_criteria}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
@@ -134,12 +165,20 @@ module HQMF2
       
       def data_criteria_template_name(data_criteria)
         case data_criteria.type
-        when :encounters
+        when :conditions 
+          'condition_criteria.xml.erb'
+        when :encounters 
           'encounter_criteria.xml.erb'
         when :procedures
           'procedure_criteria.xml.erb'
         when :medications
           'substance_criteria.xml.erb'
+        when :medication_supply
+          'supply_criteria.xml.erb'
+        when :characteristic
+          'characteristic_criteria.xml.erb'
+        when :variable
+          'variable_criteria.xml.erb'
         else
           'observation_criteria.xml.erb'
         end
@@ -157,6 +196,8 @@ module HQMF2
           'Procedures'
         when :medications
           'Medications'
+        when :medication_supply
+          'RX'
         when :characteristic
           'Demographics'
         when :derived
@@ -176,8 +217,25 @@ module HQMF2
           'procedure'
         when :medications
           'substanceAdministration'
+        when :medication_supply
+          'supply'
         else
           'observation'
+        end
+      end
+      
+      def population_element_prefix(population_criteria_code)
+        case population_criteria_code
+        when 'IPP'
+          'patientPopulation'
+        when 'DENOM'
+          'denominator'
+        when 'NUMER'
+          'numerator'
+        when 'DENEXCEP'
+          'denominatorException'
+        else
+          raise "Unknown population criteria type #{population_criteria_code}"
         end
       end
     end

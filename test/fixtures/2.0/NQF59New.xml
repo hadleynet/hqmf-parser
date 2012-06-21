@@ -325,18 +325,11 @@
               <expression>EndDate.add(new PQ(-2,"a"))</expression>
             </high>
           </effectiveTime>
-          <repeatNumber>
-            <low value="2" inclusive="true"/>
-          </repeatNumber>
           <definition>
             <encounterReference moodCode="DEF">
               <id root="0" extension="Encounters"/>
             </encounterReference>
           </definition>
-          <excerpt>
-            <subsetCode code="PREVSUM"/>
-            <encounterCriteria></encounterCriteria>
-          </excerpt>
         </encounterCriteria>
       </entry>
       <entry>
@@ -382,7 +375,7 @@
         <localVariableName>DummyProcedureAfterHasDiabetes</localVariableName>
         <procedureCriteria classCode="PROC">
           <id root="0" extension="DummyProcedureAfterHasDiabetes"/>
-          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.1"
+          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.96"
             code="127355002"/>
           <statusCode code="completed"/>
           <effectiveTime>
@@ -406,7 +399,7 @@
         <localVariableName>DummyProcedureAfterHasDiabetesWithCount</localVariableName>
         <procedureCriteria classCode="PROC">
           <id root="0" extension="DummyProcedureAfterHasDiabetesWithCount"/>
-          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.1"
+          <code codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.96"
             code="127355002"/>
           <statusCode code="completed"/>
           <effectiveTime>

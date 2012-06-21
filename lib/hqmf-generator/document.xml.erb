@@ -87,6 +87,11 @@
     </dataCriteriaSection>
   </component>
   <component>
-    <populationCriteriaSection></populationCriteriaSection>
+    <populationCriteriaSection>
+      <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
+      <%- doc.all_population_criteria.each do |population_criteria| -%>
+      <%= xml_for_population_criteria(population_criteria) %>
+      <%- end -%>
+    </populationCriteriaSection>
   </component>
 </QualityMeasureDocument>
