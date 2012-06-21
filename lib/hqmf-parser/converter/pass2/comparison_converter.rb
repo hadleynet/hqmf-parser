@@ -46,11 +46,7 @@ module HQMF
                  if operator.field.downcase == 'status'
                    new_data_criteria.status = operator.value.downcase
                  elsif operator.field.downcase == 'result value'
-                   range = operator.value
-                   range.type = 'IVL_PQ'
-                   range.high.type = 'PQ' if range.high
-                   range.low.type = 'PQ' if range.low
-                   new_data_criteria.scalar_comparison = range
+                   new_data_criteria.value = operator.value
                  else
                    Kernel.warn "Cannot convert the field of REFR: #{operator.field}"
                  end

@@ -15,7 +15,7 @@ module HQMF
     # @param [Boolean] derived
     # @param [String] expression
     def initialize(type,unit,value,inclusive,derived,expression)
-      @type = type
+      @type = type || 'PQ'
       @unit = unit
       @value = value
       @inclusive = inclusive
@@ -64,7 +64,7 @@ module HQMF
     # @param [Value] high
     # @param [Value] width
     def initialize(type,low,high,width)
-      @type = type
+      @type = type || 'IVL_PQ'
       @low = low
       @high = high
       @width = width
@@ -181,7 +181,6 @@ module HQMF
           offset = offset.low
         end
       end
-      offset.type ||= 'PQ' if offset
       @offset = offset
     end
     
@@ -219,12 +218,6 @@ module HQMF
         @value = HQMF::Range.new('IVL_PQ',value,value,nil)
       else
         @value = value
-      end
-      
-      if @value
-        @value.type ||= 'IVL_PQ' 
-        @value.low.type ||= 'PQ' if @value.low
-        @value.high.type ||= 'PQ' if @value.high
       end
     end
     

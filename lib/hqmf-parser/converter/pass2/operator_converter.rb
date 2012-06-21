@@ -66,7 +66,10 @@ module HQMF
         data_criteria = nil
         if (children_criteria.length == 1)
           data_criteria = children_criteria[0]
-          subset_operator.value ||= data_criteria.scalar_comparison if data_criteria and data_criteria.respond_to? :scalar_comparison
+          if data_criteria and !data_criteria.value.nil?
+            subset_operator.value ||= data_criteria.value 
+            data_criteria.value = nil
+          end
           data_criteria.subset_operators ||= []
           data_criteria.subset_operators << subset_operator
         else
@@ -77,10 +80,11 @@ module HQMF
             scalar_comparison = nil
             children_criteria.each do |criteria|
               if scalar_comparison.nil?
-                scalar_comparison = criteria.scalar_comparison if criteria.respond_to? :scalar_comparison
+                scalar_comparison = criteria.value
               else
-                raise "multiple different scalar comparisons for a grouping data criteria" if scalar_comparison != criteria.scalar_comparison
+                raise "multiple different scalar comparisons for a grouping data criteria" if scalar_comparison != criteria.value
               end
+              criteria.value = nil
             end 
             subset_operator.value ||= scalar_comparison
           end
