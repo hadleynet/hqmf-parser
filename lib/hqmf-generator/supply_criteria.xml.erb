@@ -15,8 +15,6 @@
           </definition>
           <%= xml_for_derivation(criteria) %>
           <%= xml_for_subsets(criteria) %>
-          <%- criteria.temporal_references.each do |relationship| -%>
-          <%= xml_for_temporal_reference(relationship) %>
-          <%- end -%>
+          <%= xml_for_temporal_references(criteria) %>
         </supplyCriteria>
       </entry>

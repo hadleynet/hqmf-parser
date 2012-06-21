@@ -88,6 +88,7 @@ module HQMF2
       end
       
       def xml_for_subsets(data_criteria)
+        subsets_xml = []
         if data_criteria.subset_operators
           subsets_xml = data_criteria.subset_operators.collect do |operator|
             template_path = File.expand_path(File.join('..', 'subset.xml.erb'), __FILE__)
@@ -128,13 +129,19 @@ module HQMF2
         template.result(context.get_binding)
       end
       
-      def xml_for_temporal_reference(reference)
-        template_path = File.expand_path(File.join('..', 'temporal_relationship.xml.erb'), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'relationship' => reference}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)
+      def xml_for_temporal_references(criteria)
+        refs = []
+        if criteria.temporal_references
+          refs = criteria.temporal_references.collect do |reference|
+            template_path = File.expand_path(File.join('..', 'temporal_relationship.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'doc' => doc, 'relationship' => reference}
+            context = ErbContext.new(params)
+            template.result(context.get_binding)
+          end
+        end
+        refs.join
       end
       
       def oid_for_name(code_system_name)
@@ -165,13 +172,13 @@ module HQMF2
       
       def data_criteria_template_name(data_criteria)
         case data_criteria.type
-        when :conditions 
+        when :conditions, :activeDiagnoses 
           'condition_criteria.xml.erb'
         when :encounters 
           'encounter_criteria.xml.erb'
         when :procedures
           'procedure_criteria.xml.erb'
-        when :medications
+        when :medications, :allMedications
           'substance_criteria.xml.erb'
         when :medication_supply
           'supply_criteria.xml.erb'
@@ -186,15 +193,15 @@ module HQMF2
 
       def section_name(data_criteria)
         case data_criteria.type
-        when :conditions
+        when :conditions, :activeDiagnoses
           'Problems'
         when :encounters
           'Encounters'
-        when :results
+        when :results, :laboratoryTests
           'Results'
         when :procedures
           'Procedures'
-        when :medications
+        when :medications, :allMedications
           'Medications'
         when :medication_supply
           'RX'
@@ -210,12 +217,13 @@ module HQMF2
       end
 
       def element_name_prefix(data_criteria)
-        case data_criteria.type
+        type = data_criteria ? data_criteria.type : :observation
+        case type
         when :encounters
           'encounter'
         when :procedures
           'procedure'
-        when :medications
+        when :medications, :allMedications
           'substanceAdministration'
         when :medication_supply
           'supply'

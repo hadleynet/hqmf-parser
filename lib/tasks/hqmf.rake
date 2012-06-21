@@ -14,7 +14,7 @@ namespace :hqmf do
     Pry.start
   end
 
-  desc 'Parse all xml files to JSON and save them to /tmp'
+  desc 'Parse all xml files to JSON and save them to ./tmp'
   task :parse_all, [:path, :version] do |t, args|
     
     raise "You must specify the HQMF XML file path to convert" unless args.path
@@ -33,7 +33,7 @@ namespace :hqmf do
     
   end
 
-  desc 'Parse specified xml file to JSON and save it to /tmp'
+  desc 'Parse specified xml file to JSON and save it to ./tmp'
   task :parse, [:file,:version] do |t, args|
     FileUtils.mkdir_p File.join(".","tmp",'json')
     
@@ -51,7 +51,7 @@ namespace :hqmf do
     
   end
   
-  desc 'Parse specified xml file to V1 JSON and save it to /tmp'
+  desc 'Parse specified xml file to V1 JSON and save it to ./tmp'
   task :parse_v1, [:file] do |t, args|
     FileUtils.mkdir_p File.join(".","tmp",'json')
     
@@ -67,7 +67,7 @@ namespace :hqmf do
     
   end
 
-  desc 'Convert V1 JSON to V2 JSON and save it to /tmp'
+  desc 'Convert V1 JSON to V2 JSON and save it to ./tmp'
   task :convert, [:file] do |t, args|
     FileUtils.mkdir_p File.join(".","tmp",'json')
     
@@ -80,6 +80,30 @@ namespace :hqmf do
     
     outfile = File.join(".","tmp",'json',"#{filename}_v2.json")
     File.open(outfile, 'w') {|f| f.write(converted.to_json.to_json.gsub(/",/,"\",\n")) }
+    puts "wrote result to: #{outfile}"
+    
+  end
+  
+  desc 'Convert specified HQMF V1 xml file to HQMF V2 and save it to ./tmp'
+  task :upgrade, [:file] do |t, args|
+    FileUtils.mkdir_p File.join(".","tmp",'xml')
+    
+    raise "You must specify the HQMF XML file to convert" unless args.file
+    
+    version = HQMF::Parser::HQMF_VERSION_1
+    file = File.expand_path(args.file)
+    filename = Pathname.new(file).basename
+    
+    doc = HQMF::Parser.parse(File.open(file).read, version)
+    
+    hqmf_xml = HQMF2::Generator::ModelProcessor.to_hqmf(doc)
+    xml = Nokogiri.XML(hqmf_xml) do |config|
+      config.default_xml.noblanks
+    end
+
+    outfile = File.join(".","tmp",'xml',"#{filename}")
+    File.open(outfile, 'w') {|f| f.write(xml.to_xml(:indent => 2)) }
+    
     puts "wrote result to: #{outfile}"
     
   end
