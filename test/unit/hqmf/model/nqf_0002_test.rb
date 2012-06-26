@@ -174,6 +174,8 @@ module HQMFModel
 
       numerator = 
       {conjunction?:true,
+       title: 'Numerator',
+       type: 'NUMER',
        :preconditions=>
         [{:preconditions=>
            [{:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest",
@@ -190,6 +192,8 @@ module HQMFModel
       ipp = 
       {
         conjunction?:true,
+        title: 'Initial Patient Population',
+        type: 'IPP',
         :preconditions=>[
           {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}, {:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}],:conjunction_code=>"allTrue"}]
       }
@@ -201,6 +205,8 @@ module HQMFModel
       
       denom = 
       {conjunction?:true,
+        title: 'Denominator',
+        type: 'DENOM',
        :preconditions=>
         [{:preconditions=>
            [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"},
@@ -231,7 +237,6 @@ module HQMFModel
       model = HQMF::Document.from_json(JSON.parse(json.to_json))
       
       json2 = model.to_json
-      
       diff = json.diff_hash(json2)
       assert diff.empty?, "differences: #{diff.to_json}"
     
@@ -247,7 +252,7 @@ module HQMFModel
         refute_nil model.data_criteria(key)
       end
 
-      model.all_population_criteria.size.must_equal 3
+      model.all_population_criteria.size.must_equal 4
       
       ["NUMER", "DENOM", "IPP"].each do |key|
         refute_nil model.population_criteria(key)

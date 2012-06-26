@@ -24,6 +24,11 @@ module HQMF2
       end
     end
     
+    # Get populations (i.e. submeasures) currently just return a static single population
+    def populations
+      [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'EXCL'=>'EXCL', 'DENEXCEP'=>'DENEXCEP'}]
+    end
+    
     # Get the title of the measure
     # @return [String] the title
     def title
@@ -74,7 +79,7 @@ module HQMF2
       dcs = all_data_criteria.collect {|dc| dc.to_model}
       pcs = all_population_criteria.collect {|pc| pc.to_model}
       attrs = []
-      HQMF::Document.new(id, title, description, pcs, dcs, attrs, measure_period.to_model)
+      HQMF::Document.new(id, title, description, pcs, dcs, attrs, measure_period.to_model, populations)
     end
     
     private

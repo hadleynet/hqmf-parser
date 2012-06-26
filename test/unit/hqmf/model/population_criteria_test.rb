@@ -15,11 +15,11 @@ module HQMFModel
     }
     
     ['IPP','DENOM','NUMER','DENEXCEP'].each do |id|
-      HQMF::PopulationCriteria.new(id, []).conjunction_code.must_equal expected[id]
+      HQMF::PopulationCriteria.new(id, id, []).conjunction_code.must_equal expected[id]
     end
     
     assert_raises(RuntimeError) {
-      HQMF::PopulationCriteria.new("blah", []).conjunction_code
+      HQMF::PopulationCriteria.new("blah", 'blah', []).conjunction_code
     }
       
     end

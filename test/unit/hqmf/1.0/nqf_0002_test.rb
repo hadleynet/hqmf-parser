@@ -37,7 +37,7 @@ module HQMF1
         refute_nil logic[logic_key]
       end
       
-      population_criteria = logic["NUMER"]
+      population_criteria = logic["NUMER"][:preconditions]
       population_criteria.size.must_equal 2
       refute_nil population_criteria[0][:comparison]
       assert_nil(population_criteria[0][:preconditions])
@@ -52,7 +52,7 @@ module HQMF1
       population_criteria[0][:comparison][:restrictions][0][:type].must_equal "EAS"
       assert population_criteria[0][:comparison][:restrictions][0][:negation]
       
-      population_criteria = logic["IPP"]
+      population_criteria = logic["IPP"][:preconditions]
       
       population_criteria.size.must_equal 2
       refute_nil population_criteria[0][:comparison]
@@ -82,7 +82,7 @@ module HQMF1
       population_criteria[1][:comparison][:restrictions][0][:range][:high][:unit].must_equal "a"
       population_criteria[1][:comparison][:restrictions][0][:range][:high][:inclusive?].must_equal true
 
-      population_criteria = logic["DENOM"]
+      population_criteria = logic["DENOM"][:preconditions]
 
       population_criteria.size.must_equal 4
       

@@ -30,22 +30,40 @@ module HQMF1
       if attr_val('cda:observation/@actionNegationInd')=='true'
         value = 'EXCL'
       end
-      value
+      value.upcase
     end
     
     # Get the id for the population criteria, used elsewhere in the HQMF document to
     # refer to this criteria
     # @return [String] the id
     def id
-      attr_val('cda:observation/cda:id/@root')
+      attr_val('cda:observation/cda:id/@root').upcase
+    end
+    
+    def title
+      attr_val('cda:observation/cda:value/@displayName')
+    end
+    
+    def reference
+      reference = attr_val('./cda:observation/cda:sourceOf[@typeCode="PRCN"]/cda:observation[@classCode="OBS"]/cda:id/@root')
+      reference = reference.upcase if reference
+      reference
     end
     
     def to_json
       
-      section = self.code
-      json = {section => []}
-      self.preconditions.each {|precondition| json[section] << precondition.to_json}
-      json
+      json = {}
+      self.preconditions.compact.each do |precondition| 
+        json[:preconditions] ||= []
+        json[:preconditions] << precondition.to_json
+      end
+      
+      json[:id] = id
+      json[:title] = title
+      json[:code] = code
+      json[:reference] = reference
+      
+      {self.code => json}
       
     end
     

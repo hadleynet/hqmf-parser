@@ -5,28 +5,33 @@ module HQMF
   
     include HQMF::Conversion::Utilities
 
-    attr_reader :preconditions, :id
+    attr_reader :preconditions, :id, :type, :title
     
     # Create a new population criteria
     # @param [String] id
     # @param [Array#Precondition] preconditions 
-    def initialize(id, preconditions)
+    # @param [String] title (optional)
+    def initialize(id, type, preconditions, title='')
       @id = id
       @preconditions = preconditions
+      @type = type
+      @title=title
     end
     
     # Create a new population criteria from a JSON hash keyed off symbols
     def self.from_json(id, json)
       preconditions = json["preconditions"].map do |precondition|
         HQMF::Precondition.from_json(precondition)
-      end
+      end if json['preconditions']
+      type = json["type"]
+      title = json['title']
       
-      HQMF::PopulationCriteria.new(id, preconditions)
+      HQMF::PopulationCriteria.new(id, type, preconditions, title)
     end
     
     def to_json
       x = nil
-      json = build_hash(self, [:conjunction?])
+      json = build_hash(self, [:conjunction?, :type, :title])
       json[:preconditions] = x if x = json_array(@preconditions)
       {self.id.to_sym => json}
     end
@@ -41,10 +46,9 @@ module HQMF
     # Get the conjunction code, e.g. allTrue, atLeastOneTrue
     # @return [String] conjunction code
     def conjunction_code
-      case id
-      when 'IPP', 'DENOM', 'NUMER'
+      if (id.start_with? 'IPP' or id.start_with? 'DENOM' or id.start_with? 'NUMER')
         HQMF::Precondition::ALL_TRUE
-      when 'DENEXCEP'
+      elsif (id.start_with? 'DENEXCEP' or id.start_with? 'EXCL')
         HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
         raise "Unknown population type [#{id}]"

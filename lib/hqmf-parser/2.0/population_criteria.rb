@@ -44,7 +44,7 @@ module HQMF2
     
     def to_model
       mps = preconditions.collect {|p| p.to_model}
-      HQMF::PopulationCriteria.new(id, mps)
+      HQMF::PopulationCriteria.new(id, id, mps)
     end
 
   end

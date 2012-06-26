@@ -6,7 +6,7 @@ module HQMF
 
     include HQMF::Conversion::Utilities
 
-    attr_reader :id, :title, :description, :measure_period, :attributes
+    attr_reader :id, :title, :description, :measure_period, :attributes, :populations
   
     # Create a new HQMF::Document which can be converted to JavaScript
     # @param [String] id
@@ -15,14 +15,16 @@ module HQMF
     # @param [Array#PopulationCritera] population_criteria 
     # @param [Array#DataCriteria] data_criteria
     # @param [Array#Attribute] attributes
+    # @param [Array#Hash] populations
     # @param [Range] measure_period
-    def initialize(id, title, description, population_criteria, data_criteria, attributes, measure_period)
+    def initialize(id, title, description, population_criteria, data_criteria, attributes, measure_period, populations=nil)
       @id = id
       @title = title
       @description = description
       @population_criteria = population_criteria
       @data_criteria = data_criteria
       @attributes = attributes
+      @populations = populations || [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'EXCL'=>'EXCL', 'DENEXCEP'=>'DENEXCEP'}]
       @measure_period = measure_period
     end
     
@@ -41,11 +43,13 @@ module HQMF
       json["data_criteria"].each do |key, data_criteria|
         data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)
       end
+      
+      populations = json["populations"] if json["populations"]
 
       attributes = json["attributes"].map {|attribute| HQMF::Attribute.from_json(attribute)} if json["attributes"]
 
       measure_period = HQMF::Range.from_json(json["measure_period"]) if json["measure_period"]
-      HQMF::Document.new(id, title, description, population_criterias, data_criterias, attributes, measure_period)
+      HQMF::Document.new(id, title, description, population_criterias, data_criterias, attributes, measure_period,populations)
     end
     
     def to_json
@@ -63,6 +67,8 @@ module HQMF
       
       x = nil
       json[:attributes] = x if x = json_array(@attributes)
+      
+      json[:populations] = @populations
       
       json[:measure_period] = @measure_period.to_json
 

@@ -28,13 +28,15 @@ module HQMF
 
       data_criteria = @data_criteria_converter.final_v2_data_criteria
       
+      populations = @population_criteria_converter.sub_measures
+      
       # Create a new HQMF::Document which can be converted to JavaScript
       # @param [String] title
       # @param [String] description
       # @param [Array#PopulationCritera] population_criteria 
       # @param [Array#DataCriteria] data_criteria
       # @param [Range] measure_period
-      doc = HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period)
+      doc = HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period, populations)
        
       backfill_patient_characteristics_with_codes(doc, codes)
       
