@@ -18,6 +18,10 @@ module HQMF
       measure_period = parse_measure_period(json)
       @data_criteria_converter = DataCriteriaConverter.new(json, measure_period)
       
+      # source data criteria are the original unmodified v2 data criteria
+      source_data_criteria = []
+      @data_criteria_converter.v2_data_criteria.each {|criteria| source_data_criteria << criteria}
+      
       # PASS 1
       @population_criteria_converter = PopulationCriteriaConverter.new(json, @data_criteria_converter)
       population_criteria = @population_criteria_converter.population_criteria
@@ -30,13 +34,7 @@ module HQMF
       
       populations = @population_criteria_converter.sub_measures
       
-      # Create a new HQMF::Document which can be converted to JavaScript
-      # @param [String] title
-      # @param [String] description
-      # @param [Array#PopulationCritera] population_criteria 
-      # @param [Array#DataCriteria] data_criteria
-      # @param [Range] measure_period
-      doc = HQMF::Document.new(id, title, description, population_criteria, data_criteria, attributes, measure_period, populations)
+      doc = HQMF::Document.new(id, title, description, population_criteria, data_criteria, source_data_criteria, attributes, measure_period, populations)
        
       backfill_patient_characteristics_with_codes(doc, codes)
       
