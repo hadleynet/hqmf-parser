@@ -126,8 +126,8 @@ require_relative '../../../test_helper'
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SBS', criteria.temporal_references[0].type
       assert_equal 'MeasurePeriod', criteria.temporal_references[0].reference.id
-      assert_equal '-50', criteria.temporal_references[0].offset.value
-      assert_equal 'a', criteria.temporal_references[0].offset.unit
+      assert_equal '-50', criteria.temporal_references[0].range.low.value
+      assert_equal 'a', criteria.temporal_references[0].range.low.unit
 
       criteria = @doc.data_criteria('ageBetween17and64')
       assert_equal :characteristic, criteria.type
@@ -191,8 +191,8 @@ require_relative '../../../test_helper'
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SAS', criteria.temporal_references[0].type
       assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
-      assert_equal '-1', criteria.temporal_references[0].offset.value
-      assert_equal 'a', criteria.temporal_references[0].offset.unit
+      assert_equal '-1', criteria.temporal_references[0].range.low.value
+      assert_equal 'a', criteria.temporal_references[0].range.low.unit
 
       criteria = @doc.data_criteria('EDorInpatientEncounter')
       assert_equal :encounters, criteria.type
@@ -278,8 +278,8 @@ require_relative '../../../test_helper'
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SBS', criteria.temporal_references[0].type
       assert_equal 'MeasurePeriod', criteria.temporal_references[0].reference.id
-      assert_equal '-50', criteria.temporal_references[0].offset.value
-      assert_equal 'a', criteria.temporal_references[0].offset.unit
+      assert_equal '-50', criteria.temporal_references[0].range.low.value
+      assert_equal 'a', criteria.temporal_references[0].range.low.unit
 
       criteria = @model.data_criteria('ageBetween17and64')
       assert_equal :characteristic, criteria.type
@@ -343,8 +343,8 @@ require_relative '../../../test_helper'
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SAS', criteria.temporal_references[0].type
       assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
-      assert_equal '-1', criteria.temporal_references[0].offset.value
-      assert_equal 'a', criteria.temporal_references[0].offset.unit
+      assert_equal '-1', criteria.temporal_references[0].range.low.value
+      assert_equal 'a', criteria.temporal_references[0].range.low.unit
 
       criteria = @model.data_criteria('EDorInpatientEncounter')
       assert_equal :encounters, criteria.type

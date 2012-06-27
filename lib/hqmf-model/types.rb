@@ -164,32 +164,27 @@ module HQMF
     TYPES = ['DURING','SBS','SAS','SBE','SAE','EBS','EAS','EBE','EAE','SDU','EDU','ECW','SCW','CONCURRENT']
     INVERSION = {'SBS' => 'EAE','EAE' => 'SBS','SAS' => 'EBE','EBE' => 'SAS','SBE' => 'EAS','EAS' => 'SBE','SAE' => 'EBS','EBS' => 'SAE'}
     
+    attr_reader :type, :reference, :range
     
-    attr_reader :type, :reference, :offset
     # @param [String] type
     # @param [Reference] reference
-    # @param [Value] range
-    def initialize(type,reference,offset)
+    # @param [Range] range
+    def initialize(type, reference, range)
       @type = type
       @reference = reference
-      if (offset.is_a? HQMF::Range)
-        if offset.high
-          raise "cannot handle range" if offset.low
-          offset = offset.high
-          offset.value = offset.value.to_f * -1
-        elsif offset.low
-          offset = offset.low
-        end
+      if (range.is_a? HQMF::Value)
+        @range = HQMF::Range.new('IVL_PQ', range, range, nil)
+      else
+        @range = range
       end
-      @offset = offset
     end
     
     def self.from_json(json)
       type = json["type"] if json["type"]
       reference = HQMF::Reference.new(json["reference"]) if json["reference"]
-      offset = HQMF::Value.from_json(json["offset"]) if json["offset"]
+      range = HQMF::Range.from_json(json["range"]) if json["range"]
       
-      HQMF::TemporalReference.new(type,reference,offset)
+      HQMF::TemporalReference.new(type,reference,range)
     end
     
     
@@ -197,7 +192,7 @@ module HQMF
       x = nil
       json = build_hash(self, [:type])
       json[:reference] = @reference.to_json if @reference
-      json[:offset] = @offset.to_json if @offset
+      json[:range] = @range.to_json if @range
       json
     end
     

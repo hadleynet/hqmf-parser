@@ -27,8 +27,8 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 1, criteria.temporal_references.length
     assert_equal 'SBS', criteria.temporal_references[0].type
     assert_equal 'MeasurePeriod', criteria.temporal_references[0].reference.id
-    assert_equal '-50', criteria.temporal_references[0].offset.value
-    assert_equal 'a', criteria.temporal_references[0].offset.unit
+    assert_equal '-50', criteria.temporal_references[0].range.low.value
+    assert_equal 'a', criteria.temporal_references[0].range.low.unit
 
     criteria = @model.data_criteria('DummyProcedureAfterHasDiabetesWithCount')
     assert_equal :procedures, criteria.type
@@ -38,8 +38,8 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert criteria.effective_time.low.inclusive
     assert criteria.effective_time.high.inclusive
     assert_equal 1, criteria.temporal_references.length
-    assert_equal '-1', criteria.temporal_references[0].offset.value
-    assert_equal 'a', criteria.temporal_references[0].offset.unit
+    assert_equal '-1', criteria.temporal_references[0].range.low.value
+    assert_equal 'a', criteria.temporal_references[0].range.low.unit
     assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
     assert !criteria.code_list_id
     assert criteria.inline_code_list

@@ -47,7 +47,7 @@ module HQMF2
   # Represents a HQMF physical quantity which can have low and high bounds
   class Range
     include HQMF2::Utilities
-    attr_reader :low, :high, :width
+    attr_accessor :low, :high, :width
     
     def initialize(entry, type=nil)
       @type = type
@@ -163,19 +163,29 @@ module HQMF2
   class TemporalReference
     include HQMF2::Utilities
     
-    attr_reader :type, :reference, :offset
+    attr_reader :type, :reference, :range
 
     def initialize(entry)
       @entry = entry
       @type = attr_val('./@typeCode')
       @reference = Reference.new(@entry.at_xpath('./*/cda:id', HQMF2::Document::NAMESPACES))
-      offset_def = @entry.at_xpath('./cda:pauseQuantity', HQMF2::Document::NAMESPACES)
-      @offset = Value.new(offset_def) if offset_def
+      range_def = @entry.at_xpath('./cda:pauseQuantity', HQMF2::Document::NAMESPACES)
+      if range_def
+        type_def = range_def.at_xpath('./@xsi:type', HQMF2::Document::NAMESPACES)
+        if type_def && type_def.value=='IVL_PQ'
+          @range = HQMF2::Range.new(range_def, 'IVL_PQ')
+        else
+          value = Value.new(range_def)
+          @range = Range.new(nil, 'IVL_PQ')
+          @range.low = value
+          @range.high = value
+        end
+      end
     end
     
     def to_model
-      om = offset ? offset.to_model : nil
-      HQMF::TemporalReference.new(type, reference.to_model, om)
+      rm = range ? range.to_model : nil
+      HQMF::TemporalReference.new(type, reference.to_model, rm)
     end  
   end
 

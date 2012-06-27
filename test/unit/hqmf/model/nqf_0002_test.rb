@@ -51,7 +51,7 @@ module HQMFModel
          :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
          :temporal_references=>
           [{:type=>"DURING", :reference=>"MeasurePeriod"},
-           {:type=>"SBS",:reference=>"GROUP_SBS",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+           {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
            
       expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
          :description=>"",
@@ -61,7 +61,7 @@ module HQMFModel
          
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test",
          :standard_category=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:property=>:unknown,:type=>:laboratoryTests,:status=>"performed",
-         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
           
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics",
          :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"dispensed"}
@@ -76,7 +76,7 @@ module HQMFModel
           :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
           :temporal_references=>
            [{:type=>"DURING", :reference=>"MeasurePeriod"},
-            {:type=>"SBS",:reference=>"GROUP_SBS",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+            {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
             
       expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
           :description=>"",
@@ -87,7 +87,7 @@ module HQMFModel
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test",
           :standard_category=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:property=>:unknown,:type=>:laboratoryTests,:status=>"performed",
           :temporal_references=>
-           [{:type=>"SAE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+           [{:type=>"SAE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
            
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"Encounter ambulatory including pediatrics",:description=>"Encounter: Encounter ambulatory including pediatrics",
           :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
@@ -115,7 +115,7 @@ module HQMFModel
            :standard_category=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:property=>:unknown,:type=>:encounters,
            :temporal_references=>
             [{:type=>"DURING", :reference=>"MeasurePeriod"},
-             {:type=>"SBS",:reference=>"GROUP_SBS",:offset=>{:type=>'PQ', :unit=>"d", :value=>-3.0, inclusive?:true}}]}
+             {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
              
       expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
            :description=>"",
@@ -129,24 +129,24 @@ module HQMFModel
            
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics",
             :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"dispensed",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true}}}]}
             
       expected_dc[:MedicationOrderPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Order: pharyngitis antibiotics",
             :standard_category=>"medication",:qds_data_type=>"medication_order",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"ordered",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true}}}]}
             
       expected_dc[:MedicationActivePharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Active: pharyngitis antibiotics",
             :standard_category=>"medication",:qds_data_type=>"medication_active",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:property=>:unknown,:type=>:allMedications,:status=>"active",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:offset=>{:type=>'PQ', :unit=>"d", :value=>-30.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true}}}]}
             
       age_codes = {'LOINC'=>['21112-8']}      
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date",
             :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:birthtime,:inline_code_list=>age_codes,:type=>:characteristic,
-            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:type=>'PQ', :unit=>"a", :value=>"2", inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:range=>{:type=>'IVL_PQ', :low=>{:type=>'PQ', :unit=>"a", :value=>"2", inclusive?:true}}}]}
             
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date",
             :standard_category=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:birthtime,:inline_code_list=>age_codes,:type=>:characteristic,
-            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:offset=>{:type=>'PQ', :unit=>"a", :value=>-17.0, inclusive?:true}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"a", :value=>"17", inclusive?:true}}}]}
        
       all_criteria.keys.each do |key|
         orig_key = key
@@ -290,7 +290,7 @@ module HQMFModel
         expected[:temporal_references].each do |expected_ref|
           this_matches = true
           this_matches &&= expected_ref[:type] == reference[:type]
-          this_matches &&= expected_ref[:offset] == reference[:offset]
+          this_matches &&= expected_ref[:range] == reference[:range]
           key1 = reference[:reference].to_s.gsub(/_precondition_\d+.*/, '')
           key2 = reference[:reference].to_s.gsub(/_CHILDREN_\d+.*/, '')
           this_matches &&= (expected_ref[:reference] == key1 || expected_ref[:reference] == key2)
