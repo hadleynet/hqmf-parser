@@ -14,15 +14,17 @@ module HQMF
     # @param [String] description
     # @param [Array#PopulationCritera] population_criteria 
     # @param [Array#DataCriteria] data_criteria
+    # @param [Array#DataCriteria] source_data_criteria
     # @param [Array#Attribute] attributes
     # @param [Array#Hash] populations
     # @param [Range] measure_period
-    def initialize(id, title, description, population_criteria, data_criteria, attributes, measure_period, populations=nil)
+    def initialize(id, title, description, population_criteria, data_criteria, source_data_criteria, attributes, measure_period, populations=nil)
       @id = id
       @title = title
       @description = description
       @population_criteria = population_criteria
       @data_criteria = data_criteria
+      @source_data_criteria = source_data_criteria
       @attributes = attributes
       @populations = populations || [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'EXCL'=>'EXCL', 'DENEXCEP'=>'DENEXCEP'}]
       @measure_period = measure_period
@@ -43,13 +45,18 @@ module HQMF
       json["data_criteria"].each do |key, data_criteria|
         data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)
       end
+
+      source_data_criterias = []
+      json["source_data_criteria"].each do |key, data_criteria|
+        source_data_criterias << HQMF::DataCriteria.from_json(key.to_s, data_criteria)
+      end
       
       populations = json["populations"] if json["populations"]
 
       attributes = json["attributes"].map {|attribute| HQMF::Attribute.from_json(attribute)} if json["attributes"]
 
       measure_period = HQMF::Range.from_json(json["measure_period"]) if json["measure_period"]
-      HQMF::Document.new(id, title, description, population_criterias, data_criterias, attributes, measure_period,populations)
+      HQMF::Document.new(id, title, description, population_criterias, data_criterias, source_data_criterias, attributes, measure_period,populations)
     end
     
     def to_json
@@ -63,6 +70,11 @@ module HQMF
       json[:data_criteria] = {}
       @data_criteria.each do |data|
         json[:data_criteria].merge! data.to_json
+      end
+
+      json[:source_data_criteria] = {}
+      @source_data_criteria.each do |data|
+        json[:source_data_criteria].merge! data.to_json
       end
       
       x = nil
