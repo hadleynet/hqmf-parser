@@ -118,7 +118,9 @@
             </observationReference>
           </definition>
           <temporallyRelatedInformation typeCode="SBS">
-            <pauseQuantity value="-50" unit="a"/>
+            <pauseQuantity xsi:type='IVL_PQ'>
+              <low value="50" unit="a"/>
+            </pauseQuantity>
             <observationReference moodCode="EVN">
               <id root="0" extension="MeasurePeriod"/>
             </observationReference>
