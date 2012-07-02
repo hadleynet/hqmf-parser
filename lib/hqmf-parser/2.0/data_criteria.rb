@@ -12,9 +12,8 @@ module HQMF2
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
-      @negation = false
-      @negation_code_list_id = nil
       @status = attr_val('./*/cda:statusCode/@code')
+      extract_negation()
       @effective_time = extract_effective_time
       @temporal_references = extract_temporal_references
       @derivation_operator = extract_derivation_operator
@@ -120,6 +119,16 @@ module HQMF2
     end
     
     private
+    
+    def extract_negation
+      negation = attr_val('./*/@actionNegationInd')
+      @negation = (negation=='true')
+      if @negation
+        @negation_code_list_id = attr_val('./*/cda:reasonCode/@valueSet')
+      else
+        @negation_code_list_id = nil
+      end
+    end
     
     def extract_child_criteria
       @entry.xpath('./*/cda:excerpt/*/cda:id', HQMF2::Document::NAMESPACES).collect do |ref|

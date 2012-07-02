@@ -563,6 +563,49 @@
         </observationCriteria>
       </entry>
       <entry>
+        <localVariableName>DiabetesMedNotAdministeredForNoStatedReason</localVariableName>
+        <substanceAdministrationCriteria actionNegationInd="true">
+          <id root="0" extension="DiabetesMedNotAdministeredForNoStatedReason"/>
+          <effectiveTime xsi:type="IVL_TS">
+            <low nullFlavor="DER">
+              <expression>StartDate.add(new PQ(-2,"a"))</expression>
+            </low>
+          </effectiveTime>
+          <participant typeCode="CSM">
+            <roleParticipant classCode="THER">
+              <code valueSet="2.16.840.1.113883.3.464.1.94"/>
+            </roleParticipant>
+          </participant>
+          <definition>
+            <substanceAdministrationReference moodCode="DEF">
+              <id root="0" extension="Medications"/>
+            </substanceAdministrationReference>
+          </definition>
+        </substanceAdministrationCriteria>
+      </entry>
+      <entry>
+        <localVariableName>DiabetesMedNotAdministeredPatientAllergic</localVariableName>
+        <substanceAdministrationCriteria actionNegationInd="true">
+          <id root="0" extension="DiabetesMedNotAdministeredPatientAllergic"/>
+          <effectiveTime xsi:type="IVL_TS">
+            <low nullFlavor="DER">
+              <expression>StartDate.add(new PQ(-2,"a"))</expression>
+            </low>
+          </effectiveTime>
+          <reasonCode valueSet="1.2.3.4" displayText="Allergic code set"/>
+          <participant typeCode="CSM">
+            <roleParticipant classCode="THER">
+              <code valueSet="2.16.840.1.113883.3.464.1.94"/>
+            </roleParticipant>
+          </participant>
+          <definition>
+            <substanceAdministrationReference moodCode="DEF">
+              <id root="0" extension="Medications"/>
+            </substanceAdministrationReference>
+          </definition>
+        </substanceAdministrationCriteria>
+      </entry>
+      <entry>
         <localVariableName>DiabetesMedAdministered</localVariableName>
         <substanceAdministrationCriteria>
           <id root="0" extension="DiabetesMedAdministered"/>
