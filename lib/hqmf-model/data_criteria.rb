@@ -7,7 +7,7 @@ module HQMF
     XPRODUCT = 'XPRODUCT'
     UNION = 'UNION'
 
-    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type, :negation
+    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type, :negation, :negation_code_list_id
     attr_accessor :id, :value, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list
   
     # Create a new data criteria instance
@@ -26,10 +26,11 @@ module HQMF
     # @param [Range] effective_time
     # @param [Hash<String,[String]>] inline_code_list
     # @param [boolean] negation
+    # @param [String] negation_code_list_id
     # @param [List<TemporalReference>] temporal_references
     # @param [List<SubsetOperator>] subset_operators
     def initialize(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator, property,type, 
-                   status, value, effective_time, inline_code_list,negation,temporal_references, subset_operators)
+                   status, value, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
       @id = id
       @title = title
       @description = description
@@ -45,6 +46,7 @@ module HQMF
       @effective_time = effective_time
       @inline_code_list = inline_code_list
       @negation = negation
+      @negation_code_list_id = negation_code_list_id
       @temporal_references = temporal_references
       @subset_operators = subset_operators
     end
@@ -62,6 +64,7 @@ module HQMF
       type = json["type"].to_sym if json["type"]
       status = json["status"] if json["status"]
       negation = json["negation"] || false
+      negation_code_list_id = json['negation_code_list_id'] if json['negation_code_list_id']
       temporal_references = json["temporal_references"].map {|reference| HQMF::TemporalReference.from_json(reference)} if json["temporal_references"]
       subset_operators = json["subset_operators"].map {|operator| HQMF::SubsetOperator.from_json(operator)} if json["subset_operators"]
       value = convert_value(json["value"]) if json["value"]
@@ -69,7 +72,7 @@ module HQMF
       inline_code_list = json["inline_code_list"].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json["inline_code_list"]
       
       HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator,
-                            property, type, status, value, effective_time, inline_code_list, negation, temporal_references, subset_operators)
+                            property, type, status, value, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
     end
     
     def to_json
@@ -79,7 +82,7 @@ module HQMF
     
     def base_json
       x = nil
-      json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :status, :negation])
+      json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :status, :negation, :negation_code_list_id])
       json[:subset_value] = @subset_value.to_json if @subset_value
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = @value.to_json if @value
