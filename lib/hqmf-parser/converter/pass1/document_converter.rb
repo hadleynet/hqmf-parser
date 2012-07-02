@@ -68,7 +68,7 @@ module HQMF
             value_set = codes[data_criteria.code_list_id]
             raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
           else
-            Kernel.warn "no code set to back fill"
+            Kernel.warn "no code set to back fill: #{data_criteria.title}"
             next
           end
           

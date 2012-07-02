@@ -109,7 +109,7 @@ require_relative '../../../test_helper'
   
     def test_data_criteria
       data_criteria = @doc.all_data_criteria
-      assert_equal 31, data_criteria.length
+      assert_equal 33, data_criteria.length
     
       criteria = @doc.data_criteria('EndDate')
       assert criteria.to_xml.include?('extension="EndDate"')
@@ -118,6 +118,14 @@ require_relative '../../../test_helper'
       assert_equal HQMF2::Value, criteria.value.class
       assert_equal '20101231', criteria.value.value
       assert_equal 'TS', criteria.value.type
+      
+      criteria = @doc.data_criteria('DiabetesMedNotAdministeredForNoStatedReason')
+      assert criteria.negation
+      assert !criteria.negation_code_list_id
+
+      criteria = @doc.data_criteria('DiabetesMedNotAdministeredPatientAllergic')
+      assert criteria.negation
+      assert_equal '1.2.3.4', criteria.negation_code_list_id
 
       criteria = @doc.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
       assert_equal :characteristic, criteria.type
@@ -234,6 +242,7 @@ require_relative '../../../test_helper'
       assert_equal '%', criteria.value.low.unit
 
       criteria = @doc.data_criteria('DiabetesMedAdministered')
+      assert !criteria.negation
       assert_equal :medications, criteria.type
       assert_equal 'DiabetesMedAdministered', criteria.title
       assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
@@ -264,7 +273,7 @@ require_relative '../../../test_helper'
     
     def test_model_data_criteria
       data_criteria = @model.all_data_criteria
-      assert_equal 31, data_criteria.length
+      assert_equal 33, data_criteria.length
     
       criteria = @model.data_criteria('EndDate')
       assert_equal :variable, criteria.type
@@ -272,6 +281,14 @@ require_relative '../../../test_helper'
       assert_equal HQMF::Value, criteria.value.class
       assert_equal '20101231', criteria.value.value
       assert_equal 'TS', criteria.value.type
+
+      criteria = @model.data_criteria('DiabetesMedNotAdministeredForNoStatedReason')
+      assert criteria.negation
+      assert !criteria.negation_code_list_id
+
+      criteria = @model.data_criteria('DiabetesMedNotAdministeredPatientAllergic')
+      assert criteria.negation
+      assert_equal '1.2.3.4', criteria.negation_code_list_id
 
       criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
       assert_equal :characteristic, criteria.type

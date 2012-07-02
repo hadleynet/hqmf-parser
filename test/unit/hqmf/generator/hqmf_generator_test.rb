@@ -18,7 +18,15 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal "Sample Quality Measure Document", @model.title.strip
     assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
-    assert_equal 31, data_criteria.length
+    assert_equal 33, data_criteria.length
+
+    criteria = @model.data_criteria('DiabetesMedNotAdministeredForNoStatedReason')
+    assert criteria.negation
+    assert !criteria.negation_code_list_id
+
+    criteria = @model.data_criteria('DiabetesMedNotAdministeredPatientAllergic')
+    assert criteria.negation
+    assert_equal '1.2.3.4', criteria.negation_code_list_id
 
     criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
     assert_equal :characteristic, criteria.type
@@ -88,6 +96,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal '%', criteria.value.low.unit
 
     criteria = @model.data_criteria('DiabetesMedAdministered')
+    assert !criteria.negation
     assert_equal :medications, criteria.type
     assert_equal 'DiabetesMedAdministered', criteria.title
     assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id

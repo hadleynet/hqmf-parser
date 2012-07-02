@@ -39,7 +39,12 @@ module HQMF1
     # Return whether the precondition is negated (true) or not (false)
     def negation
       if @entry.at_xpath('./cda:act[@actionNegationInd="true"]')
-        true
+        is_negation_rationale = (comparison.restrictions.map {|restriction| restriction.type }).include? 'RSON' if comparison
+        if is_negation_rationale
+          false
+        else
+          true
+        end
       else
         false
       end

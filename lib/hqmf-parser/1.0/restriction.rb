@@ -98,7 +98,11 @@ module HQMF1
       when 'PQ'
         value = Value.new(@entry.xpath('./cda:observation/cda:value'))
       when 'CD'
-        value = attr_val('./cda:observation/cda:value/@displayName')
+        if field && field.downcase == 'status'
+          value = attr_val('./cda:observation/cda:value/@displayName')
+        else
+          value = attr_val('./cda:observation/cda:value/@code')
+        end
       when 'ANYNonNull'
         Kernel.warn "Ignoring ANYNonNull restriction value type"
       else

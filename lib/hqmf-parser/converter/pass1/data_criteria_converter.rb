@@ -184,6 +184,7 @@ module HQMF
       subset_operators = nil # filled out by operator code
       children_criteria = nil # filled out by operator and temporal reference code
       derivation_operator = nil # filled out by operator and temporal reference code
+      negation_code_list_id = nil # filled out by RSON restrictions
 
       inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
 
@@ -208,7 +209,7 @@ module HQMF
       @measure_period_v1_keys = {measure_start: measure_start_key, measure_end: measure_end_key, measure_period: measure_period_key}
       
       type = 'variable'
-      code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
+      code_list_id,negation_code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
       
       #####
       ##
