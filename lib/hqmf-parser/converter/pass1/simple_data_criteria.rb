@@ -8,7 +8,7 @@ module HQMF
 
       def self.from_data_criteria(data_criteria)
         HQMF::Converter::SimpleDataCriteria.new(data_criteria.id, data_criteria.title, data_criteria.description, data_criteria.standard_category, data_criteria.qds_data_type,
-        data_criteria.code_list_id, data_criteria.children_criteria, data_criteria.derivation_operator, data_criteria.property,data_criteria.type,data_criteria.status, data_criteria.value, data_criteria.effective_time,
+        data_criteria.code_list_id,data_criteria.negation_code_list_id, data_criteria.children_criteria, data_criteria.derivation_operator, data_criteria.property,data_criteria.type,data_criteria.status, data_criteria.value, data_criteria.effective_time,
         data_criteria.inline_code_list,data_criteria.negation,data_criteria.temporal_references, data_criteria.subset_operators)
       end
 

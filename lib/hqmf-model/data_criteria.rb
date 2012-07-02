@@ -7,8 +7,8 @@ module HQMF
     XPRODUCT = 'XPRODUCT'
     UNION = 'UNION'
 
-    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type, :negation
-    attr_accessor :id, :value, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list
+    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type
+    attr_accessor :id, :value, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list, :negation_code_list_id,  :negation
   
     # Create a new data criteria instance
     # @param [String] id
@@ -17,6 +17,7 @@ module HQMF
     # @param [String] standard_category
     # @param [String] qds_data_type
     # @param [String] code_list_id
+    # @param [String] negation_code_list_id
     # @param [List<String>] children_criteria (ids of children data criteria)
     # @param [String] derivation_operator
     # @param [String] property
@@ -28,7 +29,7 @@ module HQMF
     # @param [boolean] negation
     # @param [List<TemporalReference>] temporal_references
     # @param [List<SubsetOperator>] subset_operators
-    def initialize(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator, property,type, 
+    def initialize(id, title, description, standard_category, qds_data_type, code_list_id, negation_code_list_id, children_criteria, derivation_operator, property,type, 
                    status, value, effective_time, inline_code_list,negation,temporal_references, subset_operators)
       @id = id
       @title = title
@@ -36,6 +37,7 @@ module HQMF
       @standard_category = standard_category
       @qds_data_type = qds_data_type
       @code_list_id = code_list_id
+      @negation_code_list_id = negation_code_list_id
       @children_criteria = children_criteria
       @derivation_operator = derivation_operator
       @property = property
@@ -56,6 +58,7 @@ module HQMF
       standard_category = json["standard_category"] if json["standard_category"]
       qds_data_type = json["qds_data_type"] if json["standard_category"]
       code_list_id = json["code_list_id"] if json["code_list_id"]
+      negation_code_list_id = json["negation_code_list_id"] if json["negation_code_list_id"]
       children_criteria = json["children_criteria"] if json["children_criteria"]
       derivation_operator = json["derivation_operator"] if json["derivation_operator"]
       property = json["property"].to_sym if json["property"]
@@ -68,7 +71,7 @@ module HQMF
       effective_time = HQMF::Range.from_json(json["effective_time"]) if json["effective_time"]
       inline_code_list = json["inline_code_list"].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json["inline_code_list"]
       
-      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator,
+      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, code_list_id, negation_code_list_id, children_criteria, derivation_operator,
                             property, type, status, value, effective_time, inline_code_list, negation, temporal_references, subset_operators)
     end
     
@@ -79,7 +82,7 @@ module HQMF
     
     def base_json
       x = nil
-      json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :status, :negation])
+      json = build_hash(self, [:title,:description,:standard_category,:qds_data_type,:code_list_id,:negation_code_list_id,:children_criteria, :derivation_operator, :property, :type, :status, :negation])
       json[:subset_value] = @subset_value.to_json if @subset_value
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = @value.to_json if @value

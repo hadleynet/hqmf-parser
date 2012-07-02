@@ -63,9 +63,9 @@ module HQMF
       type = :derived
       standard_category = "GROUP"
       qds_data_type = "GROUP"
-      _code_list_id,_property,_status,_value,_effective_time,_inline_code_list,_negation = nil
+      _code_list_id,_negation_code_list_id,_property,_status,_value,_effective_time,_inline_code_list,_negation = nil
       
-      group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, criteria_ids, derivation_operator, _property,
+      group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, _negation_code_list_id, criteria_ids, derivation_operator, _property,
                                               type, _status, _value, _effective_time, _inline_code_list,_negation,nil,nil)
       
       @v2_data_criteria << group_criteria
@@ -181,11 +181,12 @@ module HQMF
       subset_operators = nil # filled out by operator code
       children_criteria = nil # filled out by operator and temporal reference code
       derivation_operator = nil # filled out by operator and temporal reference code
+      negation_code_list_id = nil # filled out by RSON restrictions
 
       inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
 
       HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, 
-        code_list_id, children_criteria, derivation_operator, property,type, status, value, effective_time, inline_code_list,
+        code_list_id, negation_code_list_id, children_criteria, derivation_operator, property,type, status, value, effective_time, inline_code_list,
         negation, temporal_references, subset_operators)
  
     end
@@ -203,7 +204,7 @@ module HQMF
       measure_end_key = attributes['MEASUREMENT_END_DATE'][:id]
       
       type = 'variable'
-      code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
+      code_list_id,negation_code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
       
       #####
       ##
@@ -213,7 +214,7 @@ module HQMF
       
       measure_period_id = HQMF::Document::MEASURE_PERIOD_ID
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,children_criteria,derivation_operator,property,type,status,value,effective_time,inline_code_list, false,temporal_references,subset_operators)
+      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,negation_code_list_id,children_criteria,derivation_operator,property,type,status,value,effective_time,inline_code_list, false,temporal_references,subset_operators)
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria

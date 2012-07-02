@@ -44,12 +44,21 @@ module HQMF
                case operator.type
                when 'REFR'
                  if operator.field.downcase == 'status'
-                   new_data_criteria.status = operator.value.downcase
-                 elsif operator.field.downcase == 'result value'
+                   # only set the status if we don't have one.  We trust the template ID statuses more than the restrictions
+                   new_data_criteria.status ||= operator.value.downcase
+                 elsif operator.field.downcase == 'result value' or operator.field.downcase == 'result'
+                   Kernel.warn "REFR result value is nil: #{new_data_criteria.title}" if (operator.value.nil?)
                    new_data_criteria.value = operator.value
                  else
                    Kernel.warn "Cannot convert the field of REFR: #{operator.field}"
                  end
+                 restriction.converted=true
+               when 'RSON'
+                 new_data_criteria.negation_code_list_id = operator.value
+                 new_data_criteria.negation=true
+                 restriction.converted=true
+               when 'SUBJ'
+                 Kernel.warn "Currently do not handle SUBJ operator"
                  restriction.converted=true
                else
                  Kernel.warn "Operator is unknown: #{operator.type}"
