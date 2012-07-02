@@ -4,12 +4,16 @@ module HQMF2
   
     include HQMF2::Utilities
     
-    attr_reader :property, :type, :status, :value, :effective_time, :section, :temporal_references, :subset_operators, :children_criteria, :derivation_operator
+    attr_reader :property, :type, :status, :value, :effective_time, :section
+    attr_reader :temporal_references, :subset_operators, :children_criteria 
+    attr_reader :derivation_operator, :negation, :negation_code_list_id
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
+      @negation = false
+      @negation_code_list_id = nil
       @status = attr_val('./*/cda:statusCode/@code')
       @effective_time = extract_effective_time
       @temporal_references = extract_temporal_references
@@ -110,11 +114,9 @@ module HQMF2
     def to_model
       mv = value ? value.to_model : nil
       met = effective_time ? effective_time.to_model : nil
-      negation = false
-      negation_code_list_id=nil
       mtr = temporal_references.collect {|ref| ref.to_model}
       mso = subset_operators.collect {|opr| opr.to_model}
-      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, negation_code_list_id, children_criteria, derivation_operator, property, type, status, mv, met, inline_code_list, negation, mtr, mso)
+      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, derivation_operator, property, type, status, mv, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso)
     end
     
     private
