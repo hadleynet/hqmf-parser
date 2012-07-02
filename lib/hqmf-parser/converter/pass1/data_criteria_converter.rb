@@ -8,14 +8,14 @@ module HQMF
       @doc = doc
       @v1_data_criteria_by_id = {}
       @v2_data_criteria = []
-      @v2_data_criteria_to_delete = []
+      @v2_data_criteria_to_delete = {}
       @specific_occurrences = {}
       @measure_period = measure_period
       parse()
     end
 
     def final_v2_data_criteria
-      v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete.include? criteria.id }
+      v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete[criteria.id] }
     end
 
     # duplicates a data criteria.  This is important because we may be modifying source data criteria like patient characteristic birthdate to add restrictions
@@ -33,7 +33,7 @@ module HQMF
         new_data_criteria.assign_precondition(parent_id)
         @v2_data_criteria << new_data_criteria
         # we want to delete the original for data criteria that have been duplicated
-        @v2_data_criteria_to_delete << data_criteria.id
+        @v2_data_criteria_to_delete[data_criteria.id] = true if !@v2_data_criteria_to_delete.keys.include? data_criteria.id
       end
       
       new_data_criteria
@@ -42,7 +42,7 @@ module HQMF
     # make sure that if a data criteria is used as a target, that it is not deleted by someone else.
     # this is required for birthdate in NQF0106
     def validate_not_deleted(target)
-      @v2_data_criteria_to_delete.delete(target) if @v2_data_criteria_to_delete.include? target
+      @v2_data_criteria_to_delete[target] = false
     end
     
     # grouping data criteria are used to allow a single reference off of a temporal reference or subset operator
