@@ -2,7 +2,7 @@ module HQMF
   # Class representing an HQMF document
   class DataCriteriaConverter
 
-    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete, :measure_period_criteria, :specific_occurrences
+    attr_reader :v1_data_criteria_by_id, :v2_data_criteria, :v2_data_criteria_to_delete, :measure_period_criteria, :measure_period_v1_keys, :specific_occurrences
 
     def initialize(doc, measure_period)
       @doc = doc
@@ -204,6 +204,8 @@ module HQMF
       measure_period_key = attributes['MEASUREMENT_PERIOD'][:id]
       measure_start_key = attributes['MEASUREMENT_START_DATE'][:id]
       measure_end_key = attributes['MEASUREMENT_END_DATE'][:id]
+      
+      @measure_period_v1_keys = {measure_start: measure_start_key, measure_end: measure_end_key, measure_period: measure_period_key}
       
       type = 'variable'
       code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil

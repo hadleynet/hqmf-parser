@@ -19,7 +19,7 @@ module HQMF
        end
        if (precondition.comparison? && !precondition.processed)
          new_data_criteria = nil
-         # duplicate the data criteria referenced by the comparision
+         # duplicate the data criteria referenced by the comparision (unless it's the measurement period. we don't modify the measurement period)
          if precondition.reference and precondition.reference.id != HQMF::Document::MEASURE_PERIOD_ID
            data_criteria = @data_criteria_converter.v2_data_criteria_by_id[precondition.reference.id] 
            new_data_criteria = @data_criteria_converter.duplicate_data_criteria(data_criteria, precondition.id)
