@@ -226,7 +226,6 @@ module HQMFModel
       
       diff = denom.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"
-      
     end
     
     def test_json_round_trip

@@ -5,7 +5,15 @@ module HQMF
     include HQMF::Conversion::Utilities
     
     AT_LEAST_ONE_TRUE = 'atLeastOneTrue'
+    AT_LEAST_ONE_FALSE = 'atLeastOneFalse'
     ALL_TRUE = 'allTrue'
+    ALL_FALSE = 'allFalse'
+    NEGATIONS = {
+      AT_LEAST_ONE_TRUE => ALL_FALSE,
+      ALL_FALSE => AT_LEAST_ONE_TRUE,
+      ALL_TRUE => AT_LEAST_ONE_FALSE,
+      AT_LEAST_ONE_FALSE => ALL_TRUE
+    }
     
     attr_reader :id, :preconditions, :reference, :conjunction_code
     attr_accessor :negation
@@ -20,6 +28,14 @@ module HQMF
       @conjunction_code = conjunction_code
       @negation = negation
       @id = id
+    end
+    
+    def conjunction_code_with_negation
+      if negation
+        NEGATIONS[conjunction_code]
+      else
+        conjunction_code
+      end
     end
     
     # Create a new population criteria from a JSON hash keyed off symbols
