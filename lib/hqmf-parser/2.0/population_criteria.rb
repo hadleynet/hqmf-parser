@@ -42,11 +42,6 @@ module HQMF2
       end
     end
     
-    # Can't have negation on population so this is the same as conjunction_code
-    def conjuction_code_with_negation
-      conjunction_code
-    end
-    
     def to_model
       mps = preconditions.collect {|p| p.to_model}
       HQMF::PopulationCriteria.new(id, id, mps)
