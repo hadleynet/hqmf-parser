@@ -103,11 +103,8 @@ module HQMF1
       @data_criteria.each do |criteria|
         if (criteria.derived_from)
           derived_from = data_criteria_by_id[criteria.derived_from]
-          criteria.property = derived_from.property
-          criteria.type = derived_from.type
+          criteria.definition = derived_from.definition
           criteria.status = derived_from.status
-          criteria.standard_category = derived_from.standard_category
-          criteria.qds_data_type = derived_from.qds_data_type
           criteria.code_list_id = derived_from.code_list_id
         end
       end

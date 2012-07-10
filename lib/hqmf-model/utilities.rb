@@ -38,6 +38,15 @@ module HQMF
         end
         json
       end
+      
+      def check_equality(left,right)
+        same = true
+        left.instance_variables.each do |variable|
+          same &&= left.instance_variable_get(variable) == right.instance_variable_get(variable)
+        end
+        same
+      end
+      
     end
   end
 end

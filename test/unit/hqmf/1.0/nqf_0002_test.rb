@@ -23,13 +23,13 @@ module HQMF1
          refute_nil all_criteria[data_criteria_key]
       end
       
-      check_data_criteria(all_criteria, "PATIENT_CHARACTERISTIC_BIRTH_DATE", {:id=>"E929E9CB-E788-47C3-A467-4AB732D0606C",:title=>"Patient Characteristic: birth date",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:type=>:characteristic,:property=>:birthtime,:standard_category=>"individual_characteristic"})
-      check_data_criteria(all_criteria, "ENCOUNTER_ENCOUNTER_AMBULATORY_INCLUDING_PEDIATRICS", {:id=>"CA71325F-084A-4F5A-9214-229D925F836D",:title=>"Encounter: Encounter ambulatory including pediatrics",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:type=>:encounters,:property=>:unknown,:standard_category=>"encounter"})
-      check_data_criteria(all_criteria, "LABORATORY_TEST_PERFORMED_GROUP_A_STREPTOCOCCUS_TEST", {:id=>"AF9EE784-50CF-413F-9082-41A3330511A1",:title=>"Laboratory Test, Performed: Group A Streptococcus Test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:type=>:laboratoryTests,:status=>"performed",:property=>:unknown,:standard_category=>"laboratory_test"})
-      check_data_criteria(all_criteria, "DIAGNOSIS_ACTIVE_PHARYNGITIS", {:id=>"F33D9CE9-A084-4BA1-AB0E-1CBEF3934C88",:title=>"Diagnosis, Active: pharyngitis",:code_list_id=>"2.16.840.1.113883.3.464.0001.369",:type=>:activeDiagnoses,:status=>"active",:property=>:unknown,:standard_category=>"diagnosis_condition_problem",:qds_data_type=>"diagnosis_active"})
-      check_data_criteria(all_criteria, "MEDICATION_ACTIVE_PHARYNGITIS_ANTIBIOTICS", {:id=>"6A3F288D-B565-4BE9-B6DD-DCDEAB2E6DD4",:title=>"Medication, Active: pharyngitis antibiotics",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:allMedications,:status=>"active",:property=>:unknown,:standard_category=>"medication",:qds_data_type=>"medication_active"})
-      check_data_criteria(all_criteria, "MEDICATION_DISPENSED_PHARYNGITIS_ANTIBIOTICS", {:id=>"C5239EC0-B769-476F-B79E-6927ED720A03",:title=>"Medication, Dispensed: pharyngitis antibiotics",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:allMedications,:property=>:unknown,:standard_category=>"medication",:qds_data_type=>"medication_dispensed"})
-      check_data_criteria(all_criteria, "MEDICATION_ORDER_PHARYNGITIS_ANTIBIOTICS", {:id=>"B2EC949E-E9FD-4184-941E-F1F73470CB21",:title=>"Medication, Order: pharyngitis antibiotics",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:allMedications,:property=>:unknown,:standard_category=>"medication",:qds_data_type=>"medication_order"})
+      check_data_criteria(all_criteria, "PATIENT_CHARACTERISTIC_BIRTH_DATE", {:id=>"E929E9CB-E788-47C3-A467-4AB732D0606C",:title=>"Patient Characteristic: birth date",:code_list_id=>"2.16.840.1.113883.3.560.100.4"})
+      check_data_criteria(all_criteria, "ENCOUNTER_ENCOUNTER_AMBULATORY_INCLUDING_PEDIATRICS", {:id=>"CA71325F-084A-4F5A-9214-229D925F836D",:title=>"Encounter: Encounter ambulatory including pediatrics",:code_list_id=>"2.16.840.1.113883.3.464.0001.231"})
+      check_data_criteria(all_criteria, "LABORATORY_TEST_PERFORMED_GROUP_A_STREPTOCOCCUS_TEST", {:id=>"AF9EE784-50CF-413F-9082-41A3330511A1",:title=>"Laboratory Test, Performed: Group A Streptococcus Test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:status=>"performed"})
+      check_data_criteria(all_criteria, "DIAGNOSIS_ACTIVE_PHARYNGITIS", {:id=>"F33D9CE9-A084-4BA1-AB0E-1CBEF3934C88",:title=>"Diagnosis, Active: pharyngitis",:code_list_id=>"2.16.840.1.113883.3.464.0001.369",:status=>"active"})
+      check_data_criteria(all_criteria, "MEDICATION_ACTIVE_PHARYNGITIS_ANTIBIOTICS", {:id=>"6A3F288D-B565-4BE9-B6DD-DCDEAB2E6DD4",:title=>"Medication, Active: pharyngitis antibiotics",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:status=>"active"})
+      check_data_criteria(all_criteria, "MEDICATION_DISPENSED_PHARYNGITIS_ANTIBIOTICS", {:id=>"C5239EC0-B769-476F-B79E-6927ED720A03",:title=>"Medication, Dispensed: pharyngitis antibiotics",:code_list_id=>"2.16.840.1.113883.3.464.0001.373"})
+      check_data_criteria(all_criteria, "MEDICATION_ORDER_PHARYNGITIS_ANTIBIOTICS", {:id=>"B2EC949E-E9FD-4184-941E-F1F73470CB21",:title=>"Medication, Order: pharyngitis antibiotics",:code_list_id=>"2.16.840.1.113883.3.464.0001.373"})
       
       logic = json[:logic]
       refute_nil logic
@@ -110,10 +110,6 @@ module HQMF1
       data_criteria[:id].must_equal values[:id]
       data_criteria[:title].must_equal values[:title]
       data_criteria[:code_list_id].must_equal values[:code_list_id]
-      data_criteria[:type].must_equal values[:type]
-      data_criteria[:property].must_equal values[:property]
-      data_criteria[:standard_category].must_equal values[:standard_category]
-      data_criteria[:qds_data_type].must_equal values[:qds_data_type]
     end
     
   end

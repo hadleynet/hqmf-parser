@@ -63,11 +63,11 @@ module HQMF
       type = :derived
       standard_category = "GROUP"
       qds_data_type = "GROUP"
-      _code_list_id,_property,_status,_value,_effective_time,_inline_code_list,_negation_code_list_id, = nil
+      _code_list_id,_property,_status,_value,_field_values,_effective_time,_inline_code_list,_negation_code_list_id, = nil
       _negation = false
       
       group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, criteria_ids, derivation_operator, _property,
-                                              type, _status, _value, _effective_time, _inline_code_list,_negation,_negation_code_list_id,nil,nil)
+                                              type, _status, _value, _field_values, _effective_time, _inline_code_list,_negation,_negation_code_list_id,nil,nil)
       
       @v2_data_criteria << group_criteria
       
@@ -167,29 +167,33 @@ module HQMF
       # @param [Hash<String,String>] inline_code_list
       
       id = convert_key(key)
-      description = criteria[:title]
-      title = title_from_description(description, criteria[:description])
-      type = criteria[:type]
-      standard_category = criteria[:standard_category]
-      qds_data_type = criteria[:qds_data_type]
+      title = criteria[:title]
+      title = title.match(/.*:\s+(.+)/)[1]
+      description = criteria[:description]
       code_list_id = criteria[:code_list_id]
-      property = convert_data_criteria_property(criteria[:property]) if criteria[:property]
+      definition = criteria[:definition]
       status = criteria[:status]
       negation = criteria[:negation]
       negation_code_list_id = criteria[:negation_code_list_id]
       
-      value = nil # value is filled out by backfill_patient_characteristics for things like gender
+      value = nil # value is filled out by backfill_patient_characteristics for things like gender and by REFR restrictions
       effective_time = nil # filled out by temporal reference code
       temporal_references = # filled out by operator code
       subset_operators = nil # filled out by operator code
       children_criteria = nil # filled out by operator and temporal reference code
       derivation_operator = nil # filled out by operator and temporal reference code
       negation_code_list_id = nil # filled out by RSON restrictions
-
+      field_values = nil # field values are filled out by SUBJ and REFR restrictions
       inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
-
-      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, 
-        code_list_id, children_criteria, derivation_operator, property,type, status, value, effective_time, inline_code_list,
+      
+      settings = HQMF::DataCriteria.settings_for_definition(definition, status)
+      
+      standard_category = settings['standard_category']
+      qds_data_type = settings['qds_data_type']
+      property = settings['property'].to_sym if settings['property'] and !settings['property'].empty?
+      type = settings['patient_api_function'].to_sym if settings['patient_api_function'] and !settings['patient_api_function'].empty?
+      
+      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator, property, type, status, value, field_values, effective_time, inline_code_list,
         negation, negation_code_list_id, temporal_references, subset_operators)
  
     end
@@ -209,7 +213,7 @@ module HQMF
       @measure_period_v1_keys = {measure_start: measure_start_key, measure_end: measure_end_key, measure_period: measure_period_key}
       
       type = 'variable'
-      code_list_id,negation_code_list_id,property,status,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
+      code_list_id,negation_code_list_id,property,status,field_values,effective_time,inline_code_list,children_criteria,derivation_operator,temporal_references,subset_operators=nil
       
       #####
       ##
@@ -219,7 +223,7 @@ module HQMF
       
       measure_period_id = HQMF::Document::MEASURE_PERIOD_ID
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,children_criteria,derivation_operator,property,type,status,value,effective_time,inline_code_list, false, nil, temporal_references,subset_operators)
+      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,children_criteria,derivation_operator,property,type,status,value,field_values, effective_time,inline_code_list, false, nil, temporal_references,subset_operators)
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria
@@ -232,19 +236,6 @@ module HQMF
     
     def self.title_from_description(title, description)
       title.gsub(/^#{Regexp.escape(description).gsub('\\ ',':?,?\\ ')}:\s*/i,'')
-    end
-
-    def self.convert_data_criteria_property(property)
-      case property
-        when 'birthtime', :birthtime
-          :birthtime
-        when 'gender', :gender
-          :gender
-        when 'unknown', :unknown
-          :unknown
-        else
-          raise "unsupported data criteria property conversion: #{property}"
-      end
     end
 
     def self.convert_key(key)

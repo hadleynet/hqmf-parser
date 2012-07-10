@@ -4,16 +4,17 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_accessor :property, :type, :status, :standard_category, :qds_data_type, :description, :code_list_id, :derived_from
+    attr_accessor :code_list_id, :derived_from, :definition, :status, :negation
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
       
-      config_file = File.expand_path('../data_criteria.json', __FILE__)
-      config = JSON.parse(File.read(config_file))
-      settings = config['defaults']
+      template_map_file = File.expand_path('../data_criteria_template_id_map.json', __FILE__)
+      oid_xpath_file = File.expand_path('../data_criteria_oid_xpath.json', __FILE__)
+      template_map = JSON.parse(File.read(template_map_file))
+      oid_xpath_map = JSON.parse(File.read(oid_xpath_file))
       template_id = attr_val('cda:act/cda:templateId/@root') || attr_val('cda:observation/cda:templateId/@root')
       
       # check to see if this is a derived data criteria.  These are used for multiple occurrences.
@@ -25,21 +26,24 @@ module HQMF1
         @occurrence_key = @@occurrences[@derived_from].next
       end
       
-      if config[template_id]
-        settings = settings.merge(config[template_id])
+      template = template_map[template_id]
+      if template
+        @negation=template["negation"]
+        @definition=template["definition"]
+        @status=template["status"]
+        @key=@definition+(@status.empty? ? '' : "_#{@status}")
       else
-        Kernel.warn "Unknown data criteria template identifier [#{template_id}]"
+        raise "Unknown data criteria template identifier [#{template_id}]"
       end
       
-      @type = settings['type'].intern
       # Get the code list OID of the criteria, used as an index to the code list database
-      @code_list_id = attr_val(settings['code_list_xpath'])
-      @status_xpath = settings['status_xpath']
-      @property = settings['property'].intern
-      @status = settings['status']
-      @standard_category = settings['standard_category']
-      @qds_data_type = settings['qds_data_type']
-      @description = settings['description']
+      @code_list_id = attr_val(oid_xpath_map[@key]['oid_xpath'])
+      unless @code_list_id
+        Kernel.warn "code list id not found, getting default"
+        @code_list_id = attr_val('cda:act/cda:sourceOf//cda:code/@code')
+      end
+      
+      Kernel.warn "no oid defined for data criteria: #{@key}" unless @code_list_id
       
     end
     
@@ -52,13 +56,18 @@ module HQMF1
     # Get the title of the criteria, provides a human readable description
     # @return [String] the title of this data criteria
     def title
-      if (@entry.at_xpath('.//cda:title'))
-        title = @entry.at_xpath('.//cda:title').inner_text
-      else
-        title = @entry.at_xpath('.//cda:localVariableName').inner_text
-      end
+      title = description
       title = "Occurrence #{('A'..'ZZ').to_a[@occurrence_key]}: #{title}" if @derived_from
       title
+    end
+    
+    def description
+      if (@entry.at_xpath('.//cda:title'))
+        description = @entry.at_xpath('.//cda:title').inner_text
+      else
+        description = @entry.at_xpath('.//cda:localVariableName').inner_text
+      end
+      description
     end
     
     # Get a JS friendly constant name for this measure attribute
@@ -74,7 +83,7 @@ module HQMF1
       {
         self.const_name => build_hash(
           self, 
-          [:id,:title,:code_list_id,:type,:status,:property,:standard_category,:qds_data_type,:description,:derived_from])
+          [:id,:title,:description,:code_list_id,:derived_from,:definition, :status, :negation])
       }
     end
     

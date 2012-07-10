@@ -55,6 +55,7 @@ module HQMF1
           'type' => type,
           'target_id' => target_id,
           'field' => field,
+          'field_code' => field_code,
           'value' => value)
         all_restrictions = []
         all_restrictions.concat @restrictions
@@ -88,20 +89,26 @@ module HQMF1
     def field
       attr_val('./cda:observation/cda:code/@displayName')
     end
+
+    def field_code
+      attr_val('./cda:observation/cda:code/@code')
+    end
     
     def value
       
       type = attr_val('./cda:observation/cda:value/@xsi:type')
       case type
       when 'IVL_PQ'
-        value = Range.new(@entry.xpath('./cda:observation/cda:value'))
+        value = HQMF1::Range.new(@entry.xpath('./cda:observation/cda:value'))
       when 'PQ'
-        value = Value.new(@entry.xpath('./cda:observation/cda:value'))
+        value = HQMF1::Value.new(@entry.xpath('./cda:observation/cda:value'))
       when 'CD'
         if field && field.downcase == 'status'
           value = attr_val('./cda:observation/cda:value/@displayName')
         else
-          value = attr_val('./cda:observation/cda:value/@code')
+          oid = attr_val('./cda:observation/cda:value/@code')
+          title = attr_val('./cda:observation/cda:value/@displayName')
+          value = HQMF::Coded.for_code_list(oid,title)
         end
       when 'ANYNonNull'
         Kernel.warn "Ignoring ANYNonNull restriction value type"
@@ -113,7 +120,7 @@ module HQMF1
     
     def to_json 
       return nil if from_parent
-      json = build_hash(self, [:subset,:type,:target_id,:field,:from_parent, :negation])
+      json = build_hash(self, [:subset,:type,:target_id,:field,:field_code,:from_parent, :negation])
       json[:range] = range.to_json if range
       if value
         if value.is_a? String

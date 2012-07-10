@@ -50,7 +50,9 @@ module HQMF
         raise "no target for temporal restriction"
       end
       restriction.converted=true
-      data_criteria.temporal_references << temporal_reference
+      
+      # add temporal reference to data criteria
+      data_criteria.temporal_references << temporal_reference unless data_criteria.has_temporal(temporal_reference)
     end
     
     
@@ -71,7 +73,8 @@ module HQMF
             data_criteria.value = nil
           end
           data_criteria.subset_operators ||= []
-          data_criteria.subset_operators << subset_operator
+          # add subset operator to data criteria
+          data_criteria.subset_operators << subset_operator unless data_criteria.has_subset(subset_operator)
         else
           parent_id = "GROUP"
           
@@ -100,13 +103,15 @@ module HQMF
           end
           
           data_criteria.subset_operators ||= []
-          data_criteria.subset_operators << subset_operator
+          # add subset operator to data criteria
+          data_criteria.subset_operators << subset_operator unless data_criteria.has_subset(subset_operator)
         end
         precondition.reference = HQMF::Reference.new(data_criteria.id)
       elsif (restriction.single_target?)
         subset_operator = HQMF::SubsetOperator.new(type, value)
         data_criteria.subset_operators ||= []
-        data_criteria.subset_operators << subset_operator
+        # add subset operator to data criteria
+        data_criteria.subset_operators << subset_operator unless data_criteria.has_subset(subset_operator)
       end
       
       restriction.converted=true

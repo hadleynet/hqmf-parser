@@ -50,6 +50,10 @@ module HQMF
     def stringify
       "#{inclusive? ? '=' : ''}#{value}#{unit ? ' '+unit : ''}"
     end
+
+    def ==(other)
+      check_equality(self,other)
+    end
     
   end
   
@@ -104,6 +108,11 @@ module HQMF
       end
     end
     
+    def ==(other)
+      check_equality(self,other)
+    end
+    
+    
   end
   
   # Represents a HQMF effective time which is a specialization of a interval
@@ -115,33 +124,47 @@ module HQMF
     def type
       'IVL_TS'
     end
+    
   end
   
   # Represents a HQMF CD value which has a code and codeSystem
   class Coded
     include HQMF::Conversion::Utilities
-    attr_reader :type, :system, :code
+    attr_reader :type, :system, :code, :code_list_id, :title
     
     # Create a new HQMF::Coded
     # @param [String] type
     # @param [String] system
     # @param [String] code
-    def initialize(type,system,code)
+    # @param [String] code_list_id
+    def initialize(type,system,code,code_list_id=nil,title=nil)
       @type = type
       @system = system
       @code = code
+      @code_list_id = code_list_id
+      @title = title
+    end
+    
+    def self.for_code_list(code_list_id,title=nil)
+      HQMF::Coded.new('CD',nil,nil,code_list_id,title)
+    end
+    
+    def self.for_single_code(system,code,title=nil)
+      HQMF::Coded.new('CD',system,code,nil,title)
     end
     
     def self.from_json(json)
       type = json["type"] if json["type"]
       system = json["system"] if json["system"]
       code = json["code"] if json["code"]
+      code_list_id = json["code_list_id"] if json["code_list_id"]
+      title = json["title"] if json["title"]
       
-      HQMF::Coded.new(type,system,code)
+      HQMF::Coded.new(type,system,code,code_list_id,title)
     end
     
     def to_json
-      build_hash(self, [:type,:system,:code])
+      build_hash(self, [:type,:system,:code,:code_list_id,:title])
     end
     
     def value
@@ -154,6 +177,10 @@ module HQMF
 
     def unit
       nil
+    end
+    
+    def ==(other)
+      check_equality(self,other)
     end
     
   end
@@ -196,6 +223,10 @@ module HQMF
       json
     end
     
+    def ==(other)
+      check_equality(self,other)
+    end
+    
   end
 
   class SubsetOperator
@@ -231,6 +262,10 @@ module HQMF
       json
     end
     
+    def ==(other)
+      check_equality(self,other)
+    end
+    
   end
 
   
@@ -247,6 +282,10 @@ module HQMF
     
     def to_json
       @id
+    end
+    
+    def ==(other)
+      check_equality(self,other)
     end
     
   end

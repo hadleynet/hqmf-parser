@@ -115,7 +115,8 @@ module HQMF2
       met = effective_time ? effective_time.to_model : nil
       mtr = temporal_references.collect {|ref| ref.to_model}
       mso = subset_operators.collect {|opr| opr.to_model}
-      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, derivation_operator, property, type, status, mv, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso)
+      field_values = nil
+      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, derivation_operator, property, type, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso)
     end
     
     private

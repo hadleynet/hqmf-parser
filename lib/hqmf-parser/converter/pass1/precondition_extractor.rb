@@ -65,7 +65,8 @@ module HQMF
         value = HQMF::Converter::SimpleOperator.parse_value(restriction[:value])
       end
       field = restriction[:field]
-      operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value, field)
+      field_code = restriction[:field_code]
+      operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value, field, field_code)
       
       # get the precondtions off of the restriction
       children = HQMF::PreconditionConverter.parse_and_merge_preconditions(restriction[:preconditions],data_criteria_converter) if restriction[:preconditions]
