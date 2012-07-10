@@ -55,6 +55,11 @@ module HQMF
       end
     end
     
+    # Can't have negation on population so this is the same as conjunction_code
+    def conjunction_code_with_negation
+      conjunction_code
+    end
+    
   end
   
 end

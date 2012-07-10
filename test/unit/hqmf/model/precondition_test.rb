@@ -22,5 +22,14 @@ module HQMFModel
       assert precondition3.conjunction?
       
     end
+    
+    def test_precondition_inversion
+      precondition1 = HQMF::Precondition.new(nil, [], nil, "allTrue" ,false)
+      precondition2 = HQMF::Precondition.new(nil, [], nil, "allTrue" ,true)
+      assert_equal 'allTrue', precondition1.conjunction_code
+      assert_equal 'allTrue', precondition1.conjunction_code_with_negation
+      assert_equal 'allTrue', precondition2.conjunction_code
+      assert_equal 'atLeastOneFalse', precondition2.conjunction_code_with_negation
+    end
   end
 end
