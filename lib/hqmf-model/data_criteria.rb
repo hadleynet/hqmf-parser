@@ -7,8 +7,16 @@ module HQMF
     XPRODUCT = 'XPRODUCT'
     UNION = 'UNION'
 
+    FIELDS = {'SEVERITY'=>{title:'Severity',coded_entry_method: :severity},
+              'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal},
+              'ENVIRONMENT'=>{title:'Environment',coded_entry_method: :environment},
+              'REASON'=>{title:'Reason',coded_entry_method: :reason},
+              'RADIATION_DOSAGE'=>{title:'Radiation Dosage',coded_entry_method: :radiation_dosage},
+              'RADIATION_DURATION'=>{title:'Radiation Duration',coded_entry_method: :radiation_duration},
+              'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay}}
+
     attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type
-    attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list, :negation_code_list_id,  :negation
+    attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list, :negation_code_list_id, :negation
   
     # Create a new data criteria instance
     # @param [String] id
@@ -47,7 +55,6 @@ module HQMF
       @property = property
       @type = type
       @status = status
-      binding.pry if status == 'order'
       @value = value
       @field_values = field_values
       @effective_time = effective_time
