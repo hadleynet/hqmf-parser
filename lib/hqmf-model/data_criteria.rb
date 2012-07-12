@@ -15,21 +15,19 @@ module HQMF
               'RADIATION_DURATION'=>{title:'Radiation Duration',coded_entry_method: :radiation_duration},
               'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay}}
 
-    attr_reader :title,:description,:section,:code_list_id, :children_criteria, :derivation_operator, :standard_category, :qds_data_type
-    attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :property, :type, :inline_code_list, :negation_code_list_id, :negation, :display_name
+    attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator 
+    attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :definition, :inline_code_list, :negation_code_list_id, :negation, :display_name
   
     # Create a new data criteria instance
     # @param [String] id
     # @param [String] title
+    # @param [String] display_name
     # @param [String] description
-    # @param [String] standard_category
-    # @param [String] qds_data_type
     # @param [String] code_list_id
     # @param [String] negation_code_list_id
     # @param [List<String>] children_criteria (ids of children data criteria)
     # @param [String] derivation_operator
-    # @param [String] property
-    # @param [String] type
+    # @param [String] definition
     # @param [String] status
     # @param [Value|Range|Coded] value
     # @param [Hash<String,Value|Range|Coded>] field_values
@@ -39,21 +37,19 @@ module HQMF
     # @param [String] negation_code_list_id
     # @param [List<TemporalReference>] temporal_references
     # @param [List<SubsetOperator>] subset_operators
-    def initialize(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator, property,type, status, value, field_values, effective_time,
-                   inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
+    def initialize(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
 
+      status = normalize_status(definition, status)
+      @settings = get_settings_for_definition(definition, status)
 
       @id = id
       @title = title
       @description = description
-      @standard_category = standard_category
-      @qds_data_type = qds_data_type
       @code_list_id = code_list_id
       @negation_code_list_id = negation_code_list_id
       @children_criteria = children_criteria
       @derivation_operator = derivation_operator
-      @property = property
-      @type = type
+      @definition = definition
       @status = status
       @value = value
       @field_values = field_values
@@ -64,42 +60,53 @@ module HQMF
       @temporal_references = temporal_references
       @subset_operators = subset_operators
     end
-
-    def self.settings_for_definition(definition, status)
-      settings_file = File.expand_path('../data_criteria.json', __FILE__)
-      settings_map = JSON.parse(File.read(settings_file))
-      key = definition + (status.nil? || status.empty? ? '' : "_#{status}")
-      settings = settings_map[key]
-
-      raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
-
-      settings
+    
+    def standard_category
+      @settings['standard_category']
+    end
+    def qds_data_type
+      @settings['qds_data_type']
+    end
+    def type
+      @settings['category'].to_sym
+    end
+    def property
+      @settings['property'].to_sym unless @settings['property'].nil?
+    end
+    def patient_api_function
+      @settings['patient_api_function'].to_sym unless @settings['patient_api_function'].empty?
+    end
+    
+    def definition=(definition)
+      @definition = definition
+      @settings = get_settings_for_definition(@definition, @status)
+    end
+    def status=(status)
+      @status = status
+      @settings = get_settings_for_definition(@definition, @status)
     end
 
     # Create a new data criteria instance from a JSON hash keyed with symbols
     def self.from_json(id, json)
       title = json["title"] if json["title"]
+      display_name = json["display_name"] if json["display_name"]
       description = json["description"] if json["description"]
-      standard_category = json["standard_category"] if json["standard_category"]
-      qds_data_type = json["qds_data_type"] if json["standard_category"]
       code_list_id = json["code_list_id"] if json["code_list_id"]
-      negation_code_list_id = json["negation_code_list_id"] if json["negation_code_list_id"]
       children_criteria = json["children_criteria"] if json["children_criteria"]
       derivation_operator = json["derivation_operator"] if json["derivation_operator"]
-      property = json["property"].to_sym if json["property"]
-      type = json["type"].to_sym if json["type"]
+      definition = json["definition"] if json["definition"]
       status = json["status"] if json["status"]
-      negation = json["negation"] || false
-      negation_code_list_id = json['negation_code_list_id'] if json['negation_code_list_id']
-      temporal_references = json["temporal_references"].map {|reference| HQMF::TemporalReference.from_json(reference)} if json["temporal_references"]
-      subset_operators = json["subset_operators"].map {|operator| HQMF::SubsetOperator.from_json(operator)} if json["subset_operators"]
       value = convert_value(json["value"]) if json["value"]
       field_values = json["field_values"].inject({}){|memo,(k,v)| memo[k.to_s] = convert_value(v); memo} if json["field_values"]
       effective_time = HQMF::Range.from_json(json["effective_time"]) if json["effective_time"]
       inline_code_list = json["inline_code_list"].inject({}){|memo,(k,v)| memo[k.to_s] = v; memo} if json["inline_code_list"]
+      negation = json["negation"] || false
+      negation_code_list_id = json['negation_code_list_id'] if json['negation_code_list_id']
+      temporal_references = json["temporal_references"].map {|reference| HQMF::TemporalReference.from_json(reference)} if json["temporal_references"]
+      subset_operators = json["subset_operators"].map {|operator| HQMF::SubsetOperator.from_json(operator)} if json["subset_operators"]
 
-      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator,
-                            property, type, status, value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
+      HQMF::DataCriteria.new(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values,
+                             effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
     end
 
     def to_json
@@ -109,7 +116,7 @@ module HQMF
 
     def base_json
       x = nil
-      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :status, :negation, :negation_code_list_id])
+      json = build_hash(self, [:title,:display_name,:description,:code_list_id,:children_criteria, :derivation_operator, :definition, :status, :negation, :negation_code_list_id])
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = ((@value.is_a? String) ? @value : @value.to_json) if @value
       json[:field_values] = @field_values.inject({}) {|memo,(k,v)| memo[k] = v.to_json; memo} if @field_values
@@ -129,7 +136,36 @@ module HQMF
 
     private
 
+    def normalize_status(definition, status)
+      return status if status.nil?
+      case status.downcase
+        when 'completed', 'complete'
+          case definition
+            when 'diagnosis'
+              'active'
+            else
+              'performed'
+            end
+        when 'order'
+          'ordered'
+        else
+          status.downcase
+      end
+    end
+
+    def get_settings_for_definition(definition, status)
+      settings_file = File.expand_path('../data_criteria.json', __FILE__)
+      settings_map = JSON.parse(File.read(settings_file))
+      key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")
+      settings = settings_map[key]
+      
+      raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
+
+      settings
+    end
+
     def self.convert_value(json)
+      return nil unless json
       value = nil
       type = json["type"]
       case type

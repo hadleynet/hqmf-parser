@@ -42,7 +42,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
 
     criteria = @model.data_criteria('DummyProcedureAfterHasDiabetesWithCount')
     assert_equal :procedures, criteria.type
-    assert_equal 'completed', criteria.status
+    assert_equal 'performed', criteria.status
     assert_equal '20100101', criteria.effective_time.low.value
     assert_equal '20111231', criteria.effective_time.high.value
     assert criteria.effective_time.low.inclusive
@@ -82,12 +82,12 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 'EndDate', criteria.effective_time.high.expression
 
     criteria = @model.data_criteria('HbA1C')
-    assert_equal :results, criteria.type
+    assert_equal :laboratory_tests, criteria.type
     assert_equal 'HbA1C', criteria.title
     assert_equal 1, criteria.subset_operators.length
     assert_equal 'RECENT', criteria.subset_operators[0].type
     assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
-    assert_equal 'completed', criteria.status
+    assert_equal 'performed', criteria.status
     assert_equal nil, criteria.effective_time
     assert_equal HQMF::Range, criteria.value.class
     assert_equal nil, criteria.value.high
@@ -107,7 +107,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
 
     criteria = @model.data_criteria('DiabetesMedSupplied')
-    assert_equal :medication_supply, criteria.type
+    assert_equal :medications, criteria.type
     assert_equal 'DiabetesMedSupplied', criteria.title
     assert_equal '2.16.840.1.113883.3.464.1.94', criteria.code_list_id
     assert criteria.effective_time

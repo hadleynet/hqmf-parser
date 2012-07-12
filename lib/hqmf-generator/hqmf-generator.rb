@@ -204,15 +204,15 @@ module HQMF2
 
       def section_name(data_criteria)
         case data_criteria.type
-        when :conditions, :activeDiagnoses
+        when :conditions
           'Problems'
         when :encounters
           'Encounters'
-        when :results, :laboratoryTests
+        when :results, :laboratory_tests
           'Results'
         when :procedures
           'Procedures'
-        when :medications, :allMedications
+        when :medications
           'Medications'
         when :medication_supply
           'RX'

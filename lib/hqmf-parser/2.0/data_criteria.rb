@@ -26,41 +26,35 @@ module HQMF2
       entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
       case entry_type
       when 'Problem', 'Problems'
-        @type = :conditions
+        @definition = 'diagnosis'
         @code_list_xpath = './cda:observationCriteria/cda:value'
-        @section = 'conditions'
       when 'Encounter', 'Encounters'
-        @type = :encounters
+        @definition = 'encounter'
         @id_xpath = './cda:encounterCriteria/cda:id/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
-        @section = 'encounters'
       when 'LabResults', 'Results'
-        @type = :results
+        @definition = 'laboratory_test'
         @value = extract_value
-        @section = 'results'
       when 'Procedure', 'Procedures'
+        @definition = 'procedure'
         @id_xpath = './cda:procedureCriteria/cda:id/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
-        @type = :procedures
-        @section = 'procedures'
       when 'Medication', 'Medications'
-        @type = :medications
+        @definition = 'medication'
         @id_xpath = './cda:substanceAdministrationCriteria/cda:id/@extension'
         @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
-        @section = 'medications'
       when 'RX'
-        @type = :medication_supply
+        @definition = 'medication'
+        @status = 'dispensed'
         @id_xpath = './cda:supplyCriteria/cda:id/@extension'
         @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
-        @section = 'medications'
       when 'Demographics'
-        @type = :characteristic
-        @property = property_for_demographic
+        @definition = definition_for_demographic
         @value = extract_value
       when 'Derived'
-        @type = :derived
+        @definition = 'derived'
       when nil
-        @type = :variable
+        @definition = 'variable'
         @value = extract_value
       else
         raise "Unknown data criteria template identifier [#{entry_type}]"
@@ -116,7 +110,8 @@ module HQMF2
       mtr = temporal_references.collect {|ref| ref.to_model}
       mso = subset_operators.collect {|opr| opr.to_model}
       field_values = nil
-      HQMF::DataCriteria.new(id, title, nil, nil, nil, code_list_id, children_criteria, derivation_operator, property, type, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso)
+      
+      HQMF::DataCriteria.new(id, title, nil, nil, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso)
     end
     
     private
@@ -194,24 +189,25 @@ module HQMF2
       value
     end
     
-    def property_for_demographic
+    def definition_for_demographic
       demographic_type = attr_val('./cda:observationCriteria/cda:code/@code')
       case demographic_type
       when '21112-8'
-        :birthtime
+        "patient_characteristic_birthdate"
       when '424144002'
-        :age
+        "patient_characteristic_age"
       when '263495000'
-        :gender
+        "patient_characteristic_gender"
       when '102902016'
-        :languages
+        "patient_characteristic_languages"
       when '125680007'
-        :maritalStatus
+        "patient_characteristic_marital_status"
       when '103579009'
-        :race
+        "patient_characteristic_race"
       else
         raise "Unknown demographic identifier [#{demographic_type}]"
       end
+      
     end
 
   end

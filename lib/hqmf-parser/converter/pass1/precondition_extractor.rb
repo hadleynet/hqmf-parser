@@ -115,7 +115,7 @@ module HQMF
 
       data_criteria = data_criteria_converter.v1_data_criteria_by_id[comparison[:data_criteria_id]]
       reference = HQMF::Reference.new(data_criteria.id)
-      conjunction_code = "#{data_criteria.type}Reference"
+      conjunction_code = "#{data_criteria.type.to_s.gsub(/(?:_|(\/))([a-z\d]*)/) { "#{$1}#{$2.capitalize}" }}Reference"
 
       preconditions = []
       if comparison[:restrictions]

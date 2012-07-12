@@ -12,8 +12,6 @@ module HQMF1
     # def test_patient_criteria_backfill
     #   hqmf = HQMF::Parser.parse(@hqmf_contents, HQMF::Parser::HQMF_VERSION_1)
     #   
-    #   binding.pry
-    #   
     # end
       
 

@@ -60,14 +60,12 @@ module HQMF
       id = "#{parent_id}_#{section}_#{@@ids.next}"
       title = "#{id}"
       description = ""
-      type = :derived
-      standard_category = "GROUP"
-      qds_data_type = "GROUP"
-      _code_list_id,_property,_status,_value,_field_values,_effective_time,_inline_code_list,_negation_code_list_id, = nil
+      definition = 'derived'
+      _display_name,_code_list_id,_status,_value,_field_values,_effective_time,_inline_code_list,_negation_code_list_id, = nil
       _negation = false
       
-      group_criteria = HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, _code_list_id, criteria_ids, derivation_operator, _property,
-                                              type, _status, _value, _field_values, _effective_time, _inline_code_list,_negation,_negation_code_list_id,nil,nil)
+      group_criteria = HQMF::DataCriteria.new(id, title, _display_name, description, _code_list_id, criteria_ids, derivation_operator, definition, _status,
+                                              _value, _field_values, _effective_time, _inline_code_list,_negation,_negation_code_list_id,nil,nil)
       
       @v2_data_criteria << group_criteria
       
@@ -185,16 +183,10 @@ module HQMF
       negation_code_list_id = nil # filled out by RSON restrictions
       field_values = nil # field values are filled out by SUBJ and REFR restrictions
       inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
+      display_name=nil
       
-      settings = HQMF::DataCriteria.settings_for_definition(definition, status)
-      
-      standard_category = settings['standard_category']
-      qds_data_type = settings['qds_data_type']
-      property = settings['property'].to_sym if settings['property'] and !settings['property'].empty?
-      type = settings['patient_api_function'].to_sym if settings['patient_api_function'] and !settings['patient_api_function'].empty?
-      
-      HQMF::DataCriteria.new(id, title, description, standard_category, qds_data_type, code_list_id, children_criteria, derivation_operator, property, type, status, value, field_values, effective_time, inline_code_list,
-        negation, negation_code_list_id, temporal_references, subset_operators)
+      HQMF::DataCriteria.new(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, 
+                             value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
  
     end
     
@@ -223,7 +215,8 @@ module HQMF
       
       measure_period_id = HQMF::Document::MEASURE_PERIOD_ID
       value = measure_period
-      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,measure_period_id,measure_period_id,measure_period_id,code_list_id,children_criteria,derivation_operator,property,type,status,value,field_values, effective_time,inline_code_list, false, nil, temporal_references,subset_operators)
+      measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,nil,measure_period_id,code_list_id,children_criteria,derivation_operator,measure_period_id,status,
+                                                value,field_values,effective_time,inline_code_list, false, nil, temporal_references,subset_operators)
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria

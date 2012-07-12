@@ -74,11 +74,8 @@ module HQMF
           
           # looking for Gender: Female
           if value_set["HL7"] and value_set["HL7"] == ["10174"]
-            data_criteria.property = :gender
+            data_criteria.definition = 'patient_characteristic_gender'
             data_criteria.value = HQMF::Coded.new('CD','Gender','F')
-          else
-            data_criteria.type = :allProblems
-            Kernel.warn "backfilled data criteria: #{data_criteria.id}"
           end
         
         elsif (data_criteria.type == :characteristic and data_criteria.property == :birthtime)
