@@ -363,6 +363,17 @@
       "standard_category":"diagnostic_study",
       "qds_data_type":"diagnostic_study_result",
       "not_supported":false},
+  "diagnostic_study_result_final report":{
+      "title":"diagnostic study, result",
+      "category":"diagnostic_studies",
+      "definition":"diagnostic_study_result",
+      "status":"final report",
+      "property":"result",
+      "hard_status":true,
+      "patient_api_function":"procedureResults",
+      "standard_category":"diagnostic_study",
+      "qds_data_type":"diagnostic_study_result",
+      "not_supported":false},
   "diagnostic_study_adverse_event":{
       "title":"diagnostic study, adverse event",
       "category":"diagnostic_studies",

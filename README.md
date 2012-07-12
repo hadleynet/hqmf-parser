@@ -131,7 +131,7 @@ transfers
 
 
 STATUSES
-  active, performed, ordered, recommended, resolved, inactive, dispensed, administered, applied, assessed
+  active, performed, ordered, recommended, resolved, inactive, dispensed, administered, applied, assessed, final report
 
 
 STATUSES BY CATEGORY
@@ -152,6 +152,7 @@ STATUSES BY CATEGORY
   diagnostic_studies
     performed
     ordered
+    final report
   medications
     dispensed
     ordered
