@@ -37,7 +37,7 @@ Data Mappings
 =======
 
 PATIENT API FUNCTIONS
-  allProblems => conditions, socialHistories
+  allProblems => conditions, socialHistories, procedures
   encounters => encounters
   allProcedures => procedures, immunizations, medications
   procedureResults => results, vitalSigns, procedures
