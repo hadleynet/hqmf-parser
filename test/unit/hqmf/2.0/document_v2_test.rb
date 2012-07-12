@@ -242,7 +242,7 @@ require_relative '../../../test_helper'
       assert_equal '%', criteria.value.low.unit
 
       criteria = @doc.data_criteria('DummyInlineCodedResult')
-      assert_equal :results, criteria.type
+      assert_equal :laboratory_tests, criteria.to_model.type
       assert_equal 'DummyInlineCodedResult', criteria.title
       assert_equal 0, criteria.subset_operators.length
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
@@ -253,7 +253,7 @@ require_relative '../../../test_helper'
       assert_equal 'xyzzy', criteria.value.code
 
       criteria = @doc.data_criteria('DummyExternalCodedResult')
-      assert_equal :results, criteria.type
+      assert_equal :laboratory_tests, criteria.to_model.type
       assert_equal 'DummyExternalCodedResult', criteria.title
       assert_equal 0, criteria.subset_operators.length
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
@@ -426,22 +426,22 @@ require_relative '../../../test_helper'
       assert_equal '%', criteria.value.low.unit
 
       criteria = @model.data_criteria('DummyInlineCodedResult')
-      assert_equal :results, criteria.type
+      assert_equal :laboratory_tests, criteria.type
       assert_equal 'DummyInlineCodedResult', criteria.title
       assert_equal 0, criteria.subset_operators.length
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
-      assert_equal 'completed', criteria.status
+      assert_equal 'performed', criteria.status
       assert_equal nil, criteria.effective_time
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal '1.2.3.4', criteria.value.system
       assert_equal 'xyzzy', criteria.value.code
 
       criteria = @model.data_criteria('DummyExternalCodedResult')
-      assert_equal :results, criteria.type
+      assert_equal :laboratory_tests, criteria.type
       assert_equal 'DummyExternalCodedResult', criteria.title
       assert_equal 0, criteria.subset_operators.length
       assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
-      assert_equal 'completed', criteria.status
+      assert_equal 'performed', criteria.status
       assert_equal nil, criteria.effective_time
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal '1.2.3.4', criteria.value.code_list_id
