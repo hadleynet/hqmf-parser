@@ -18,7 +18,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal "Sample Quality Measure Document", @model.title.strip
     assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
-    assert_equal 33, data_criteria.length
+    assert_equal 35, data_criteria.length
 
     criteria = @model.data_criteria('DiabetesMedNotAdministeredForNoStatedReason')
     assert criteria.negation
@@ -94,6 +94,27 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert criteria.value.low
     assert_equal '9', criteria.value.low.value
     assert_equal '%', criteria.value.low.unit
+
+    criteria = @model.data_criteria('DummyInlineCodedResult')
+    assert_equal :results, criteria.type
+    assert_equal 'DummyInlineCodedResult', criteria.title
+    assert_equal 0, criteria.subset_operators.length
+    assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+    assert_equal 'completed', criteria.status
+    assert_equal nil, criteria.effective_time
+    assert_equal HQMF::Coded, criteria.value.class
+    assert_equal '1.2.3.4', criteria.value.system
+    assert_equal 'xyzzy', criteria.value.code
+
+    criteria = @model.data_criteria('DummyExternalCodedResult')
+    assert_equal :results, criteria.type
+    assert_equal 'DummyExternalCodedResult', criteria.title
+    assert_equal 0, criteria.subset_operators.length
+    assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+    assert_equal 'completed', criteria.status
+    assert_equal nil, criteria.effective_time
+    assert_equal HQMF::Coded, criteria.value.class
+    assert_equal '1.2.3.4', criteria.value.code_list_id
 
     criteria = @model.data_criteria('DiabetesMedAdministered')
     assert !criteria.negation

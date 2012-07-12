@@ -109,7 +109,7 @@ require_relative '../../../test_helper'
   
     def test_data_criteria
       data_criteria = @doc.all_data_criteria
-      assert_equal 33, data_criteria.length
+      assert_equal 35, data_criteria.length
     
       criteria = @doc.data_criteria('EndDate')
       assert criteria.to_xml.include?('extension="EndDate"')
@@ -241,6 +241,27 @@ require_relative '../../../test_helper'
       assert_equal '9', criteria.value.low.value
       assert_equal '%', criteria.value.low.unit
 
+      criteria = @doc.data_criteria('DummyInlineCodedResult')
+      assert_equal :results, criteria.type
+      assert_equal 'DummyInlineCodedResult', criteria.title
+      assert_equal 0, criteria.subset_operators.length
+      assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+      assert_equal 'completed', criteria.status
+      assert_equal nil, criteria.effective_time
+      assert_equal HQMF2::Coded, criteria.value.class
+      assert_equal '1.2.3.4', criteria.value.system
+      assert_equal 'xyzzy', criteria.value.code
+
+      criteria = @doc.data_criteria('DummyExternalCodedResult')
+      assert_equal :results, criteria.type
+      assert_equal 'DummyExternalCodedResult', criteria.title
+      assert_equal 0, criteria.subset_operators.length
+      assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+      assert_equal 'completed', criteria.status
+      assert_equal nil, criteria.effective_time
+      assert_equal HQMF2::Coded, criteria.value.class
+      assert_equal '1.2.3.4', criteria.value.code_list_id
+
       criteria = @doc.data_criteria('DiabetesMedAdministered')
       assert !criteria.negation
       assert_equal :medications, criteria.type
@@ -273,7 +294,7 @@ require_relative '../../../test_helper'
     
     def test_model_data_criteria
       data_criteria = @model.all_data_criteria
-      assert_equal 33, data_criteria.length
+      assert_equal 35, data_criteria.length
     
       criteria = @model.data_criteria('EndDate')
       assert_equal :variable, criteria.type
@@ -403,6 +424,27 @@ require_relative '../../../test_helper'
       assert criteria.value.low
       assert_equal '9', criteria.value.low.value
       assert_equal '%', criteria.value.low.unit
+
+      criteria = @model.data_criteria('DummyInlineCodedResult')
+      assert_equal :results, criteria.type
+      assert_equal 'DummyInlineCodedResult', criteria.title
+      assert_equal 0, criteria.subset_operators.length
+      assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+      assert_equal 'completed', criteria.status
+      assert_equal nil, criteria.effective_time
+      assert_equal HQMF::Coded, criteria.value.class
+      assert_equal '1.2.3.4', criteria.value.system
+      assert_equal 'xyzzy', criteria.value.code
+
+      criteria = @model.data_criteria('DummyExternalCodedResult')
+      assert_equal :results, criteria.type
+      assert_equal 'DummyExternalCodedResult', criteria.title
+      assert_equal 0, criteria.subset_operators.length
+      assert_equal '2.16.840.1.113883.3.464.1.72', criteria.code_list_id
+      assert_equal 'completed', criteria.status
+      assert_equal nil, criteria.effective_time
+      assert_equal HQMF::Coded, criteria.value.class
+      assert_equal '1.2.3.4', criteria.value.code_list_id
 
       criteria = @model.data_criteria('DiabetesMedAdministered')
       assert_equal :medications, criteria.type
