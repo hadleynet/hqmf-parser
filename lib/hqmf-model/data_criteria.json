@@ -238,6 +238,17 @@
       "standard_category":"procedure",
       "qds_data_type":"procedure_result",
       "not_supported":false},
+  "procedure_result_final report":{
+      "title":"procedure, result",
+      "category":"procedures",
+      "definition":"procedure_result",
+      "status":"final report",
+      "property":"result",
+      "hard_status":false,
+      "patient_api_function":"procedureResults",
+      "standard_category":"procedure",
+      "qds_data_type":"procedure_result",
+      "not_supported":false},
   "procedure_adverse_event":{
       "title":"procedure, adverse event",
       "category":"procedures",

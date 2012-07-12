@@ -159,7 +159,6 @@ module HQMF
       key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")
       settings = settings_map[key]
       
-      binding.pry if settings.nil? || settings["not_supported"]
       raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
 
       settings

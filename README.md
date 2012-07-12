@@ -145,6 +145,7 @@ STATUSES BY CATEGORY
     performed
     ordered
     recommended
+    final report
   conditions
     active
     resolved
