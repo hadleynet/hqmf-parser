@@ -121,6 +121,14 @@ module HQMF2
     def code
       attr_val('./@code')
     end
+    
+    def code_list_id
+      attr_val('./@valueSet')
+    end
+
+    def title
+      attr_val('./@displayName')
+    end
 
     def value
       code
@@ -135,7 +143,7 @@ module HQMF2
     end
     
     def to_model
-      HQMF::Coded.new(type, system, code)
+      HQMF::Coded.new(type, system, code, code_list_id, title)
     end
     
   end

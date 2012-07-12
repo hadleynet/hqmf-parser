@@ -563,6 +563,34 @@
         </observationCriteria>
       </entry>
       <entry>
+        <localVariableName>DummyInlineCodedResult</localVariableName>
+        <observationCriteria>
+          <id root="0" extension="DummyInlineCodedResult"/>
+          <code valueSet="2.16.840.1.113883.3.464.1.72"/>
+          <statusCode code="completed"/>
+          <value xsi:type="CD" code="xyzzy" codeSystem="1.2.3.4"/>
+          <definition>
+            <observationReference moodCode="DEF">
+              <id root="0" extension="Results"/>
+            </observationReference>
+          </definition>
+        </observationCriteria>
+      </entry>
+      <entry>
+        <localVariableName>DummyExternalCodedResult</localVariableName>
+        <observationCriteria>
+          <id root="0" extension="DummyExternalCodedResult"/>
+          <code valueSet="2.16.840.1.113883.3.464.1.72"/>
+          <statusCode code="completed"/>
+          <value xsi:type="CD" valueSet="1.2.3.4"/>
+          <definition>
+            <observationReference moodCode="DEF">
+              <id root="0" extension="Results"/>
+            </observationReference>
+          </definition>
+        </observationCriteria>
+      </entry>
+      <entry>
         <localVariableName>DiabetesMedNotAdministeredForNoStatedReason</localVariableName>
         <substanceAdministrationCriteria actionNegationInd="true">
           <id root="0" extension="DiabetesMedNotAdministeredForNoStatedReason"/>

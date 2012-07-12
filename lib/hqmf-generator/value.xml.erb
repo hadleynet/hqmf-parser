@@ -4,7 +4,11 @@
     <%= xml_for_value(value.high, 'high', false) if value.high -%>
   </<%= name %>>
 <%- elsif value.class==HQMF::Coded -%>
-  <<%= name %> xsi:type="<%= value.type %>" codeSystem="<%= value.system %>" code="<%= value.code %>"/>
+  <%- if value.code_list_id -%>
+  <<%= name %> xsi:type="<%= value.type %>" valueSet="<%= value.code_list_id %>" <%= "displayName=\"#{value.title}\"" if value.title %>/>
+  <%- else -%>
+  <<%= name %> xsi:type="<%= value.type %>" codeSystem="<%= value.system %>" code="<%= value.code %>" <%= "displayName=\"#{value.title}\"" if value.title %>/>
+  <%- end -%>
 <%- elsif value.class==HQMF::Value -%>
   <%- if value.derived? -%>
   <<%= name %> nullFlavor="DER">
