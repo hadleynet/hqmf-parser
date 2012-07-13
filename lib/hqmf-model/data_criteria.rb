@@ -76,6 +76,9 @@ module HQMF
     def patient_api_function
       @settings['patient_api_function'].to_sym unless @settings['patient_api_function'].empty?
     end
+    def hard_status
+      @settings['hard_status']
+    end
     
     def definition=(definition)
       @definition = definition
@@ -116,7 +119,7 @@ module HQMF
 
     def base_json
       x = nil
-      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :negation, :negation_code_list_id])
+      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :hard_status, :negation, :negation_code_list_id])
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = ((@value.is_a? String) ? @value : @value.to_json) if @value
       json[:field_values] = @field_values.inject({}) {|memo,(k,v)| memo[k] = v.to_json; memo} if @field_values
