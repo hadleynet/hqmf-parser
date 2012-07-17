@@ -45,14 +45,14 @@ module HQMF
                when 'REFR'
                  if operator.field.downcase == 'status'
                    # only set the status if we don't have one.  We trust the template ID statuses more than the restrictions
-                   new_data_criteria.status ||= operator.value.downcase
+                   new_data_criteria.status ||= operator.value.code
                  elsif operator.field.downcase == 'result value' or operator.field.downcase == 'result'
-                   Kernel.warn "REFR result value is nil: #{new_data_criteria.title}" if (operator.value.nil?)
+                   puts "REFR result value is nil: #{new_data_criteria.title}" if (operator.value.nil?)
                    new_data_criteria.value = operator.value
                  else
                    new_data_criteria.field_values ||= {}
                    new_data_criteria.field_values[operator.field_value_key] = operator.value
-                   Kernel.warn "Cannot convert the field of REFR: #{operator.field}"
+                   puts "Cannot convert the field of REFR: #{operator.field}"
                  end
                  restriction.converted=true
                when 'RSON'
@@ -60,12 +60,11 @@ module HQMF
                  new_data_criteria.negation=true
                  restriction.converted=true
                when 'SUBJ'
-                 Kernel.warn "Currently do not handle SUBJ operator"
                  new_data_criteria.field_values ||= {}
                  new_data_criteria.field_values[operator.field_value_key] = operator.value
                  restriction.converted=true
                else
-                 Kernel.warn "Operator is unknown: #{operator.type}"
+                 puts "Operator is unknown: #{operator.type}"
                  restriction.converted=true
                end
              end

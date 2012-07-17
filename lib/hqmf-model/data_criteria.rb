@@ -13,7 +13,10 @@ module HQMF
               'REASON'=>{title:'Reason',coded_entry_method: :reason},
               'RADIATION_DOSAGE'=>{title:'Radiation Dosage',coded_entry_method: :radiation_dosage},
               'RADIATION_DURATION'=>{title:'Radiation Duration',coded_entry_method: :radiation_duration},
-              'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay}}
+              'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay},
+              'SOURCE'=>{title:'Source',coded_entry_method: :source},
+              'CUMULATIVE_MEDICTION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
+              'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location}}
 
     attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator 
     attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :definition, :inline_code_list, :negation_code_list_id, :negation, :display_name

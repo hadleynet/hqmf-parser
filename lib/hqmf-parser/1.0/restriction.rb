@@ -91,12 +91,12 @@ module HQMF1
     end
 
     def field_code
-      attr_val('./cda:observation/cda:code/@code')
+      attr_val('./cda:observation/cda:code/@code') || attr_val('./cda:encounter/cda:participant/cda:roleParticipant/@classCode')
     end
     
     def value
-      
-      type = attr_val('./cda:observation/cda:value/@xsi:type')
+      value = nil
+      type = attr_val('./cda:observation/cda:value/@xsi:type') || 'CD'
       case type
       when 'IVL_PQ'
         value = HQMF1::Range.new(@entry.xpath('./cda:observation/cda:value'))
@@ -104,14 +104,19 @@ module HQMF1
         value = HQMF1::Value.new(@entry.xpath('./cda:observation/cda:value'))
       when 'CD'
         if field && field.downcase == 'status'
-          value = attr_val('./cda:observation/cda:value/@displayName')
-        else
+          code = attr_val('./cda:observation/cda:value/@displayName').downcase
+          value = HQMF::Coded.for_single_code('status',code,code)
+        elsif attr_val('./cda:observation/cda:value/@code')
           oid = attr_val('./cda:observation/cda:value/@code')
           title = attr_val('./cda:observation/cda:value/@displayName')
           value = HQMF::Coded.for_code_list(oid,title)
+        elsif attr_val('./cda:encounter/cda:participant/cda:roleParticipant/cda:code/@code')
+          oid = attr_val('./cda:encounter/cda:participant/cda:roleParticipant/cda:code/@code')
+          title = attr_val('./cda:encounter/cda:participant/cda:roleParticipant/cda:code/@displayName')
+          value = HQMF::Coded.for_code_list(oid,title)
         end
       when 'ANYNonNull'
-        Kernel.warn "Ignoring ANYNonNull restriction value type"
+        puts "Ignoring ANYNonNull restriction value type"
       else
         raise "Unknown restriction value type #{type}"
       end if type

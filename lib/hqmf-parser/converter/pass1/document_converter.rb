@@ -38,6 +38,8 @@ module HQMF
        
       backfill_patient_characteristics_with_codes(doc, codes)
       
+      HQMF::DocumentConverter.validate(doc, codes)
+      
       doc
       
     end
@@ -68,7 +70,7 @@ module HQMF
             value_set = codes[data_criteria.code_list_id]
             raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
           else
-            Kernel.warn "no code set to back fill: #{data_criteria.title}"
+            puts "no code set to back fill: #{data_criteria.title}"
             next
           end
           
@@ -83,9 +85,7 @@ module HQMF
           data_criteria.inline_code_list = BIRTHTIME_CODE_LIST
           
           # if (data_criteria.temporal_references.nil? or data_criteria.temporal_references.empty?)
-          #   Kernel.warn("Age with no value comparison found")
           # else
-          #   Kernel.warn("more than one temporal reference found for age... taking first") if data_criteria.temporal_references.size > 1
           #   
           #   value = HQMF::Value.from_json(JSON.parse(data_criteria.temporal_references.first.offset.to_json.to_json))
           #   range = HQMF::Range.new('IVL_PQ',nil,nil,nil)
@@ -124,11 +124,53 @@ module HQMF
       high = HQMF::Value.new('TS',nil,'20101231',nil, nil, nil)
       width = HQMF::Value.new('PQ','a','1',nil, nil, nil)
       
-      Kernel.warn('need to figure out a way to make dates dynamic')
+#      puts ('need to figure out a way to make dates dynamic')
       
       HQMF::EffectiveTime.new(low,high,width)
     end
     
+    def self.validate(document,codes)
+      puts "!!!!!!!!!!!(#{document.id})document is nil!!!!!!!!!!!" unless document
+      puts "!!!!!!!!!!!(#{document.id})codes are nil!!!!!!!!!!!" unless codes
+      return unless document and codes
+      
+      referenced_oids = document.all_data_criteria.map(&:code_list_id).compact.uniq
+      
+      referenced_oids.each do |oid|
+        value_set = codes[oid]
+        puts "DC (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+      end
+      
+      oid_values = document.all_data_criteria.select {|dc| dc.value != nil and dc.value.type == 'CD'}
+      
+      if oid_values.size > 0
+        referenced_oids = (oid_values.map {|dc| dc.value.code_list_id }).compact.uniq
+        referenced_oids.each do |oid|
+          value_set = codes[oid]
+          puts "VALUE (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+        end
+      end
+      
+      
+      oid_negation = document.all_data_criteria.select {|dc| dc.negation_code_list_id != nil}
+      if oid_negation.size > 0
+        referenced_oids = (oid_negation.map {|dc| dc.negation_code_list_id}).compact.uniq
+        referenced_oids.each do |oid|
+          value_set = codes[oid]
+          puts "NEGATION (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+        end
+      end
+        
+      oid_fields = document.all_data_criteria.select {|dc| dc.field_values != nil}
+      if oid_fields.size > 0
+        referenced_oids = (oid_fields.map{|dc| dc.field_values.map {|key,field| puts "field: #{key} is nil" unless field; field.code_list_id if field != nil and field.type == 'CD'}}).flatten.compact.uniq
+        referenced_oids.each do |oid|
+          value_set = codes[oid]
+          puts "FIELDS (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+        end
+      end
+      
+    end
 
    
   end  

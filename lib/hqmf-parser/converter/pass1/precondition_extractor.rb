@@ -38,7 +38,7 @@ module HQMF
         if (inverted)
           type = inverted
         else
-          Kernel.warn "don't know how to invert #{type}"
+          puts "don't know how to invert #{type}"
         end
       end
       

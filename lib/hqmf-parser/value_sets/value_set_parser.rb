@@ -35,14 +35,16 @@ module HQMF
     
         # select the grouped code sets and fill in the children... also remove the children that are a
         # member of a group.  We remove the children so that we can create parent groups for the orphans
-        (by_oid_ungrouped.select {|key,value| value["code_set"] == GROUP_CODE_SET}).each do |key, value|
+        (by_oid_ungrouped.select {|key,value| value["code_set"].upcase == GROUP_CODE_SET}).each do |key, value|
           # remove the group so that it is not in the orphan list
           by_oid_ungrouped.delete(value["oid"])
           codes = []
           value["codes"].each do |child_oid|
 #            codes << by_oid_ungrouped.delete(child_oid)
             # do not delete the children of a group.  These may be referenced by other groups or directly by the measure
-            codes << by_oid_ungrouped[child_oid]
+            code = by_oid_ungrouped[child_oid]
+            puts "code could not be found: #{child_oid}" unless code
+            codes << code
             # for hierarchies we need to probably have codes be a hash that we select from if we don't find the
             # element in by_oid_ungrouped we may need to look for it in final
           end
@@ -79,7 +81,7 @@ module HQMF
         by_oid = {}
         array_of_hashes.each do |row|
           entry = convert_row(row)
-      
+          
           existing = by_oid[entry["oid"]]
           if (existing)
             existing["codes"].concat(entry["codes"])
@@ -110,10 +112,10 @@ module HQMF
         # Code System Version
         # Code
         # Descriptor
-        {
+        value = {
           "key" => normalize_names(row[CATEGORY_TITLE],row[CONCEPT_TITLE]),
           "organization" => row[ORGANIZATION_TITLE],
-          "oid" => row[OID_TITLE].strip,
+          "oid" => row[OID_TITLE].strip.gsub(/[^0-9\.]/i, ''),
           "concept" => normalize_names(row[CONCEPT_TITLE]),
           "category" => normalize_names(row[CATEGORY_TITLE]),
           "code_set" => row[CODE_SET_TITLE],
@@ -121,6 +123,8 @@ module HQMF
           "codes" => extract_code(row[CODE_TITLE], row[CODE_SET_TITLE]),
           "description" => row[DESCRIPTION_TITLE]
         }
+        value['codes'].map! {|code| code.strip.gsub(/[^0-9\.]/i, '')} if (value['code_set'].upcase == GROUP_CODE_SET)
+        value
       end
   
       # Break all the supplied strings into separate words and return the resulting list as a
