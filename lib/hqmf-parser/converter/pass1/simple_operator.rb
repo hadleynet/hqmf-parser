@@ -8,7 +8,7 @@ module HQMF
       SUMMARY = 'SUMMARY'
       UNKNOWN = 'UNKNOWN'
       
-      VALUE_FIELDS = {'SEV'=>'SEVERITY','117363000'=>'ORDINAL','285202004'=>'ENVIRONMENT','410666004'=>'REASON','446996006'=>'RADIATION_DOSAGE','306751006'=>'RADIATION_DURATION','183797002'=>'LENGTH_OF_STAY'}
+      VALUE_FIELDS = {'SEV'=>'SEVERITY','117363000'=>'ORDINAL','285202004'=>'ENVIRONMENT','410666004'=>'REASON','446996006'=>'RADIATION_DOSAGE','306751006'=>'RADIATION_DURATION','183797002'=>'LENGTH_OF_STAY', '260753009'=>'SOURCE','363819003'=>'CUMULATIVE_MEDICTION_DURATION', 'SDLOC'=>'FACILITY_LOCATION'}
       
 
       attr_accessor :type, :value, :category, :field, :field_code
@@ -40,7 +40,7 @@ module HQMF
       
       def field_value_key
         key = VALUE_FIELDS[field_code]
-        raise "unsupported field value" unless key
+        raise "unsupported field value: #{field_code}, #{field}" unless key
         key
       end
 

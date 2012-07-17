@@ -39,7 +39,7 @@ module HQMF
       population_criterias = []
       json["population_criteria"].each do |key, population_criteria|
         population_criterias << HQMF::PopulationCriteria.from_json(key.to_s, population_criteria)
-      end
+      end if json['population_criteria']
 
       data_criterias = []
       json["data_criteria"].each do |key, data_criteria|

@@ -39,11 +39,11 @@ module HQMF1
       # Get the code list OID of the criteria, used as an index to the code list database
       @code_list_id = attr_val(oid_xpath_map[@key]['oid_xpath'])
       unless @code_list_id
-        Kernel.warn "code list id not found, getting default"
+        puts "code list id not found, getting default" if !@derived_from
         @code_list_id = attr_val('cda:act/cda:sourceOf//cda:code/@code')
       end
       
-      Kernel.warn "no oid defined for data criteria: #{@key}" unless @code_list_id
+      puts "no oid defined for data criteria: #{@key}" if !@code_list_id and !@derived_from
       
     end
     
