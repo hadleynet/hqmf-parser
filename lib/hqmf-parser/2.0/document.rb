@@ -21,7 +21,7 @@ module HQMF2
       end
       @populations = []
       @population_criteria = []
-      @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection', NAMESPACES).each do |population_def|
+      @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection', NAMESPACES).each_with_index do |population_def, population_index|
         population = {}
         {
           'IPP' => 'patientPopulationCriteria',
@@ -37,6 +37,8 @@ module HQMF2
             population[criteria_id] = criteria.id
           end
         end
+        id_def = population_def.at_xpath('cda:id/@extension', NAMESPACES)
+        population['ID'] = id_def ? id_def.value : "Population#{population_index}"
         @populations << population
       end
     end

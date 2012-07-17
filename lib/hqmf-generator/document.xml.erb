@@ -86,9 +86,10 @@
       <%- end -%>
     </dataCriteriaSection>
   </component>
-  <%- doc.populations.each do |population| -%>
+  <%- doc.populations.each_with_index do |population, population_index| -%>
   <component>
     <populationCriteriaSection>
+      <id root="2.16.840.1.113883.3.100.1" extension="<%= population['ID'] || "Population#{population_index}" %>"/>
       <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
       <%- population.keys.each do |criteria_id| -%>
       <%= xml_for_population_criteria(population, criteria_id) %>

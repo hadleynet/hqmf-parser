@@ -69,6 +69,8 @@ require_relative '../../../test_helper'
       assert_equal 3, ipp.preconditions.length
       
       assert_equal 2, @doc.populations.length
+      assert_equal 'Population1', @doc.populations[0]['ID']
+      assert_equal 'Population2', @doc.populations[1]['ID']
       assert_equal 'IPP', @doc.populations[0]['IPP']
       assert_equal 'IPP2', @doc.populations[1]['IPP']
       assert_equal 'DENOM', @doc.populations[0]['DENOM']
@@ -119,6 +121,8 @@ require_relative '../../../test_helper'
       assert_equal 3, ipp.preconditions.length
 
       assert_equal 2, @model.populations.length
+      assert_equal 'Population1', @model.populations[0]['ID']
+      assert_equal 'Population2', @model.populations[1]['ID']
       assert_equal 'IPP', @model.populations[0]['IPP']
       assert_equal 'IPP2', @model.populations[1]['IPP']
       assert_equal 'DENOM', @model.populations[0]['DENOM']
