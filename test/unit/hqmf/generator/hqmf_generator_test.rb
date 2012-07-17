@@ -138,7 +138,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
       
     all_population_criteria = @model.all_population_criteria
-    assert_equal 4, all_population_criteria.length
+    assert_equal 8, all_population_criteria.length
   
     codes = all_population_criteria.collect {|p| p.id}
     %w(IPP DENOM NUMER DENEXCEP).each do |c|
@@ -172,6 +172,18 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert ipp.conjunction?
     assert_equal 'atLeastOneTrue', ipp.conjunction_code
     assert_equal 3, ipp.preconditions.length
+
+    assert_equal 2, @model.populations.length
+    assert_equal 'IPP', @model.populations[0]['IPP']
+    assert_equal 'IPP2', @model.populations[1]['IPP']
+    assert_equal 'DENOM', @model.populations[0]['DENOM']
+    assert_equal 'DENOM2', @model.populations[1]['DENOM']
+    assert_equal 'NUMER', @model.populations[0]['NUMER']
+    assert_equal 'NUMER2', @model.populations[1]['NUMER']
+    assert_equal 'DENEXCEP', @model.populations[0]['DENEXCEP']
+    assert_equal 'DENEXCEP2', @model.populations[1]['DENEXCEP']
+    assert_equal nil, @model.populations[0]['EXCL']
+    assert_equal nil, @model.populations[1]['EXCL']
   end
   
   def test_schema_valid

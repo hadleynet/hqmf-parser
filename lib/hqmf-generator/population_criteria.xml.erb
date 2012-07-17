@@ -1,9 +1,9 @@
       <entry>
-        <<%= population_element_prefix(criteria.id) %>Criteria>
+        <<%= population_element_prefix(criteria_id) %>Criteria>
           <id root="c75181d0-73eb-11de-8a39-0800200c9a66"
-            extension="<%= criteria.id %>"/>
-          <%- criteria.preconditions.each do |precondition| -%>
+            extension="<%= population_criteria.id %>"/>
+          <%- population_criteria.preconditions.each do |precondition| -%>
           <%= xml_for_precondition(precondition) %>
           <%- end -%>
-        </<%= population_element_prefix(criteria.id) %>Criteria>
+        </<%= population_element_prefix(criteria_id) %>Criteria>
       </entry>

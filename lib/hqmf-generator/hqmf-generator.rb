@@ -120,13 +120,16 @@ module HQMF2
         template.result(context.get_binding)
       end
       
-      def xml_for_population_criteria(population_criteria)
+      def xml_for_population_criteria(population, criteria_id)
         template_path = File.expand_path(File.join('..', 'population_criteria.xml.erb'), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => population_criteria}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)
+        population_criteria = doc.population_criteria(population[criteria_id])
+        if population_criteria
+          params = {'doc' => doc, 'population' => population, 'criteria_id' => criteria_id, 'population_criteria' => population_criteria}
+          context = ErbContext.new(params)
+          template.result(context.get_binding)
+        end
       end
       
       def xml_for_temporal_references(criteria)
@@ -253,6 +256,8 @@ module HQMF2
           'numerator'
         when 'DENEXCEP'
           'denominatorException'
+        when 'EXCL'
+          'exclusion'
         else
           raise "Unknown population criteria type #{population_criteria_code}"
         end

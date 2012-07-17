@@ -189,6 +189,8 @@
           type="POQM_MT000002UV.PatientPopulationCriteria"/>
         <xs:element name="numeratorCriteria" type="POQM_MT000002UV.NumeratorCriteria"/>
         <xs:element name="denominatorCriteria" type="POQM_MT000002UV.DenominatorCriteria"/>
+        <xs:element name="exclusionCriteria"
+          type="POQM_MT000002UV.DenominatorExceptionCriteria"/>
         <xs:element name="denominatorExceptionCriteria"
           type="POQM_MT000002UV.DenominatorExceptionCriteria"/>
         <xs:element name="stratifierCriteria" type="POQM_MT000002UV.StratifierCriteria"/>

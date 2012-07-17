@@ -19,14 +19,31 @@ module HQMF2
       @data_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:dataCriteriaSection/cda:entry', NAMESPACES).collect do |entry|
         DataCriteria.new(entry)
       end
-      @population_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection/cda:entry[not(cda:stratifierCriteria)]', NAMESPACES).collect do |attr|
-        PopulationCriteria.new(attr, self)
+      @populations = []
+      @population_criteria = []
+      @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection', NAMESPACES).each do |population_def|
+        population = {}
+        {
+          'IPP' => 'patientPopulationCriteria',
+          'DENOM' => 'denominatorCriteria',
+          'NUMER' => 'numeratorCriteria',
+          'DENEXCEP' => 'denominatorExceptionCriteria',
+          'EXCL' => 'exclusionCriteria'
+        }.each_pair do |criteria_id, criteria_element_name|
+          criteria_def = population_def.at_xpath("cda:entry[cda:#{criteria_element_name}]", NAMESPACES)
+          if criteria_def
+            criteria = PopulationCriteria.new(criteria_def, self)
+            @population_criteria << criteria
+            population[criteria_id] = criteria.id
+          end
+        end
+        @populations << population
       end
     end
     
     # Get populations (i.e. submeasures) currently just return a static single population
     def populations
-      [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'EXCL'=>'EXCL', 'DENEXCEP'=>'DENEXCEP'}]
+      @populations
     end
     
     # Get the title of the measure

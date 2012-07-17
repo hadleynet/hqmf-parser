@@ -620,7 +620,7 @@
               <expression>StartDate.add(new PQ(-2,"a"))</expression>
             </low>
           </effectiveTime>
-          <reasonCode valueSet="1.2.3.4" displayText="Allergic code set"/>
+          <reasonCode valueSet="1.2.3.4" displayName="Allergic code set"/>
           <participant typeCode="CSM">
             <roleParticipant classCode="THER">
               <code valueSet="2.16.840.1.113883.3.464.1.94"/>
@@ -721,6 +721,7 @@
   </component>
   <component>
     <populationCriteriaSection>
+      <id root="0" extension="Population1"/>
       <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
       <title>Population Criteria Section</title>
       <text>This section describes the Initial Patient Population,
@@ -832,59 +833,121 @@
           </precondition>
         </denominatorExceptionCriteria>
       </entry>
+    </populationCriteriaSection>
+  </component>
+  <component>
+    <populationCriteriaSection>
+      <id root="0" extension="Population2"/>
+      <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
+      <title>Population Criteria Section</title>
+      <text>This section describes the Initial Patient Population,
+        Numerator, Denominator, Denominator Exceptions, and Measure
+        Populations</text>
       <entry>
-        <localVariableName>Age</localVariableName>
-        <stratifierCriteria>
+        <patientPopulationCriteria>
           <id root="c75181d0-73eb-11de-8a39-0800200c9a66"
-            extension="CLASSIFIER1"/>
-          <precondition>
-            <observationReference>
-              <id root="0" extension="ageBetween17and21"/>
-            </observationReference>
-          </precondition>
-          <precondition>
-            <observationReference>
-              <id root="0" extension="ageBetween22and29"/>
-            </observationReference>
-          </precondition>
-          <precondition>
-            <observationReference>
-              <id root="0" extension="ageBetween30and39"/>
-            </observationReference>
-          </precondition>
-          <precondition>
-            <observationReference>
-              <id root="0" extension="ageBetween40and49"/>
-            </observationReference>
-          </precondition>
-          <precondition>
-            <observationReference>
-              <id root="0" extension="ageBetween50and59"/>
-            </observationReference>
-          </precondition>
+            extension="IPP2"/>
           <precondition>
             <observationReference>
               <id root="0" extension="ageBetween60and64"/>
             </observationReference>
           </precondition>
-        </stratifierCriteria>
+        </patientPopulationCriteria>
       </entry>
       <entry>
-        <localVariableName>Gender</localVariableName>
-        <stratifierCriteria>
+        <denominatorCriteria>
           <id root="c75181d0-73eb-11de-8a39-0800200c9a66"
-            extension="CLASSIFIER2"/>
+            extension="DENOM2"/>
+          <precondition>
+            <atLeastOneTrue>
+              <precondition>
+                <allTrue>
+                  <precondition>
+                    <observationReference>
+                      <id root="0" extension="HasDiabetes"/>
+                    </observationReference>
+                  </precondition>
+                  <precondition>
+                    <atLeastOneTrue>
+                      <precondition>
+                        <encounterReference>
+                          <id root="0"
+                            extension="EDorInpatientEncounter"/>
+                        </encounterReference>
+                      </precondition>
+                      <precondition>
+                        <encounterReference>
+                          <id root="0" extension="AmbulatoryEncounter"/>
+                        </encounterReference>
+                      </precondition>
+                    </atLeastOneTrue>
+                  </precondition>
+                </allTrue>
+              </precondition>
+              <precondition>
+                <substanceAdministrationReference>
+                  <id root="0" extension="DiabetesMedAdministered"/>
+                </substanceAdministrationReference>
+              </precondition>
+              <precondition>
+                <substanceAdministrationReference moodCode="INT">
+                  <id root="0" extension="DiabetesMedIntended"/>
+                </substanceAdministrationReference>
+              </precondition>
+              <precondition>
+                <supplyReference>
+                  <id root="0" extension="DiabetesMedSupplied"/>
+                </supplyReference>
+              </precondition>
+              <precondition>
+                <supplyReference moodCode="RQO">
+                  <id root="0" extension="DiabetesMedOrdered"/>
+                </supplyReference>
+              </precondition>
+            </atLeastOneTrue>
+          </precondition>
+        </denominatorCriteria>
+      </entry>
+      <entry>
+        <numeratorCriteria>
+          <id root="c75181d0-73eb-11de-8a39-0800200c9a66"
+            extension="NUMER2"/>
           <precondition>
             <observationReference>
-              <id root="0" extension="genderMale"/>
+              <id root="0" extension="HbA1C"/>
+            </observationReference>
+          </precondition>
+        </numeratorCriteria>
+      </entry>
+      <entry>
+        <denominatorExceptionCriteria>
+          <id root="c75181d0-73eb-11de-8a39-0800200c9a66"
+            extension="DENEXCEP2"/>
+          <precondition>
+            <allTrue>
+              <precondition>
+                <observationReference>
+                  <id root="0" extension="HasPolycysticOvaries"/>
+                </observationReference>
+              </precondition>
+              <precondition>
+                <observationReference>
+                  <id root="0" extension="HasDiabetes"/>
+                </observationReference>
+              </precondition>
+            </allTrue>
+          </precondition>
+          <precondition>
+            <observationReference>
+              <id root="0" extension="HasSteroidInducedDiabetes"/>
             </observationReference>
           </precondition>
           <precondition>
             <observationReference>
-              <id root="0" extension="genderFemale"/>
+              <id root="0" extension="HasGestationalDiabetes"/>
             </observationReference>
           </precondition>
-        </stratifierCriteria>
+        </denominatorExceptionCriteria>
       </entry>
     </populationCriteriaSection>
   </component>
