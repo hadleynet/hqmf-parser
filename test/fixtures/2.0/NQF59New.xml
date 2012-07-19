@@ -7,7 +7,7 @@
   <id root="0" extension="foo"/>
   <code code="57024-2" codeSystem="2.16.840.1.113883.6.1"/>
   <title value="Sample Quality Measure Document"/>
-  <text value="This is the measure description"/>
+  <text value="This is the measure description."/>
   <statusCode code="completed"/>
   <setId root="0"/>
   <versionNumber value="1"/>
@@ -736,7 +736,9 @@
       </entry>
       <entry typeCode="DRIV">
         <supplyCriteria moodCode="EVN" classCode="SPLY">
-          <id> <item root="0" extension="DiabetesMedSupplied"/></id>
+          <id>
+            <item root="0" extension="DiabetesMedSupplied"/>
+          </id>
           <effectiveTime xsi:type="IVL_TS">
             <high nullFlavor="DER">
               <expression value='EndDate.add(new PQ(-2,"a"))'/>

@@ -19,7 +19,7 @@ module HQMF2
       @derivation_operator = extract_derivation_operator
       @subset_operators = extract_subset_operators
       @children_criteria = extract_child_criteria
-      @id_xpath = './cda:observationCriteria/cda:id/@extension'
+      @id_xpath = './cda:observationCriteria/cda:id/cda:item/@extension'
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
       
@@ -30,24 +30,24 @@ module HQMF2
         @code_list_xpath = './cda:observationCriteria/cda:value'
       when 'Encounter', 'Encounters'
         @definition = 'encounter'
-        @id_xpath = './cda:encounterCriteria/cda:id/@extension'
+        @id_xpath = './cda:encounterCriteria/cda:id/cda:item/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
       when 'LabResults', 'Results'
         @definition = 'laboratory_test'
         @value = extract_value
       when 'Procedure', 'Procedures'
         @definition = 'procedure'
-        @id_xpath = './cda:procedureCriteria/cda:id/@extension'
+        @id_xpath = './cda:procedureCriteria/cda:id/cda:item/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
       when 'Medication', 'Medications'
         @definition = 'medication'
-        @id_xpath = './cda:substanceAdministrationCriteria/cda:id/@extension'
-        @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participant/cda:roleParticipant/cda:code'
+        @id_xpath = './cda:substanceAdministrationCriteria/cda:id/cda:item/@extension'
+        @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participation/cda:role/cda:code'
       when 'RX'
         @definition = 'medication'
         @status = 'dispensed'
-        @id_xpath = './cda:supplyCriteria/cda:id/@extension'
-        @code_list_xpath = './cda:supplyCriteria/cda:participant/cda:roleParticipant/cda:code'
+        @id_xpath = './cda:supplyCriteria/cda:id/cda:item/@extension'
+        @code_list_xpath = './cda:supplyCriteria/cda:participation/cda:role/cda:code'
       when 'Demographics'
         @definition = definition_for_demographic
         @value = extract_value
@@ -80,7 +80,7 @@ module HQMF2
     # Get the title of the criteria, provides a human readable description
     # @return [String] the title of this data criteria
     def title
-      @entry.at_xpath('./cda:localVariableName', HQMF2::Document::NAMESPACES).inner_text
+      id
     end
     
     # Get the code list OID of the criteria, used as an index to the code list database
@@ -120,7 +120,7 @@ module HQMF2
       negation = attr_val('./*/@actionNegationInd')
       @negation = (negation=='true')
       if @negation
-        @negation_code_list_id = attr_val('./*/cda:reasonCode/@valueSet')
+        @negation_code_list_id = attr_val('./*/cda:reasonCode/cda:item/@valueSet')
       else
         @negation_code_list_id = nil
       end

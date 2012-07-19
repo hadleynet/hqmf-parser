@@ -229,8 +229,8 @@ require_relative '../../../test_helper'
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SAS', criteria.temporal_references[0].type
       assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
-      assert_equal '-1', criteria.temporal_references[0].range.low.value
-      assert_equal 'a', criteria.temporal_references[0].range.low.unit
+      assert_equal '1', criteria.temporal_references[0].range.high.value
+      assert_equal 'a', criteria.temporal_references[0].range.high.unit
 
       criteria = @doc.data_criteria('EDorInpatientEncounter')
       assert_equal :encounters, criteria.to_model.type
@@ -240,7 +240,7 @@ require_relative '../../../test_helper'
       assert_equal nil, criteria.effective_time.low
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
-      assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      assert_equal 'EndDate.add(new PQ(-2,\'a\'))', criteria.effective_time.high.expression
       assert_equal 0, criteria.temporal_references.length
 
       criteria = @doc.data_criteria('HasGestationalDiabetes')
@@ -413,8 +413,8 @@ require_relative '../../../test_helper'
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SAS', criteria.temporal_references[0].type
       assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
-      assert_equal '-1', criteria.temporal_references[0].range.low.value
-      assert_equal 'a', criteria.temporal_references[0].range.low.unit
+      assert_equal '1', criteria.temporal_references[0].range.high.value
+      assert_equal 'a', criteria.temporal_references[0].range.high.unit
 
       criteria = @model.data_criteria('EDorInpatientEncounter')
       assert_equal :encounters, criteria.type
@@ -424,7 +424,7 @@ require_relative '../../../test_helper'
       assert_equal nil, criteria.effective_time.low
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
-      assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      assert_equal 'EndDate.add(new PQ(-2,\'a\'))', criteria.effective_time.high.expression
       assert_equal 0, criteria.temporal_references.length
 
       criteria = @model.data_criteria('HasGestationalDiabetes')
@@ -543,7 +543,6 @@ require_relative '../../../test_helper'
            :conjunction_code=>"atLeastOneTrue"
           }]
       }
-
       diff = denom.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       

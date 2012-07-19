@@ -12,7 +12,7 @@ class Hash
     (self.keys | other.keys).inject({}) do |diff, k|
       left = self[k]
       right = other[k]
-      right = right.gsub(/_precondition_\d+/, '') if (k == :reference && clean_reference)
+      right = right.gsub(/_precondition_\d+/, '') if (right && k==:reference && clean_reference)
       unless left == right
         if left.is_a? Hash
           if right.nil?

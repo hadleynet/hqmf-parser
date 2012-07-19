@@ -35,7 +35,7 @@ module HQMF2
       if !derived?
         nil
       else
-        @entry.at_xpath('./cda:expression', HQMF2::Document::NAMESPACES).inner_text
+        attr_val('./cda:expression/@value')
       end
     end
     
@@ -179,15 +179,7 @@ module HQMF2
       @reference = Reference.new(@entry.at_xpath('./*/cda:id', HQMF2::Document::NAMESPACES))
       range_def = @entry.at_xpath('./cda:pauseQuantity', HQMF2::Document::NAMESPACES)
       if range_def
-        type_def = range_def.at_xpath('./@xsi:type', HQMF2::Document::NAMESPACES)
-        if type_def && type_def.value=='IVL_PQ'
-          @range = HQMF2::Range.new(range_def, 'IVL_PQ')
-        else
-          value = Value.new(range_def)
-          @range = Range.new(nil, 'IVL_PQ')
-          @range.low = value
-          @range.high = value
-        end
+        @range = HQMF2::Range.new(range_def, 'IVL_PQ')
       end
     end
     

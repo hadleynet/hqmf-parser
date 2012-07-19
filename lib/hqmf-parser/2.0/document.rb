@@ -30,7 +30,7 @@ module HQMF2
           'DENEXCEP' => 'denominatorExceptionCriteria',
           'EXCL' => 'exclusionCriteria'
         }.each_pair do |criteria_id, criteria_element_name|
-          criteria_def = population_def.at_xpath("cda:entry[cda:#{criteria_element_name}]", NAMESPACES)
+          criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
           if criteria_def
             criteria = PopulationCriteria.new(criteria_def, self)
             @population_criteria << criteria
@@ -51,13 +51,13 @@ module HQMF2
     # Get the title of the measure
     # @return [String] the title
     def title
-      @doc.at_xpath('cda:QualityMeasureDocument/cda:title', NAMESPACES).inner_text
+      @doc.at_xpath('cda:QualityMeasureDocument/cda:title/@value', NAMESPACES).inner_text
     end
     
     # Get the description of the measure
     # @return [String] the description
     def description
-      description = @doc.at_xpath('cda:QualityMeasureDocument/cda:text', NAMESPACES)
+      description = @doc.at_xpath('cda:QualityMeasureDocument/cda:text/@value', NAMESPACES)
       description==nil ? '' : description.inner_text
     end
   
