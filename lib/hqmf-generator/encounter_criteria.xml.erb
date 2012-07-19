@@ -1,12 +1,13 @@
-      <entry>
-        <localVariableName><%= criteria.id %></localVariableName>
-        <encounterCriteria<%= " actionNegationInd='true'" if criteria.negation %>>
-          <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+      <entry typeCode="DRIV">
+        <encounterCriteria moodCode="EVN" classCode="ENC"<%= " actionNegationInd='true'" if criteria.negation %>>
+          <id>
+            <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          </id>
           <%= xml_for_code(criteria) %>
           <%= xml_for_effective_time(criteria) %>
-          <%= "<reasonCode valueSet=\"#{criteria.negation_code_list_id}\"/>" if criteria.negation && criteria.negation_code_list_id %>
+          <%= xml_for_reason(criteria) %>
           <definition>
-            <encounterReference moodCode="DEF">
+            <encounterReference moodCode="EVN" classCode="ENC">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </encounterReference>
           </definition>

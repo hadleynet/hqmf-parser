@@ -1,16 +1,17 @@
-      <entry>
-        <localVariableName><%= criteria.id %></localVariableName>
-        <substanceAdministrationCriteria<%= " actionNegationInd='true'" if criteria.negation %>>
-          <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+      <entry typeCode="DRIV">
+        <substanceAdministrationCriteria moodCode="EVN" classCode="SBADM"<%= " actionNegationInd='true'" if criteria.negation %>>
+          <id>
+            <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          </id>
           <%= xml_for_effective_time(criteria) %>
-          <%= "<reasonCode valueSet=\"#{criteria.negation_code_list_id}\"/>" if criteria.negation && criteria.negation_code_list_id %>
-          <participant typeCode="CSM">
-            <roleParticipant classCode="THER">
+          <%= xml_for_reason(criteria) %>
+          <participation typeCode="CSM">
+            <role classCode="THER">
               <%= xml_for_code(criteria, 'code', false) %>
-            </roleParticipant>
-          </participant>
+            </role>
+          </participation>
           <definition>
-            <substanceAdministrationReference moodCode="DEF">
+            <substanceAdministrationReference moodCode="EVN" classCode="SBADM">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </substanceAdministrationReference>
           </definition>

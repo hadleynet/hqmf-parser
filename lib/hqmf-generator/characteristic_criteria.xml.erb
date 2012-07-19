@@ -1,15 +1,17 @@
-      <entry>
-        <localVariableName><%= criteria.id %></localVariableName>
-        <observationCriteria>
-          <id root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
-          <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="<%= oid_for_characteristic(criteria.property) %>"
-            displayName="<%= criteria.property.to_s.capitalize %>"/>
+      <entry typeCode="DRIV">
+        <observationCriteria moodCode="EVN" classCode="OBS">
+          <id>
+            <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
+          </id>
+          <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="<%= oid_for_characteristic(criteria.property) %>">
+            <displayName value="<%= criteria.property.to_s.capitalize %>"/>
+          </code>
           <%= xml_for_effective_time(criteria) %>
           <%- if criteria.value -%>
           <%= xml_for_value(criteria.value) %>
           <%- end -%>
           <definition>
-            <observationReference moodCode="DEF">
+            <observationReference moodCode="EVN" classCode="OBS">
               <id root="2.16.840.1.113883.3.100.1" extension="<%= section_name(criteria) %>"/>
             </observationReference>
           </definition>

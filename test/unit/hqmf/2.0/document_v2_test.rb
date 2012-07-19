@@ -299,7 +299,7 @@ require_relative '../../../test_helper'
       assert_equal nil, criteria.effective_time.high
       assert criteria.effective_time.low
       assert_equal true, criteria.effective_time.low.derived?
-      assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
+      assert_equal "StartDate.add(new PQ(-2,'a'))", criteria.effective_time.low.expression
 
       criteria = @doc.data_criteria('DiabetesMedSupplied')
       assert_equal :medications, criteria.to_model.type
@@ -309,7 +309,7 @@ require_relative '../../../test_helper'
       assert_equal nil, criteria.effective_time.low
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
-      assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      assert_equal "EndDate.add(new PQ(-2,'a'))", criteria.effective_time.high.expression
       
       criteria = @doc.data_criteria('anyDiabetes')
       assert_equal :derived, criteria.to_model.type
@@ -482,7 +482,7 @@ require_relative '../../../test_helper'
       assert_equal nil, criteria.effective_time.high
       assert criteria.effective_time.low
       assert_equal true, criteria.effective_time.low.derived?
-      assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
+      assert_equal "StartDate.add(new PQ(-2,'a'))", criteria.effective_time.low.expression
 
       criteria = @model.data_criteria('DiabetesMedSupplied')
       assert_equal :medications, criteria.type
@@ -492,7 +492,7 @@ require_relative '../../../test_helper'
       assert_equal nil, criteria.effective_time.low
       assert criteria.effective_time.high
       assert_equal true, criteria.effective_time.high.derived?
-      assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+      assert_equal "EndDate.add(new PQ(-2,'a'))", criteria.effective_time.high.expression
       
       criteria = @model.data_criteria('anyDiabetes')
       assert_equal :derived, criteria.type

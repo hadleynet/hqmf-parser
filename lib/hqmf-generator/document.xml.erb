@@ -1,83 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <QualityMeasureDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <id root="2.16.840.1.113883.3.100.1" extension="<%= doc.id %>" />
-  <code code="57024-2" codeSystem="2.16.840.1.113883.6.1" displayName="HQMF Document" />
-  <title>
-    <%= doc.title %>
-  </title>
-  <text>
-    <%= doc.description %>
-  </text>
+  <code code="57024-2" codeSystem="2.16.840.1.113883.6.1"/>
+  <title value="<%= doc.title %>"/>
+  <text value="<%= doc.description %>"/>
   <statusCode code="completed" />
   <setId root="2.16.840.1.113883.3.100.1" extension="1" />
-  <versionNumber />
-  <author>
-    <assignedPerson classCode="ASSIGNED" />
+  <versionNumber value="1"/>
+  <author typeCode="AUT" contextControlCode="OP">
+    <responsibleParty classCode="ASSIGNED" />
   </author>
-  <author>
-    <assignedPerson classCode="ASSIGNED" />
-  </author>
-  <custodian>
-    <assignedPerson classCode="ASSIGNED" />
+  <custodian typeCode="CST">
+    <responsibleParty classCode="ASSIGNED" />
   </custodian>
   <controlVariable>
     <measurePeriod>
-      <id root="2.16.840.1.113883.3.100.1" extension="MeasurePeriod" />
+      <code code="MSRTP" codeSystem="2.16.840.1.113883.3.560">
+        <displayName value="Measurement period"/>
+      </code>
       <value>
-        <low inclusive="true" value="20101023" />
-        <high inclusive="true" value="20101231" />
+        <low value="20101023" />
+        <high value="20101231" />
       </value>
     </measurePeriod>
   </controlVariable>
   <component>
     <dataCriteriaSection>
+      <code code="57025-9" codeSystem="2.16.840.1.113883.6.1"/>
+      <title value="Data Criteria Section"/>
+      <text>This section describes the data criteria.</text>
       <definition>
-        <observationDefinition>
+        <observationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Derived" />
         </observationDefinition>
       </definition>
       <definition>
-        <observationDefinition>
+        <observationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Demographics" />
         </observationDefinition>
       </definition>
       <definition>
-        <encounterDefinition>
+        <encounterDefinition moodCode="DEF" classCode="ENC">
           <id root="2.16.840.1.113883.3.100.1" extension="Encounters" />
         </encounterDefinition>
       </definition>
       <definition>
-        <observationDefinition>
+        <observationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Problems" />
         </observationDefinition>
       </definition>
       <definition>
-        <observationDefinition>
+        <observationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Allergies" />
         </observationDefinition>
       </definition>
       <definition>
-        <procedureDefinition>
+        <procedureDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Procedures" />
         </procedureDefinition>
       </definition>
       <definition>
-        <observationDefinition>
+        <observationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Results" />
         </observationDefinition>
       </definition>
       <definition>
-        <observationDefinition>
+        <observationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Vitals" />
         </observationDefinition>
       </definition>
       <definition>
-        <substanceAdministrationDefinition>
+        <substanceAdministrationDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="Medications" />
         </substanceAdministrationDefinition>
       </definition>
       <definition>
-        <supplyDefinition>
+        <supplyDefinition moodCode="DEF">
           <id root="2.16.840.1.113883.3.100.1" extension="RX" />
         </supplyDefinition>
       </definition>
@@ -91,6 +89,10 @@
     <populationCriteriaSection>
       <id root="2.16.840.1.113883.3.100.1" extension="<%= population['ID'] || "Population#{population_index}" %>"/>
       <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
+      <title value="Population Criteria Section"/>
+      <text>This section describes the Initial Patient Population,
+        Numerator, Denominator, Denominator Exceptions, and Measure
+        Populations</text>
       <%- population.keys.each do |criteria_id| -%>
       <%= xml_for_population_criteria(population, criteria_id) %>
       <%- end -%>

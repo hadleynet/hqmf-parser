@@ -112,6 +112,30 @@ namespace :hqmf do
     
   end
   
+  desc 'Roundtrip specified HQMF V2 xml file through the model and back to HQMF V2 and save it to ./tmp'
+  task :roundtrip, [:file] do |t, args|
+    FileUtils.mkdir_p File.join(".","tmp",'xml')
+    
+    raise "You must specify the HQMF XML file to roundtrip" unless args.file
+    
+    version = HQMF::Parser::HQMF_VERSION_2
+    file = File.expand_path(args.file)
+    filename = Pathname.new(file).basename
+    
+    doc = HQMF::Parser.parse(File.open(file).read, version)
+    
+    hqmf_xml = HQMF2::Generator::ModelProcessor.to_hqmf(doc)
+    xml = Nokogiri.XML(hqmf_xml) do |config|
+      config.default_xml.noblanks
+    end
+
+    outfile = File.join(".","tmp",'xml',"#{filename}")
+    File.open(outfile, 'w') {|f| f.write(xml.to_xml(:indent => 2)) }
+    
+    puts "wrote result to: #{outfile}"
+    
+  end
+  
 
   
 end

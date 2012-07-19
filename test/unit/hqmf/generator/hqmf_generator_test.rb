@@ -48,8 +48,8 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert criteria.effective_time.low.inclusive
     assert criteria.effective_time.high.inclusive
     assert_equal 1, criteria.temporal_references.length
-    assert_equal '-1', criteria.temporal_references[0].range.low.value
-    assert_equal 'a', criteria.temporal_references[0].range.low.unit
+    assert_equal '1', criteria.temporal_references[0].range.high.value
+    assert_equal 'a', criteria.temporal_references[0].range.high.unit
     assert_equal 'HasDiabetes', criteria.temporal_references[0].reference.id
     assert !criteria.code_list_id
     assert criteria.inline_code_list
@@ -65,7 +65,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal '2.16.840.1.113883.3.464.1.42', criteria.code_list_id
     assert criteria.effective_time.high
     assert criteria.effective_time.high.derived?
-    assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+    assert_equal "EndDate.add(new PQ(-2,'a'))", criteria.effective_time.high.expression
 
     criteria = @model.data_criteria('anyDiabetes')
     assert_equal :derived, criteria.type
@@ -125,7 +125,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal nil, criteria.effective_time.high
     assert criteria.effective_time.low
     assert_equal true, criteria.effective_time.low.derived?
-    assert_equal 'StartDate.add(new PQ(-2,"a"))', criteria.effective_time.low.expression
+    assert_equal "StartDate.add(new PQ(-2,'a'))", criteria.effective_time.low.expression
 
     criteria = @model.data_criteria('DiabetesMedSupplied')
     assert_equal :medications, criteria.type
@@ -135,7 +135,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal nil, criteria.effective_time.low
     assert criteria.effective_time.high
     assert_equal true, criteria.effective_time.high.derived?
-    assert_equal 'EndDate.add(new PQ(-2,"a"))', criteria.effective_time.high.expression
+    assert_equal "EndDate.add(new PQ(-2,'a'))", criteria.effective_time.high.expression
       
     all_population_criteria = @model.all_population_criteria
     assert_equal 8, all_population_criteria.length
@@ -190,7 +190,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
   
   def test_schema_valid
     doc = Nokogiri.XML(@hqmf_xml)
-    xsd_file = File.open("test/fixtures/2.0/schema/EMeasureNew.xsd")
+    xsd_file = File.open("test/fixtures/2.0/schema/EMeasure.xsd")
     xsd = Nokogiri::XML.Schema(xsd_file)
     error_count = 0
     xsd.validate(doc).each do |error|

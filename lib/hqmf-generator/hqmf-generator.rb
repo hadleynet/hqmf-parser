@@ -87,6 +87,19 @@ module HQMF2
         xml
       end
       
+      def xml_for_reason(data_criteria)
+        xml = ''
+        if data_criteria.negation && data_criteria.negation_code_list_id
+            template_path = File.expand_path(File.join('..', 'reason.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'doc' => doc, 'code_list_id' => data_criteria.negation_code_list_id}
+            context = ErbContext.new(params)
+            xml = template.result(context.get_binding)
+        end
+        xml
+      end
+      
       def xml_for_subsets(data_criteria)
         subsets_xml = []
         if data_criteria.subset_operators
@@ -154,6 +167,31 @@ module HQMF2
       def reference_element_name(id)
         referenced_criteria = doc.data_criteria(id)
         element_name_prefix(referenced_criteria)
+      end
+      
+      def reference_type_name(id)
+        referenced_criteria = doc.data_criteria(id)
+        type = nil
+        if referenced_criteria
+          type = referenced_criteria.type
+        elsif id=="MeasurePeriod"
+          type = :observation
+        end
+        if !type
+          raise "No data criteria with ID: #{id}"
+        end
+        case type
+        when :encounters
+          'ENC'
+        when :procedures
+          'PROC'
+        when :medications, :allMedications
+          'SBADM'
+        when :medication_supply
+          'SPLY'
+        else
+          'OBS'
+        end
       end
       
       def code_for_characteristic(characteristic)
